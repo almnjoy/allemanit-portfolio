@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import Thumb from '../../components/Thumb.astro';
+import { getCollection } from 'astro:content';
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).filter((p) => p.data.listed !== false);
+  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+const { project } = Astro.props;
+const { Content } = await project.render();
+const d = project.data;
+---
+<Base title={`${d.title} — AllemanIT`} description={d.summary}>
+  <article class="container-x py-16">
+    <a href="/projects" class="text-sm text-white/50 hover:text-white">← All projects</a>
+    <div class="mt-4 flex flex-wrap items-center gap-3">
+      <h1 class="text-4xl font-extrabold text-white">{d.title}</h1>
+      <span class="tag">{d.status}</span>
+    </div>
+    <p class="mt-4 max-w-2xl text-lg text-white/70">{d.summary}</p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      {d.liveUrl && (<a href={d.liveUrl} target="_blank" rel="noopener" class="btn btn-primary !py-2 !px-4 text-sm">Visit live →</a>)}
+      {d.repoUrl && (<a href={d.repoUrl} target="_blank" rel="noopener" class="btn btn-ghost !py-2 !px-4 text-sm">Source</a>)}
+    </div>
+
+    <div class="mt-8 max-w-3xl"><Thumb image={d.image} alt={d.title} /></div>
+
+    {d.stack.length > 0 && (<div class="mt-6 flex flex-wrap gap-1.5">{d.stack.map((s) => (<span class="tag">{s}</span>))}</div>)}
+    <div class="prose-doc mt-8 max-w-2xl"><Content /></div>
+  </article>
+</Base>

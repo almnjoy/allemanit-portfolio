@@ -1,0 +1,21 @@
+---
+const year = new Date().getFullYear();
+const socials = [
+  { href: 'https://github.com/almnjoy', label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/dustin-alleman/', label: 'LinkedIn' },
+  { href: 'https://www.youtube.com/@Almnjoy', label: 'YouTube' },
+  { href: 'https://www.instagram.com/alleman_joyy/', label: 'Instagram' },
+  { href: 'https://almnjoy.dev', label: 'Blog' },
+];
+---
+<footer class="mt-8 border-t border-white/10 py-10">
+  <div class="container-x flex flex-col items-center justify-between gap-4 sm:flex-row">
+    <div class="flex items-center gap-3">
+      <img src="/AllemanITLogo.svg" alt="AllemanIT" class="h-6 w-auto opacity-80" />
+      <span class="text-sm text-white/50">© {year} Dustin Alleman · AllemanIT</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-5">
+      {socials.map((s) => (<a href={s.href} class="text-sm text-white/60 hover:text-white transition" target="_blank" rel="noopener">{s.label}</a>))}
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,17 @@
+---
+const links = [
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#content', label: 'Content' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+<header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/70 backdrop-blur">
+  <nav class="container-x flex h-16 items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <img src="/AllemanITLogo.svg" alt="AllemanIT" class="h-8 w-auto" />
+    </a>
+    <div class="flex items-center gap-6">
+      {links.map((l) => (<a href={l.href} class="text-sm text-white/70 hover:text-white transition">{l.label}</a>))}
+    </div>
+  </nav>
+</header>

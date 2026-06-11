@@ -8,7 +8,9 @@ tags: ["AI", "DevOps", "Full-stack"]
 stack: ["React", "Node", "Docker", "Claude / OpenRouter", "Grafana", "Loki", "Meraki API", "Hetzner API"]
 ---
 
-OpsCanvas is the control room for everything I run. It is a chat agent wired into real infrastructure: query logs, check network devices, read dashboards, pull server status, and take action, all from one conversation.
+OpsCanvas started with one want: I wanted my AI to live in one spot and be able to pull every tool I have. Logs, network devices, dashboards, server status, billing, a browser. One agent, one screen, everything I run.
+
+It came together fast, and the honest reason is that the foundation already existed. Years of homelab and cloud buildout meant the integrations were sitting there waiting: Grafana and Loki already collecting, Meraki already wired for API access, SSO already in front of everything. The dashboard was the last mile, not the first. I still learned a ton shipping it.
 
 ## What makes it interesting
 

@@ -8,7 +8,9 @@ tags: ["Automation", "AI", "CRM"]
 stack: ["Twilio", "Retell", "n8n", "Twenty CRM", "cal.com", "Microsoft Graph"]
 ---
 
-The whole front end of my consulting business runs itself. A caller dials in, an AI voice agent handles intake, and the lead lands in the CRM and on the calendar before I ever touch it.
+The whole front end of my consulting business runs itself. A caller dials in, an AI voice agent handles intake, and the lead lands in the CRM and on the calendar before I ever touch it. Everything flows through the CRM: calls, web chat, forms, follow-up email, all of it lands in one place and triggers the next step on its own.
+
+The point is leverage. One person can't answer every call and chase every lead while doing the actual work. The automation does the intake; I do the engineering.
 
 ## What makes it interesting
 

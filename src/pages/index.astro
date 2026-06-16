@@ -7,10 +7,10 @@ const featured = all.filter((p) => p.data.featured);
 const others = all.filter((p) => !p.data.featured);
 
 const sites = [
-  { name: 'almnjoy.dev', style: 'Retro Windows 98 desktop', url: 'https://almnjoy.dev' },
-  { name: 'quickitprojects.com', style: 'Clean corporate / consulting', url: 'https://quickitprojects.com' },
-  { name: 'madeformeai.com', style: 'Modern SaaS product', url: 'https://madeformeai.com' },
-  { name: 'netadmintoolbox.com', style: 'Engineer utility site', url: 'https://netadmintoolbox.com' },
+  { name: 'almnjoy.dev', style: 'Retro Windows 98 desktop', url: 'https://almnjoy.dev', img: '/sites/almnjoy.png' },
+  { name: 'quickitprojects.com', style: 'Clean corporate / consulting', url: 'https://quickitprojects.com', img: '/sites/quickit.png' },
+  { name: 'madeformeai.com', style: 'Modern SaaS product', url: 'https://madeformeai.com', img: '/sites/madeformeai.png' },
+  { name: 'netadmintoolbox.com', style: 'Engineer utility site', url: 'https://netadmintoolbox.com', img: '/sites/toolbox.png' },
 ];
 const links = [
   { href: 'https://github.com/almnjoy', label: 'GitHub' },
@@ -121,7 +121,7 @@ const credentials = [
     <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {sites.map((s) => (
         <a href={s.url} target="_blank" rel="noopener" class="card group block overflow-hidden">
-          <Thumb alt={s.name} />
+          <Thumb image={s.img} alt={s.name} />
           <div class="p-4"><h3 class="font-bold text-white">{s.name}</h3><p class="text-sm text-white/60">{s.style}</p></div>
         </a>
       ))}

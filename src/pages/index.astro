@@ -27,16 +27,15 @@ const credentials = [
   { k: 'Service', v: 'U.S. Marine Corps veteran' },
 ];
 const journey = [
-  { t: 'Homelab + vibe coding', d: 'Scavenged gear and prompts typed into Replit, hoping it ran.' },
-  { t: 'Making websites', d: 'Got it online with a host. It is live. Mind blown.' },
-  { t: 'Owning the stack', d: 'Pulled the code, hosted it myself, ran it like production.' },
-  { t: 'Docker', d: 'Put the app in a box so it stopped breaking.' },
-  { t: 'Kubernetes', d: 'Now it runs across many servers at once.' },
-  { t: 'App dev + AI', d: 'Shipping whole platforms now, agents and all.' },
+  { t: 'Homelab + vibe coding', d: 'Scavenged gear and prompts typed into Replit, hoping it ran.', href: '/projects/homelab' },
+  { t: 'Making websites', d: 'Got it online with a host. It is live. Mind blown.', href: '/projects/web-design' },
+  { t: 'Owning the stack', d: 'Pulled the code, hosted it myself, ran it like production.', href: '/projects/media-stack' },
+  { t: 'Docker', d: 'Put the app in a box so it stopped breaking.', href: '/projects/brain-map' },
+  { t: 'Kubernetes', d: 'Now it runs across many servers at once.', href: '/projects/madeformeai' },
+  { t: 'App dev + AI', d: 'Shipping whole platforms now, agents and all.', href: '/projects/ai-agents' },
 ];
 ---
 <Base>
-  <!-- HERO -->
   <section class="relative overflow-hidden">
     <div class="container-x grid items-center gap-6 pt-12 pb-8 lg:grid-cols-2 lg:gap-4">
       <div class="order-2 lg:order-1">
@@ -45,16 +44,16 @@ const journey = [
         <p class="mt-6 max-w-md text-lg text-white/70">
           Over a decade in networking and IT. Off the clock I build AI tools, automation, and a homelab that runs like production.
         </p>
-        <div class="mt-7 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+        <div class="mt-7 flex flex-wrap items-center gap-3">
+          <a href="https://quickitprojects.com" target="_blank" rel="noopener" class="btn btn-primary text-sm">Work with me →</a>
+          <a href="/contact" class="btn btn-ghost text-sm">Get in touch</a>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
           {links.map((l) => (<a href={l.href} target="_blank" rel="noopener" class="text-white/55 underline-offset-4 hover:text-white hover:underline transition">{l.label}</a>))}
-          <a href="/contact" class="text-white/55 underline-offset-4 hover:text-white hover:underline transition">Contact</a>
         </div>
       </div>
       <div class="order-1 lg:order-2">
-        <img src="/me.jpg" alt="Dustin Alleman"
-          class="mx-auto w-full max-w-md object-cover lg:max-w-none"
-          style="aspect-ratio:4/5; -webkit-mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%);"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+        <img src="/me.jpg" alt="Dustin Alleman" class="mx-auto w-full max-w-md object-cover lg:max-w-none" style="aspect-ratio:4/5; -webkit-mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%);" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
         <div class="mx-auto hidden aspect-[4/5] w-full max-w-md flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-white/15" style="display:none">
           <img src="/logo-mark.png" class="h-12 w-12 opacity-40" alt="" />
           <span class="text-sm text-white/40">Your photo → public/me.jpg</span>
@@ -63,7 +62,6 @@ const journey = [
     </div>
   </section>
 
-  <!-- ABOUT / BACKGROUND -->
   <section id="about" class="container-x py-10">
     <div class="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
       <div>
@@ -92,22 +90,22 @@ const journey = [
     </div>
   </section>
 
-  <!-- JOURNEY -->
   <section class="container-x py-10">
     <h2 class="text-2xl font-bold text-white">The path here</h2>
     <p class="mb-8 mt-1 text-white/60">No straight line. One broken build at a time.</p>
     <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
       {journey.map((s, i) => (
-        <li class="card relative p-5">
-          <span class="text-sm font-extrabold text-brand-orange">0{i + 1}</span>
-          <h3 class="mt-2 font-bold leading-tight text-white">{s.t}</h3>
-          <p class="mt-1.5 text-sm text-white/60">{s.d}</p>
+        <li>
+          <a href={s.href} class="card group block h-full p-5 transition hover:border-brand-orange/40">
+            <span class="text-sm font-extrabold text-brand-orange">0{i + 1}</span>
+            <h3 class="mt-2 font-bold leading-tight text-white">{s.t}</h3>
+            <p class="mt-1.5 text-sm text-white/60">{s.d}</p>
+          </a>
         </li>
       ))}
     </ol>
   </section>
 
-  <!-- FEATURED -->
   <section id="projects" class="container-x py-10">
     <h2 class="mb-6 text-2xl font-bold text-white">Featured projects</h2>
     <div class="grid gap-5 sm:grid-cols-2">
@@ -124,7 +122,6 @@ const journey = [
     </div>
   </section>
 
-  <!-- OTHER -->
   <section class="container-x py-10">
     <h2 class="mb-6 text-2xl font-bold text-white">Other projects</h2>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -137,7 +134,6 @@ const journey = [
     </div>
   </section>
 
-  <!-- SITES -->
   <section class="container-x py-10">
     <h2 class="mb-2 text-2xl font-bold text-white">Sites I have designed</h2>
     <p class="mb-6 text-white/60">Different builds, different design languages.</p>
@@ -151,7 +147,6 @@ const journey = [
     </div>
   </section>
 
-  <!-- CONTENT -->
   <section id="content" class="container-x py-10">
     <div class="card flex flex-col items-start justify-between gap-5 p-7 sm:flex-row sm:items-center">
       <div><h2 class="text-xl font-bold text-white">Follow the build</h2><p class="mt-1 text-white/60">Homelab, AI agents, networking, and automation.</p></div>
@@ -159,12 +154,11 @@ const journey = [
     </div>
   </section>
 
-  <!-- QUIET CONTACT -->
   <section class="container-x py-10">
     <div class="card flex flex-col items-start justify-between gap-4 p-7 sm:flex-row sm:items-center">
       <div>
         <h2 class="text-xl font-bold text-white">Want to talk shop or hire me?</h2>
-        <p class="mt-1 text-white/60">Call or text my AI line. It answers, asks a few questions, and books you in.</p>
+        <p class="mt-1 text-white/60">Call my AI line for a fun AI game to sign up. Just say "sign up" if you don't want to play. :)</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <a href="tel:+15178834473" class="btn btn-primary text-sm">(517) 883-4473</a>

@@ -4,7 +4,7 @@ summary: "A self-hosted media platform: Plex plus the full *arr automation stack
 status: "Live"
 order: 13
 tags: ["Self-hosted", "Automation"]
-stack: ["Plex", "Sonarr", "Radarr", "Jellyseerr", "Docker", "VPN"]
+stack: ["Plex", "Sonarr", "Radarr", "Overseerr", "Docker", "VPN"]
 image: "/projects/media-stack/hero.png"
 ---
 

@@ -5,6 +5,7 @@ status: "Service"
 order: 9
 tags: ["Networking", "Security", "Architecture"]
 stack: ["Cisco", "Meraki", "Cisco Modeling Labs", "BGP / OSPF", "RADIUS / ISE", "VPN"]
+image: "/projects/homelab/header.png"
 ---
 
 Networking is the foundation everything else of mine is built on. Over a decade in, it is still my favorite part of the work. I think of network design as building roads for the internet: deciding how data gets from one point to another, fast, secure, and without surprises. Designing that well still feels like a treat.

@@ -1,0 +1,11 @@
+{
+  // Static-assets deploy for the Astro portfolio (no Worker script, no adapter).
+  // `npm run build` produces ./dist; wrangler uploads it as static assets.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "allemanit-portfolio",
+  "compatibility_date": "2026-06-16",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

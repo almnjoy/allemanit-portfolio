@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>G · QuickIT Sales, the three parts</title>
+<style>
+  :root{
+    --orange:#F47B20; --orange-tint:#FFF1E6;
+    --blue:#2E6FD6; --blue-tint:#E9F1FD;
+    --green:#2E9E5B; --green-tint:#E7F6EE;
+    --ink:#1A1D21; --muted:#5A6472; --line:#CdD6E0; --bg:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:48px;}
+  .stage{width:1280px;}
+  h1{font-size:42px;font-weight:800;letter-spacing:-0.5px;}
+  h1 .u{background:linear-gradient(transparent 65%, var(--orange) 65%);}
+  .sub{font-size:20px;color:var(--muted);margin-top:8px;margin-bottom:36px;}
+  .flow{display:flex;align-items:stretch;gap:0;}
+  .card{flex:1;border-radius:18px;padding:22px 18px;background:#fff;text-align:center;
+    box-shadow:0 8px 22px rgba(30,40,60,.10);border:1px solid #EEF2F7;display:flex;
+    flex-direction:column;align-items:center;justify-content:center;}
+  .card .ico{font-size:40px;line-height:1;margin-bottom:10px;}
+  .card h3{font-size:20px;font-weight:800;margin-bottom:6px;}
+  .card p{font-size:14px;color:var(--muted);line-height:1.35;}
+  .blue{border-top:5px solid var(--blue);}
+  .green{border-top:5px solid var(--green);}
+  .brain{border:2px solid var(--orange);background:var(--orange-tint);position:relative;flex:1.2;}
+  .brain h3{color:#B8541A;}
+  .arrow{display:flex;align-items:center;justify-content:center;width:56px;color:#9AA5B1;font-size:34px;font-weight:700;flex:none;}
+  .divider{display:flex;align-items:center;gap:14px;margin:34px 0 26px;}
+  .divider .lab{font-size:15px;font-weight:800;color:#fff;background:var(--blue);
+    border-radius:999px;padding:6px 16px;white-space:nowrap;}
+  .divider .ln{height:2px;background:var(--line);flex:1;}
+
+  .roles{display:flex;gap:20px;}
+  .rolec{flex:1;border-radius:18px;padding:22px 20px;background:#fff;
+    box-shadow:0 8px 22px rgba(30,40,60,.10);border:1px solid #EEF2F7;border-top:5px solid var(--line);}
+  .rolec .tag{display:inline-block;font-size:12.5px;font-weight:800;color:#fff;border-radius:999px;padding:4px 13px;margin-bottom:12px;}
+  .rolec .name{font-size:21px;font-weight:800;margin-bottom:6px;}
+  .rolec p{font-size:14px;color:var(--muted);line-height:1.4;}
+  .r-brain{border-top-color:var(--orange);} .r-brain .tag{background:var(--orange);} .r-brain .name{color:#B8541A;}
+  .r-tools{border-top-color:var(--blue);} .r-tools .tag{background:var(--blue);} .r-tools .name{color:#1E51A8;}
+  .r-mem{border-top-color:var(--green);} .r-mem .tag{background:var(--green);} .r-mem .name{color:#1F7A45;}
+
+  .foot{text-align:center;font-size:15px;color:var(--muted);margin-top:34px;}
+  .foot b{color:var(--ink);}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <h1>QuickIT Sales is really just <span class="u">three parts</span></h1>
+    <p class="sub">Strip away the buzzwords and it's a brain, a set of tools, and a memory.</p>
+
+    <div class="flow">
+      <div class="card blue"><div class="ico">🗣️</div><h3>Lead reaches out</h3><p>A call or a chat, in plain words.</p></div>
+      <div class="arrow">→</div>
+      <div class="card brain"><div class="ico">🧠</div><h3>The AI thinks</h3><p>Understands the lead and decides what to do.</p></div>
+      <div class="arrow">→</div>
+      <div class="card blue"><div class="ico">🔧</div><h3>n8n acts</h3><p>Runs the workflows that do the real work.</p></div>
+      <div class="arrow">→</div>
+      <div class="card green"><div class="ico">🗃️</div><h3>Twenty records</h3><p>Everything saved, nothing forgotten.</p></div>
+    </div>
+
+    <div class="divider"><div class="ln"></div><span class="lab">Who plays what part</span><div class="ln"></div></div>
+
+    <div class="roles">
+      <div class="rolec r-brain"><span class="tag">The brain</span><div class="name">🧠 The AI agent</div><p>Talks to the lead, understands intent, and drives the whole thing. Retell on the phone, chat on the site.</p></div>
+      <div class="rolec r-tools"><span class="tag">The tools</span><div class="name">🔧 n8n</div><p>The hands. Every action, routing a lead, creating a record, sending a follow-up, runs as a workflow here.</p></div>
+      <div class="rolec r-mem"><span class="tag">The memory</span><div class="name">🗃️ Twenty CRM</div><p>The database. Contacts, deals, and history all live here, so nothing slips through the cracks.</p></div>
+    </div>
+
+    <p class="foot"><b>That's the whole system.</b> A brain to think, tools to act, a memory to keep it all straight.</p>
+  </div>
+</body>
+</html>

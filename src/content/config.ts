@@ -11,6 +11,7 @@ const projects = defineCollection({
     liveUrl: z.string().optional(),
     repoUrl: z.string().optional(),
     image: z.string().optional(),
+    gallery: z.array(z.object({ src: z.string(), caption: z.string().optional() })).default([]),
     featured: z.boolean().default(false),
     listed: z.boolean().default(true),
     order: z.number().default(99),

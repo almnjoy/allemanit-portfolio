@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>C · One App, Many Users</title>
+<style>
+  :root{
+    --orange:#F47B20; --orange-tint:#FFF1E6;
+    --blue:#2E6FD6; --blue-tint:#E9F1FD;
+    --green:#2E9E5B; --green-tint:#E7F6EE;
+    --red:#E0533D; --red-tint:#FBEAE7;
+    --ink:#1A1D21; --muted:#5A6472; --line:#D7DEE7; --bg:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:44px;}
+  .stage{width:1280px;}
+  h1{font-size:42px;font-weight:800;letter-spacing:-0.5px;}
+  h1 .u{background:linear-gradient(transparent 65%, var(--orange) 65%);}
+  .sub{font-size:20px;color:var(--muted);margin-top:8px;margin-bottom:30px;}
+  .band-label{font-size:14px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin:0 0 14px;}
+  .ingredients{display:flex;gap:22px;}
+  .big{flex:1;border-radius:20px;padding:24px;display:flex;gap:18px;align-items:flex-start;
+    box-shadow:0 8px 22px rgba(30,40,60,.10);}
+  .big .ico{font-size:44px;line-height:1;}
+  .big h3{font-size:22px;font-weight:800;margin-bottom:6px;}
+  .big p{font-size:15px;color:var(--muted);line-height:1.4;}
+  .big.shared{background:var(--blue-tint);border:2px solid var(--blue);}
+  .big.shared h3{color:#1E51A8;}
+  .big.config{background:var(--orange-tint);border:2px solid var(--orange);}
+  .big.config h3{color:#B8541A;}
+  .tag{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;border-radius:999px;padding:4px 12px;}
+  .tag.b{background:var(--blue);color:#fff;}
+  .tag.o{background:var(--orange);color:#fff;}
+  .pipe{display:flex;align-items:center;gap:0;margin-top:14px;}
+  .step{flex:1;border-radius:16px;padding:18px;text-align:center;background:#fff;
+    border:1px solid #EEF2F7;box-shadow:0 6px 16px rgba(30,40,60,.08);}
+  .step .ico{font-size:30px;}
+  .step h4{font-size:17px;font-weight:800;margin:8px 0 3px;}
+  .step p{font-size:13px;color:var(--muted);}
+  .arrow{width:50px;text-align:center;color:#9AA5B1;font-size:30px;font-weight:700;flex:none;}
+  .users{flex:1.3;border-radius:16px;padding:16px 18px;background:#F7F9FC;border:1px dashed #C3CDDA;}
+  .users .ut{font-size:13px;font-weight:800;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;}
+  .urow{display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:700;
+    padding:7px 12px;border-radius:10px;margin-bottom:7px;}
+  .urow:last-child{margin-bottom:0;}
+  .on{background:var(--green-tint);color:#1F7A45;}
+  .off{background:var(--red-tint);color:#B23A26;}
+  .pill{font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;}
+  .pill.on{background:var(--green);color:#fff;}
+  .pill.off{background:var(--red);color:#fff;}
+  .down{display:flex;justify-content:center;color:#9AA5B1;font-size:34px;margin:18px 0 6px;}
+  .foot{margin-top:26px;border-radius:14px;background:#111418;color:#fff;padding:18px 22px;font-size:18px;text-align:center;}
+  .foot b{color:var(--orange);}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <h1>One app. Many users. <span class="u">One update.</span></h1>
+    <p class="sub">How I update everybody at once, without ever touching their private setup.</p>
+
+    <p class="band-label">The two ingredients</p>
+    <div class="ingredients">
+      <div class="big shared">
+        <div class="ico">📦</div>
+        <div><h3>One shared app</h3><p>The exact same app ships to every user. It's generic on purpose, it holds no one's private info.</p><span class="tag b">Same for everyone</span></div>
+      </div>
+      <div class="big config">
+        <div class="ico">⚙️</div>
+        <div><h3>Your private settings</h3><p>A small settings file decides what's switched on for you, and holds your own keys. It lives on your space only, never shared.</p><span class="tag o">Yours alone</span></div>
+      </div>
+    </div>
+
+    <div class="down">↓</div>
+
+    <p class="band-label">One push updates everyone</p>
+    <div class="pipe">
+      <div class="step"><div class="ico">🚀</div><h4>I push once</h4><p>One update to the shared app.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><div class="ico">☁️</div><h4>Cloud rebuilds</h4><p>The new version goes out.</p></div>
+      <div class="arrow">→</div>
+      <div class="users">
+        <div class="ut">Everyone updated · each keeps their own setup</div>
+        <div class="urow on"><span>User A</span><span class="pill on">Feature ON ✓ keys</span></div>
+        <div class="urow off"><span>User B</span><span class="pill off">Feature OFF</span></div>
+        <div class="urow off"><span>User C</span><span class="pill off">Feature OFF</span></div>
+        <div class="urow on"><span>User D</span><span class="pill on">Feature ON ✓ keys</span></div>
+      </div>
+    </div>
+
+    <div class="foot">I update <b>once</b>. Everyone gets it. Everyone keeps their <b>own private setup</b>, on their own space.</div>
+  </div>
+</body>
+</html>

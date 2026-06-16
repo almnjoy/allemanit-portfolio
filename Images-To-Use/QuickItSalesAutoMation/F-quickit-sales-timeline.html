@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>F · QuickIT Sales Journey</title>
+<style>
+  :root{
+    --orange:#F47B20; --orange-tint:#FFF1E6;
+    --blue:#2E6FD6; --blue-tint:#E9F1FD;
+    --ink:#1A1D21; --muted:#5A6472; --line:#D7DEE7; --bg:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--bg);}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:48px;}
+  .stage{width:1280px;}
+  h1{font-size:42px;font-weight:800;letter-spacing:-0.5px;}
+  h1 .u{background:linear-gradient(transparent 65%, var(--orange) 65%);}
+  .sub{font-size:20px;color:var(--muted);margin-top:8px;margin-bottom:48px;}
+  .timeline{position:relative;display:grid;grid-template-columns:repeat(6,1fr);
+    grid-template-rows:190px 40px 190px;align-items:center;}
+  .rail{position:absolute;left:2%;right:2%;top:calc(190px + 20px);height:6px;
+    background:var(--line);border-radius:3px;z-index:0;}
+  .rail .fill{position:absolute;inset:0;width:100%;border-radius:3px;
+    background:linear-gradient(90deg,var(--blue),var(--orange));}
+  .col{position:relative;display:flex;flex-direction:column;align-items:center;z-index:1;}
+  .dot{grid-row:2;width:26px;height:26px;border-radius:50%;border:5px solid #fff;
+    box-shadow:0 0 0 3px var(--orange);background:var(--orange);}
+  .col:nth-child(odd) .dot{box-shadow:0 0 0 3px var(--blue);background:var(--blue);}
+  .card{width:190px;border-radius:18px;padding:16px 16px 18px;background:#fff;
+    box-shadow:0 8px 22px rgba(30,40,60,.10);border:1px solid #EEF2F7;text-align:center;}
+  .card .ico{font-size:34px;line-height:1;}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+    font-size:14px;font-weight:800;color:#fff;background:var(--orange);margin-bottom:8px;}
+  .card.b .num{background:var(--blue);}
+  .card h3{font-size:18px;font-weight:800;margin:8px 0 4px;}
+  .card p{font-size:13.5px;color:var(--muted);line-height:1.35;}
+  .top{grid-row:1;justify-content:flex-end;padding-bottom:14px;}
+  .bottom{grid-row:3;justify-content:flex-start;padding-top:14px;}
+  .top::after{content:"";position:absolute;bottom:0;width:2px;height:14px;background:var(--line);}
+  .bottom::before{content:"";position:absolute;top:0;width:2px;height:14px;background:var(--line);}
+  .endcap{font-size:15px;color:var(--muted);margin-top:40px;text-align:center;}
+  .endcap b{color:var(--ink);}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <h1>From a <span class="u">missed call</span> to a booked meeting</h1>
+    <p class="sub">Every lead, handled the same way, every time. No callbacks, no dropped leads.</p>
+
+    <div class="timeline">
+      <div class="rail"><div class="fill"></div></div>
+
+      <div class="col"><div class="card b top"><div class="num">1</div><div class="ico">📞</div><h3>Lead reaches out</h3><p>Calls or chats in, any hour, any channel.</p></div><div class="dot"></div></div>
+
+      <div class="col"><div class="dot"></div><div class="card bottom"><div class="num">2</div><div class="ico">🤖</div><h3>AI answers</h3><p>Picks up instantly and talks like a person.</p></div></div>
+
+      <div class="col"><div class="card b top"><div class="num">3</div><div class="ico">📝</div><h3>Captures details</h3><p>Name, the need, and how to reach them.</p></div><div class="dot"></div></div>
+
+      <div class="col"><div class="dot"></div><div class="card bottom"><div class="num">4</div><div class="ico">🔧</div><h3>n8n routes it</h3><p>Fires the right workflow behind the scenes.</p></div></div>
+
+      <div class="col"><div class="card b top"><div class="num">5</div><div class="ico">🗃️</div><h3>Lands in Twenty</h3><p>Contact and deal created automatically.</p></div><div class="dot"></div></div>
+
+      <div class="col"><div class="dot"></div><div class="card bottom"><div class="num">6</div><div class="ico">📅</div><h3>Meeting booked</h3><p>On the calendar, follow-up already sent.</p></div></div>
+    </div>
+
+    <p class="endcap"><b>No human in the loop for intake.</b> The phone rings, the work just happens.</p>
+  </div>
+</body>
+</html>

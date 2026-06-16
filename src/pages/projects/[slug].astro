@@ -27,5 +27,19 @@ const d = project.data;
 
     {d.stack.length > 0 && (<div class="mt-6 flex flex-wrap gap-1.5">{d.stack.map((s) => (<span class="tag">{s}</span>))}</div>)}
     <div class="prose-doc mt-8 max-w-2xl"><Content /></div>
+
+    {d.gallery.length > 0 && (
+      <div class="mt-14 max-w-3xl">
+        <h2 class="mb-6 text-xl font-bold text-white/90">Inside the build</h2>
+        <div class="grid gap-8">
+          {d.gallery.map((g) => (
+            <figure>
+              <img src={g.src} alt={g.caption || d.title} loading="lazy" class="w-full rounded-xl border border-white/10" />
+              {g.caption && (<figcaption class="mt-2.5 text-sm text-white/50">{g.caption}</figcaption>)}
+            </figure>
+          ))}
+        </div>
+      </div>
+    )}
   </article>
 </Base>

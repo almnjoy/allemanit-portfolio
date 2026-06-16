@@ -1,29 +1,24 @@
 ---
 title: "Network Design & Architecture"
-summary: "Secure, scalable, well-documented network design, drawn from ten years as a network engineer and a homelab that mirrors enterprise architecture."
+summary: "Networking is the foundation the rest of my work is built on: secure, segmented, well-documented design, a homelab that mirrors the enterprise, and a dedicated Cisco Modeling Labs environment for the heavy scenarios."
 status: "Service"
 order: 9
 tags: ["Networking", "Security", "Architecture"]
-stack: ["Cisco", "Meraki", "Zero Trust", "WiFi 6", "VPN"]
+stack: ["Cisco", "Meraki", "Cisco Modeling Labs", "BGP / OSPF", "RADIUS / ISE", "VPN"]
 ---
 
-A modern business needs more than connectivity. It needs a network that is secure, scalable, documented, and ready to adapt. This is the part of my background I have done the longest.
+Networking is the foundation everything else of mine is built on. Over a decade in, it is still my favorite part of the work. I think of network design as building roads for the internet: deciding how data gets from one point to another, fast, secure, and without surprises. Designing that well still feels like a treat.
 
-## Secure access and identity
+That is why I have rebuilt my own home network more times than I can count, each time to try something new: VLAN segmentation, firewall rules, access policies, traffic shaping and QoS, internet breakout, site-to-site and remote VPNs, a DNS server, and RADIUS authentication. Testing ideas on real gear before they ever touch a production network.
 
-- Zero Trust principles, VPN and remote access, identity management and Active Directory.
-- MFA and role-based access control built in, not bolted on.
+## A lab that mirrors the enterprise
 
-## Cloud connectivity
+I eventually repurposed an old server into a dedicated Cisco Modeling Labs (CML) environment for the heavier scenarios: BGP and OSPF routing, RADIUS and Cisco ISE for identity, VPNs, and high-availability designs. It is a safe place to build enterprise-scale topologies, break them, and figure out why.
 
-- AWS, Azure, and GCP integration, hybrid networking, site-to-site VPN and ExpressRoute.
-- Cloud security, compliance, and cost optimization.
+## Two things that came out of it
 
-## Wireless design and hardening
+The same curiosity turned into a couple of projects worth their own pages. [MerakiNOC](/projects/merakinoc) was my take on automating configuration and monitoring through the Meraki API and a custom dashboard. [netadmintoolbox.com](/projects/netadmintoolbox) packages the everyday utilities and troubleshooting I teach into one fast site.
 
-- Enterprise WiFi 6 (802.11ax) design, mesh optimization, WPA3 hardening.
-- Coverage planning, site surveys, and guest network isolation.
+## Teaching it
 
-## Homelab and applied engineering
-
-Ten-plus years in the field on top of a homelab that mirrors enterprise architecture: network segmentation and secure access, Docker deployments and backups, LAN/WAN/cloud planning, and firewall and IDS/IPS configuration, all tested for real.
+A lot of this loops back to teaching. I run CCNA-level networking for students in Chicago, and explaining a concept cleanly is its own skill, often harder than the concept itself. The troubleshooting instinct, the architectural thinking, and the security habits I built here show up in everything else I make, from AI platforms to automation.

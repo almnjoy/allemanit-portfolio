@@ -6,11 +6,17 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
 <Base title="Request Access — AllemanIT" description="Request access to the AllemanIT home lab, media server, or Nextcloud.">
   <section class="container-x py-16">
     <div class="mx-auto max-w-xl">
+      <div class="card mb-8 p-6">
+        <h2 class="text-lg font-bold text-white">Business inquiry? Call my AI line.</h2>
+        <p class="mt-1 text-sm text-white/65">It answers, asks a few questions, and books you in. Call or text anytime.</p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <a href="tel:+15178834473" class="btn btn-primary text-sm">(517) 883-4473</a>
+          <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" class="btn btn-ghost text-sm">Start online</a>
+        </div>
+      </div>
+
       <h1 class="text-4xl font-extrabold text-white">Request Access</h1>
-      <p class="mt-3 text-white/65">Submit once for any services you want. I review and follow up by email if approved.</p>
-      <p class="mt-4 rounded-xl border border-brand-orange/40 bg-brand-orange/5 px-4 py-3 text-sm text-white/80">
-        Business inquiry? This form is for lab and media access. For business, go here: <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" class="font-semibold text-brand-orange underline underline-offset-4 hover:text-white">quickitprojects.com/start</a>
-      </p>
+      <p class="mt-3 text-white/65">The form below is for home lab, media, or Nextcloud access. Submit once for any services you want. I review and follow up by email if approved.</p>
 
       <form id="access-form" class="card mt-8 space-y-5 p-7" data-webhook={WEBHOOK_URL}>
         <div>

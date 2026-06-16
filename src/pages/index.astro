@@ -26,6 +26,14 @@ const credentials = [
   { k: 'Teaching', v: 'Instructor, Cisco Networking Academy' },
   { k: 'Service', v: 'U.S. Marine Corps veteran' },
 ];
+const journey = [
+  { t: 'Homelab + vibe coding', d: 'Scavenged gear and prompts typed into Replit, hoping it ran.' },
+  { t: 'Making websites', d: 'Got it online with a host. It is live. Mind blown.' },
+  { t: 'Owning the stack', d: 'Pulled the code, hosted it myself, ran it like production.' },
+  { t: 'Docker', d: 'Put the app in a box so it stopped breaking.' },
+  { t: 'Kubernetes', d: 'Now it runs across many servers at once.' },
+  { t: 'App dev + AI', d: 'Shipping whole platforms now, agents and all.' },
+];
 ---
 <Base>
   <!-- HERO -->
@@ -84,6 +92,21 @@ const credentials = [
     </div>
   </section>
 
+  <!-- JOURNEY -->
+  <section class="container-x py-10">
+    <h2 class="text-2xl font-bold text-white">The path here</h2>
+    <p class="mb-8 mt-1 text-white/60">No straight line. One broken build at a time.</p>
+    <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+      {journey.map((s, i) => (
+        <li class="card relative p-5">
+          <span class="text-sm font-extrabold text-brand-orange">0{i + 1}</span>
+          <h3 class="mt-2 font-bold leading-tight text-white">{s.t}</h3>
+          <p class="mt-1.5 text-sm text-white/60">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
   <!-- FEATURED -->
   <section id="projects" class="container-x py-10">
     <h2 class="mb-6 text-2xl font-bold text-white">Featured projects</h2>
@@ -138,6 +161,15 @@ const credentials = [
 
   <!-- QUIET CONTACT -->
   <section class="container-x py-10">
-    <p class="text-white/60">Need lab, media, or Nextcloud access, or want to talk shop? <a href="/contact" class="font-semibold text-white underline underline-offset-4 hover:text-brand-orange">Get in touch</a>.</p>
+    <div class="card flex flex-col items-start justify-between gap-4 p-7 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-xl font-bold text-white">Want to talk shop or hire me?</h2>
+        <p class="mt-1 text-white/60">Call or text my AI line. It answers, asks a few questions, and books you in.</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="tel:+15178834473" class="btn btn-primary text-sm">(517) 883-4473</a>
+        <a href="/contact" class="btn btn-ghost text-sm">Request lab access</a>
+      </div>
+    </div>
   </section>
 </Base>

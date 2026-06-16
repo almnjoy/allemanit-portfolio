@@ -20,11 +20,14 @@ I wanted my AI to live in one place and reach every tool I run: logs, network ge
 
 This is also where I pulled together everything I'd picked up along the way: self-hosting, running OpenClaw, prompting and coding with AI, GitHub deploys, plugins, MCP servers, and how an agent actually calls tools. Brain Map is all of it in one platform, self-hosted on a local Docker instance, a cloud Docker instance, and version-controlled in a GitHub repo.
 
-## Why I'm renaming it to Brain Map
+## What I've run through it
 
-OpsCanvas described the operations side. Brain Map describes what you actually see. Every tool the agent uses generates a node on a canvas, so the work is visible instead of buried in a chat log. You can watch which information it pulled, which tool it called, and how the pieces connect.
+- **Trace a device on the network in plain language.** I ask where something is, and the agent calls the Meraki API and my infra APIs, then comes back with the switch port, the access point, the IP, and when it was last seen. No clicking through five dashboards.
+- **Schedule calls and run the calendar.** Book a meeting, move it, or check what's coming up, all from the same chat.
+- **Draft and send email.** It pulls the context, writes the message, and sends once I approve.
+- **Live infra at a glance.** Server health, logs, and billing render as tiles I arrange into boards I can come back to.
 
-That idea came straight out of MadeForMeAI feedback. People would sit in front of a chat box with no idea what to type or what it was doing behind the scenes. A map fixes that. The AI reasons across your tools, documents, and data, and you can see it happen.
+Every tool the agent uses lands as a node on the canvas, so the work stays visible instead of buried in a chat log. You can see what it pulled, which tool it called, and how the pieces connect.
 
 ## What's under the hood
 

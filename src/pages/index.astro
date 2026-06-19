@@ -26,14 +26,6 @@ const credentials = [
   { k: 'Teaching', v: 'Instructor, Cisco Networking Academy' },
   { k: 'Service', v: 'U.S. Marine Corps veteran' },
 ];
-const journey = [
-  { t: 'Homelab + vibe coding', d: 'Scavenged gear and prompts typed into Replit, hoping it ran.', href: '/projects/homelab' },
-  { t: 'Making websites', d: 'Got it online with a host. It is live. Mind blown.', href: '/projects/web-design' },
-  { t: 'Owning the stack', d: 'Pulled the code, hosted it myself, ran it like production.', href: '/projects/media-stack' },
-  { t: 'Docker', d: 'Put the app in a box so it stopped breaking.', href: '/projects/brain-map' },
-  { t: 'Kubernetes', d: 'Now it runs across many servers at once.', href: '/projects/madeformeai' },
-  { t: 'App dev + AI', d: 'Shipping whole platforms now, agents and all.', href: '/projects/ai-agents' },
-];
 ---
 <Base>
   <section class="relative overflow-hidden">
@@ -88,22 +80,6 @@ const journey = [
         ))}
       </div>
     </div>
-  </section>
-
-  <section class="container-x py-10">
-    <h2 class="text-2xl font-bold text-white">The path here</h2>
-    <p class="mb-8 mt-1 text-white/60">No straight line. One broken build at a time.</p>
-    <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-      {journey.map((s, i) => (
-        <li>
-          <a href={s.href} class="card group block h-full p-5 transition hover:border-brand-orange/40">
-            <span class="text-sm font-extrabold text-brand-orange">0{i + 1}</span>
-            <h3 class="mt-2 font-bold leading-tight text-white">{s.t}</h3>
-            <p class="mt-1.5 text-sm text-white/60">{s.d}</p>
-          </a>
-        </li>
-      ))}
-    </ol>
   </section>
 
   <section id="projects" class="container-x py-10">

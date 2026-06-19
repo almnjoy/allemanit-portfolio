@@ -15,6 +15,7 @@ repos:
   - url: "https://github.com/almnjoy/madeforMeAI-openclaw-template"
     label: "OpenClaw template"
 image: "/projects/madeformeai/intro.png"
+video: "L4ERokeYAvI"
 cardImage: "/projects/madeformeai/architecture.png"
 gallery:
   - src: "/projects/madeformeai/dashboard.png"

@@ -24,7 +24,15 @@ const d = project.data;
       {d.repos.map((r) => (<a href={r.url} target="_blank" rel="noopener" class="btn btn-ghost !py-2 !px-4 text-sm">{r.label}</a>))}
     </div>
 
-    <div class="mt-8 max-w-3xl"><Thumb image={d.image} alt={d.title} /></div>
+    <div class="mt-8 max-w-3xl">
+      {d.video ? (
+        <div class="aspect-video w-full overflow-hidden rounded-xl border border-white/10">
+          <iframe class="h-full w-full" src={`https://www.youtube.com/embed/${d.video}`} title={d.title} loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      ) : (
+        <Thumb image={d.image} alt={d.title} />
+      )}
+    </div>
 
     {d.stack.length > 0 && (<div class="mt-6 flex flex-wrap gap-1.5">{d.stack.map((s) => (<span class="tag">{s}</span>))}</div>)}
     <div class="prose-doc mt-8 max-w-2xl"><Content /></div>

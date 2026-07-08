@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+// Friends-only Plex portal. Linked from emails, not from site nav.
+// Live status pulls from Uptime Kuma monitor "Plex (Windows)" (http keyword check on 10.20.10.100:32400/identity).
+const UPTIME_BASE = 'https://uptime.allemanit.com';
+const PLEX_MONITOR_ID = 58; // Uptime Kuma "Plex (Windows)" monitor
+const VIDEO_URL = 'https://youtu.be/m-wiCr5uvXQ';
+---
+<Base title="AllemanIT Plex" description="Your AllemanIT Plex quick links and live server status.">
+  <section class="container-x py-16">
+    <div class="mx-auto max-w-2xl">
+      <h1 class="text-4xl font-extrabold text-white">AllemanIT Plex</h1>
+      <p class="mt-3 text-white/65">Everything you need in one place: server status, watch link, and how to request or accept.</p>
+
+      <!-- STATUS -->
+      <div class="card mt-8 flex items-center justify-between gap-4 p-6">
+        <div class="flex items-center gap-4">
+          <span id="status-dot" class="inline-block h-3.5 w-3.5 shrink-0 rounded-full bg-white/30"></span>
+          <div>
+            <div class="text-lg font-bold text-white">Plex Server</div>
+            <div id="status-text" class="text-sm text-white/60">Checking status…</div>
+          </div>
+        </div>
+        <img id="status-badge" alt="Plex status" class="hidden h-7" />
+      </div>
+      <p class="mt-2 text-xs text-white/40">If it shows offline, the server is likely rebooting. Give it a few minutes and try again, or let me know.</p>
+
+      <!-- LINKS -->
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        <a href="https://app.plex.tv/desktop" target="_blank" rel="noopener" class="card group p-6 transition hover:border-brand-orange">
+          <div class="text-lg font-bold text-white">▶ Watch on Plex</div>
+          <p class="mt-1 text-sm text-white/60">Open Plex in your browser or app and start watching.</p>
+        </a>
+        <a href="https://request.allemanit.com" target="_blank" rel="noopener" class="card group p-6 transition hover:border-brand-orange">
+          <div class="text-lg font-bold text-white">🍿 Request a movie or show</div>
+          <p class="mt-1 text-sm text-white/60">Ask for a title and it gets added automatically.</p>
+        </a>
+        <a href={VIDEO_URL} target="_blank" rel="noopener" class="card group p-6 transition hover:border-brand-orange">
+          <div class="text-lg font-bold text-white">🎬 How to accept your invite</div>
+          <p class="mt-1 text-sm text-white/60">60-second walkthrough for first-timers.</p>
+        </a>
+        <a href="/contact" class="card group p-6 transition hover:border-brand-orange">
+          <div class="text-lg font-bold text-white">✉ New here? Request access</div>
+          <p class="mt-1 text-sm text-white/60">Not on the server yet? Send a quick request.</p>
+        </a>
+      </div>
+
+      <p class="mt-10 text-center text-xs text-white/40">AllemanIT Plex · questions? just reply to any of my emails.</p>
+    </div>
+  </section>
+
+  <script define:vars={{ UPTIME_BASE, PLEX_MONITOR_ID }}>
+    (function () {
+      const dot = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+      const badge = document.getElementById('status-badge');
+      if (!PLEX_MONITOR_ID) {
+        text.textContent = 'Live status coming soon.';
+        dot.className = 'inline-block h-3.5 w-3.5 shrink-0 rounded-full bg-yellow-400';
+        return;
+      }
+      const src = `${UPTIME_BASE}/api/badge/${PLEX_MONITOR_ID}/status?upLabel=Online&downLabel=Offline&style=flat-square`;
+      badge.onload = () => { badge.classList.remove('hidden'); };
+      badge.onerror = () => { text.textContent = 'Status unavailable — open Plex to check.'; };
+      badge.src = src;
+      // Also fetch the JSON heartbeat for the colored dot + text (best-effort; ignores CORS failures)
+      fetch(`${UPTIME_BASE}/api/badge/${PLEX_MONITOR_ID}/status?value=json`).then(r => r.ok ? r.text() : Promise.reject()).then(t => {
+        const up = /up/i.test(t) && !/down/i.test(t);
+        dot.className = 'inline-block h-3.5 w-3.5 shrink-0 rounded-full ' + (up ? 'bg-green-400' : 'bg-red-400');
+        text.textContent = up ? 'Online — ready to watch.' : 'Offline — likely rebooting.';
+      }).catch(() => {
+        dot.className = 'inline-block h-3.5 w-3.5 shrink-0 rounded-full bg-green-400';
+        text.textContent = 'See live badge →';
+      });
+    })();
+  </script>
+</Base>

@@ -1,9 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-// TODO: confirm this n8n webhook exists / create it. Lab+media+nextcloud access requests POST here.
+// Plex access requests POST here → n8n WF (EmUILkGVv0B44j3j) → Discord approval → Plex invite flow.
 const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-00c909d1a7b3';
 ---
-<Base title="Request Access — AllemanIT" description="Request access to the AllemanIT home lab, media server, or Nextcloud.">
+<Base title="Request Plex Access — AllemanIT" description="Request access to the AllemanIT Plex media server.">
   <section class="container-x py-16">
     <div class="mx-auto max-w-xl">
       <div class="card mb-8 p-6">
@@ -15,8 +15,8 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
         </div>
       </div>
 
-      <h1 class="text-4xl font-extrabold text-white">Request Access</h1>
-      <p class="mt-3 text-white/65">The form below is for home lab, media, or Nextcloud access. Submit once for any services you want. I review and follow up by email if approved.</p>
+      <h1 class="text-4xl font-extrabold text-white">Request Plex Access</h1>
+      <p class="mt-3 text-white/65">Want in on the AllemanIT Plex server? Drop your name and email below. I review each request and, once approved, email you the last step to get watching.</p>
 
       <form id="access-form" class="card mt-8 space-y-5 p-7" data-webhook={WEBHOOK_URL}>
         <div>
@@ -30,16 +30,8 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
             class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
         </div>
         <div>
-          <label class="mb-2 block text-sm font-semibold text-white">Access Desired <span class="text-brand-orange">*</span></label>
-          <div class="space-y-2">
-            <label class="flex items-center gap-3 text-white/80"><input type="checkbox" name="access" value="Lab Access" class="h-4 w-4 accent-brand-orange" /> Lab Access</label>
-            <label class="flex items-center gap-3 text-white/80"><input type="checkbox" name="access" value="Media (Plex)" class="h-4 w-4 accent-brand-orange" /> Media Access (Plex videos / music)</label>
-            <label class="flex items-center gap-3 text-white/80"><input type="checkbox" name="access" value="Nextcloud" class="h-4 w-4 accent-brand-orange" /> Nextcloud</label>
-          </div>
-        </div>
-        <div>
-          <label class="mb-1.5 block text-sm font-semibold text-white">Notes</label>
-          <textarea name="notes" rows="4" placeholder="Anything else you'd like to add"
+          <label class="mb-1.5 block text-sm font-semibold text-white">Notes <span class="text-white/40">(optional)</span></label>
+          <textarea name="notes" rows="3" placeholder="Anything you're hoping to watch, or how I know you"
             class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange"></textarea>
         </div>
         <button type="submit" class="btn btn-primary w-full">Request Access</button>
@@ -55,12 +47,10 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
       e.preventDefault();
       const btn = form.querySelector('button[type=submit]');
       const data = new FormData(form);
-      const access = data.getAll('access');
-      if (access.length === 0) { show('Pick at least one service.', true); return; }
       const payload = {
         fullName: data.get('fullName'),
         email: data.get('email'),
-        access,
+        access: ['Plex'],
         notes: data.get('notes'),
         source: 'allemanit.com',
         submittedAt: new Date().toISOString(),
@@ -71,7 +61,7 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error('bad status');
-        form.reset(); show('Request received. I will follow up by email.', false);
+        form.reset(); show('Request received. I will follow up by email once approved.', false);
       } catch (err) {
         show('Something went wrong. Email hello@quickitprojects.com and I will sort it.', true);
       } finally {

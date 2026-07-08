@@ -30,6 +30,11 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
             class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
         </div>
         <div>
+          <label class="mb-1.5 block text-sm font-semibold text-white">Phone <span class="text-white/40">(optional, for text updates)</span></label>
+          <input name="phone" type="tel" placeholder="(555) 555-5555"
+            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
+        </div>
+        <div>
           <label class="mb-1.5 block text-sm font-semibold text-white">Notes <span class="text-white/40">(optional)</span></label>
           <textarea name="notes" rows="3" placeholder="Anything you're hoping to watch, or how I know you"
             class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange"></textarea>
@@ -50,6 +55,7 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
       const payload = {
         fullName: data.get('fullName'),
         email: data.get('email'),
+        phone: data.get('phone'),
         access: ['Plex'],
         notes: data.get('notes'),
         source: 'allemanit.com',

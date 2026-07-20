@@ -1,11 +1,12 @@
 ---
 title: "MindMap"
-summary: "A self-hosted, white-label AI workspace. Every tool the agent touches becomes a node on a visual canvas, so you can see what it is doing and why. Plugin-based, fully tenant-isolated, with one connector for thousands of apps."
+summary: "A self-hosted, white-label AI workspace. Every tool the agent touches becomes a node on a visual canvas, so you can see what it is doing and why. Plugin-based, fully tenant-isolated, now running real paying customers with a live marketplace, public docs, and a CRM that shapes itself to each business."
 status: "Live"
 featured: true
 order: 1
 tags: ["AI", "Automation", "Self-hosted"]
-stack: ["React", "Node", "Docker", "Postgres", "Zapier", "Claude / OpenRouter", "Grafana", "Loki", "Meraki API"]
+stack: ["React", "Node", "Docker", "Postgres", "Twenty CRM", "n8n", "Claude / OpenRouter", "Grafana", "Loki", "Meraki API"]
+liveUrl: "https://madeformeai.com"
 image: "/projects/brain-map/header.png"
 gallery:
   - src: "/projects/brain-map/canvas.png"
@@ -33,9 +34,10 @@ Every tool the agent uses lands as a node on the canvas, so the work stays visib
 
 - **Plugin-based and white-label.** Logos, colors, and layout swap per client. I can copy the same design a hundred times over and brand each one differently.
 - **Every customer is isolated.** Separate pod, database, authentication, API keys, and storage. I push updates to every environment at once without touching anyone's keys or risking their data.
+- **A CRM that shapes itself to the business.** The Sales, Clients, and Client-360 pages build themselves from each tenant's own CRM fields instead of a fixed template, and let them edit a client and fire off actions right from the profile. Per-business differences are configuration, not custom code, so one fix reaches every box.
 - **Secrets stay on the server.** API keys, tokens, and session data never live in the browser. The browser is a window into the platform, not the platform itself.
-- **Zapier is the universal connector.** Instead of building hundreds of integrations, one Zapier connection reaches thousands of apps: email, calendars, CRMs, messaging, databases. That has been the biggest unlock here.
+- **One connector reaches thousands of apps.** Instead of building hundreds of integrations, one automation layer reaches email, calendars, CRMs, messaging, and databases. That has been the biggest unlock here.
 
-## Where it's going
+## Where it is now
 
-MindMap is built for small business owners and entrepreneurs who want AI, automation, and their own tools working together without learning the plumbing. A marketplace, full docs, and a dedicated site are coming. This is the one I am most excited to put in front of people.
+MindMap is built for small business owners and entrepreneurs who want AI, automation, and their own tools working together without learning the plumbing. What was "coming soon" is now live: a real plugin marketplace, a full public documentation site, and the first paying customers running their whole practice on their own isolated box. This is the one I am most excited to keep putting in front of people.

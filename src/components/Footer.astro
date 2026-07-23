@@ -1,5 +1,10 @@
 ---
 const year = new Date().getFullYear();
+const pages = [
+  { href: '/daily', label: 'Daily' },
+  { href: '/music', label: 'Music' },
+  { href: '/status', label: 'Media' },
+];
 const socials = [
   { href: 'https://github.com/almnjoy', label: 'GitHub' },
   { href: 'https://www.linkedin.com/in/dustin-alleman/', label: 'LinkedIn' },
@@ -15,6 +20,8 @@ const socials = [
       <span class="text-sm text-white/50">© {year} Dustin Alleman · AllemanIT</span>
     </div>
     <div class="flex flex-wrap items-center gap-5">
+      {pages.map((p) => (<a href={p.href} class="text-sm text-white/70 hover:text-white transition">{p.label}</a>))}
+      <span class="hidden text-white/20 sm:inline">|</span>
       {socials.map((s) => (<a href={s.href} class="text-sm text-white/60 hover:text-white transition" target="_blank" rel="noopener">{s.label}</a>))}
     </div>
   </div>

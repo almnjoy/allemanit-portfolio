@@ -6,8 +6,10 @@ import Base from '../layouts/Base.astro';
 const REC_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/music-rec';
 const WALL_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/music-wall';
 
-const SPOTIFY_TOP = 'https://open.spotify.com/user/12156555860'; // Groove Bass Skating
+const SPOTIFY_PROFILE = 'https://open.spotify.com/user/12156555860';
 const SOUNDCLOUD = 'https://soundcloud.com/almnjoy';
+const SOUNDCLOUD_SET = 'https://soundcloud.com/almnjoy/sets/afternoonvibes';
+const SC_EMBED = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(SOUNDCLOUD_SET) + '&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true';
 
 const lanes = [
   { tag: 'The core', name: 'Funk-bass / electronic soul', artists: 'GRiZ · Daily Bread · ODESZA · Big Wild · Late Night Radio' },
@@ -27,7 +29,7 @@ const playlists = [
   { name: 'Rage Rock Anthems', sub: 'loud / pop-punk', id: '1wtK8HAKoCfDJfBGMyd9U2' },
 ];
 ---
-<Base title="Dustin's Music — AllemanIT" description="Funk-bass, soulful, always cruising for the next groove. Here's what Dustin listens to — and a place to drop him something he'd dig.">
+<Base title="Dustin's Music — AllemanIT" description="Funk-bass, soulful, always cruising. Here's what Dustin listens to, plus a spot to send him something new.">
   <section class="mz">
 
     <!-- HERO -->
@@ -37,9 +39,9 @@ const playlists = [
       <div class="hero-inner container-x">
         <p class="eyebrow">Funk-bass · soulful · always cruising</p>
         <h1 class="title">WHAT I'M<br /><span class="grad">LISTENING TO</span></h1>
-        <p class="lede">This is my music. The grooves I live in, the playlists I actually run, the artists I'd put anyone onto. Peep it. Then drop me something I'd dig — I go check out every one.</p>
+        <p class="lede">This is my music. The grooves I live in, the playlists I run, the artists I put people onto. Look around, then send me something new. I check out every rec that comes in.</p>
         <div class="cta">
-          <a class="btn primary" href={SPOTIFY_TOP} target="_blank" rel="noopener">▶ Listen on Spotify</a>
+          <a class="btn primary" href={SPOTIFY_PROFILE} target="_blank" rel="noopener">▶ Listen on Spotify</a>
           <a class="btn sc" href={SOUNDCLOUD} target="_blank" rel="noopener">☁ SoundCloud</a>
           <a class="btn ghost" href="#drop">Drop me a rec ↓</a>
         </div>
@@ -63,11 +65,10 @@ const playlists = [
 
     <!-- PLAYLISTS -->
     <div class="container-x block">
-      <h2 class="sec">Playlists I run</h2>
-      <p class="sub">Real ones, not the AI-generated filler. Hit play.</p>
-      <div class="pls">
-        {playlists.map((p) => (
-          <div class="pl">
+      <h2 class="sec">Spotify playlists</h2>
+      <div class="pls" id="pls">
+        {playlists.map((p, i) => (
+          <div class={i < 3 ? 'pl' : 'pl pl-extra'}>
             <div class="pl-top">
               <div>
                 <b>{p.name}</b>
@@ -79,13 +80,14 @@ const playlists = [
           </div>
         ))}
       </div>
+      <button id="more-pls" class="more-btn" type="button" aria-expanded="false">Show all playlists ↓</button>
     </div>
 
     <!-- FIND ME -->
     <div class="container-x block">
       <h2 class="sec">Find me on</h2>
       <div class="finds">
-        <a class="find spot" href={SPOTIFY_TOP} target="_blank" rel="noopener">
+        <a class="find spot" href={SPOTIFY_PROFILE} target="_blank" rel="noopener">
           <span class="fi">▶</span>
           <div><b>Spotify</b><small>playlists + heavy rotation</small></div>
         </a>
@@ -94,6 +96,7 @@ const playlists = [
           <div><b>SoundCloud</b><small>sets, edits + deep cuts — @almnjoy</small></div>
         </a>
       </div>
+      <iframe class="sc-embed" scrolling="no" frameborder="no" allow="autoplay" loading="lazy" title="SoundCloud — Afternoon Vibes" src={SC_EMBED}></iframe>
     </div>
 
     <!-- DROP A REC + WALL -->
@@ -142,6 +145,15 @@ const playlists = [
   </section>
 
   <script define:vars={{ WALL_WEBHOOK }}>
+    // ---- Playlist show-more ----
+    const moreBtn = document.getElementById('more-pls');
+    const plsEl = document.getElementById('pls');
+    moreBtn?.addEventListener('click', () => {
+      const open = plsEl.classList.toggle('expanded');
+      moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      moreBtn.textContent = open ? 'Show fewer ↑' : 'Show all playlists ↓';
+    });
+
     // ---- Rec form ----
     const form = document.getElementById('rec-form');
     const msg = document.getElementById('form-msg');
@@ -172,7 +184,7 @@ const playlists = [
         });
         if (!res.ok) throw new Error('bad status');
         form.reset();
-        show('Got it — thanks for the rec, going to check it out.', false);
+        show('Got it. Thanks for the rec, going to check it out.', false);
         if (wasPublic) setTimeout(loadWall, 800);
       } catch (err) {
         show('Something broke on my end. Try again, or hit me on socials.', true);
@@ -227,23 +239,23 @@ const playlists = [
     .block { padding: 34px 0; }
 
     /* HERO */
-    .hero { position: relative; min-height: 74vh; display: flex; align-items: flex-end; overflow: hidden; }
+    .hero { position: relative; min-height: 60vh; display: flex; align-items: flex-end; overflow: hidden; }
     .hero-bg {
       position: absolute; inset: 0;
       background-image: url('/music/cruise.jpg');
-      background-size: cover; background-position: center 42%;
+      background-size: cover; background-position: center 40%;
       transform: scale(1.03);
     }
     .hero-shade {
       position: absolute; inset: 0;
       background:
-        linear-gradient(180deg, rgba(8,12,20,0.30) 0%, rgba(8,12,20,0.05) 30%, rgba(8,12,20,0.55) 78%, #0A0E14 100%),
+        linear-gradient(180deg, rgba(8,12,20,0.28) 0%, rgba(8,12,20,0.05) 34%, rgba(8,12,20,0.55) 80%, #0A0E14 100%),
         radial-gradient(120% 80% at 20% 100%, rgba(10,14,20,0.60), transparent 60%);
     }
-    .hero-inner { position: relative; padding-top: 60px; padding-bottom: 46px; width: 100%; }
+    .hero-inner { position: relative; padding-top: 30px; padding-bottom: 40px; width: 100%; }
     .eyebrow {
       text-transform: uppercase; letter-spacing: 0.28em; font-size: 12px; font-weight: 700;
-      color: var(--sun); margin-bottom: 14px; text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      color: var(--sun); margin-bottom: 12px; text-shadow: 0 2px 12px rgba(0,0,0,0.6);
     }
     .title {
       font-weight: 800; line-height: 0.92; letter-spacing: -0.02em;
@@ -255,7 +267,7 @@ const playlists = [
       -webkit-background-clip: text; background-clip: text; color: transparent;
     }
     .lede {
-      margin: 20px 0 26px; max-width: 620px; font-size: clamp(15px, 2vw, 19px);
+      margin: 18px 0 24px; max-width: 620px; font-size: clamp(15px, 2vw, 19px);
       line-height: 1.55; color: #e7ecf3; text-shadow: 0 2px 14px rgba(0,0,0,0.6);
     }
     .cta { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -305,12 +317,20 @@ const playlists = [
       border-radius: 18px; padding: 14px; background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.09);
     }
+    .pl-extra { display: none; }
+    .pls.expanded .pl-extra { display: block; }
     .pl-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
     .pl-top b { color: #fff; font-size: 15px; display: block; }
     .pl-top small { color: rgba(231,236,243,0.55); font-size: 12px; }
     .open { font-size: 13px; font-weight: 700; color: var(--amber); white-space: nowrap; }
     .open:hover { color: var(--sun); }
     .pl iframe { width: 100%; border: 0; border-radius: 12px; display: block; }
+    .more-btn {
+      margin-top: 18px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+      background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px; padding: 10px 20px; font-weight: 700; font-size: 14px; transition: background .15s ease, border-color .15s ease;
+    }
+    .more-btn:hover { background: rgba(247,162,59,0.14); border-color: rgba(247,162,59,0.5); }
 
     /* FIND ME */
     .finds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -328,6 +348,7 @@ const playlists = [
     .find.scl { background: linear-gradient(150deg, rgba(255,85,0,0.14), rgba(255,255,255,0.02)); }
     .find.scl .fi { background: #ff5500; color: #fff; }
     .find.scl:hover { border-color: rgba(255,85,0,0.55); }
+    .sc-embed { width: 100%; height: 320px; border: 0; border-radius: 16px; margin-top: 16px; display: block; }
 
     /* DROP + WALL */
     .drop-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 20px; align-items: start; }
@@ -378,7 +399,18 @@ const playlists = [
     @media (max-width: 560px) {
       .lanes, .pls { grid-template-columns: 1fr; }
       .row2 { grid-template-columns: 1fr; }
-      .hero { min-height: 66vh; }
+      .hero { min-height: 56vh; }
     }
+  </style>
+
+  <!-- Wall cards are injected via JS at runtime, so Astro scoped styles won't attach.
+       These global rules are namespaced under .mz so nothing leaks off this page. -->
+  <style is:global>
+    .mz .wall { display: grid; gap: 12px; max-height: 640px; overflow-y: auto; padding-right: 4px; }
+    .mz .wall-empty { color: rgba(231,236,243,0.5); font-size: 14px; padding: 10px 0; }
+    .mz .wrec { border-radius: 14px; padding: 14px 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+    .mz .wrec-top { color: #fff; font-weight: 700; font-size: 15px; }
+    .mz .wrec-note { color: rgba(231,236,243,0.72); font-size: 13.5px; margin-top: 5px; font-style: italic; }
+    .mz .wrec-by { color: #f7a23b; font-size: 12.5px; margin-top: 8px; font-weight: 600; }
   </style>
 </Base>

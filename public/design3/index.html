@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dustin Alleman — AllemanIT</title>
+<meta name="description" content="Dustin Alleman — network engineer, builder, Chicago. Portfolio of AI tools, automation, and infrastructure work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F4F2;
+    --ink:#0B0B0B;
+    --orange:#FF6A00;
+    --blue:#007BFF;
+    --line:#0B0B0B;
+    --mute:#5c5c58;
+    --panel:#ECECE8;
+    --maxw:1320px;
+    --gutter:clamp(20px, 4vw, 56px);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  html{ -webkit-text-size-adjust:100%; }
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', Helvetica, Arial, sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk', 'Inter', sans-serif;
+    font-weight:600;
+    letter-spacing:-0.02em;
+    line-height:1.02;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 var(--gutter);
+  }
+
+  .rule{
+    border:none;
+    border-top:2px solid var(--line);
+    width:100%;
+  }
+  .rule-thin{
+    border:none;
+    border-top:1px solid var(--line);
+    width:100%;
+  }
+
+  .micro{
+    font-family:'Inter', sans-serif;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .micro.accent-orange{ color:var(--orange); }
+  .micro.accent-blue{ color:var(--blue); }
+
+  .sec-num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.05em;
+  }
+
+  /* ============ NAV ============ */
+  header.site-nav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--bg);
+    border-bottom:2px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:18px var(--gutter);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:18px;
+    letter-spacing:-0.01em;
+  }
+  .brand span{ color:var(--orange); }
+  nav.nav-links{
+    display:flex;
+    align-items:center;
+    gap:clamp(16px,3vw,36px);
+  }
+  .nav-links a{
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    padding:6px 0;
+    border-bottom:2px solid transparent;
+    transition:border-color .15s ease;
+  }
+  .nav-links a:hover{ border-bottom-color:var(--orange); }
+  .nav-links a.btn-outline{
+    border:1px solid var(--ink);
+    padding:8px 16px;
+  }
+  .nav-links a.btn-outline:hover{
+    background:var(--ink);
+    color:var(--bg);
+    border-bottom-color:var(--ink);
+  }
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:1px solid var(--ink);
+    width:40px;
+    height:40px;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after{
+    display:block;
+    width:18px;
+    height:2px;
+    background:var(--ink);
+    position:relative;
+  }
+  .nav-toggle span::before{ content:''; position:absolute; top:-6px; width:18px; height:2px; background:var(--ink);}
+  .nav-toggle span::after{ content:''; position:absolute; top:6px; width:18px; height:2px; background:var(--ink);}
+
+  /* ============ SECTION SHELL ============ */
+  section{
+    border-bottom:2px solid var(--line);
+  }
+  .sec-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:clamp(48px,8vw,96px) var(--gutter);
+  }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:clamp(28px,5vw,56px);
+  }
+  .sec-head .sec-title{
+    font-size:clamp(28px,4vw,44px);
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    padding-top:clamp(56px,10vw,120px);
+    padding-bottom:clamp(48px,8vw,96px);
+  }
+  .hero .micro{ margin-bottom:22px; }
+  .hero h1{
+    font-size:clamp(48px,10vw,124px);
+    font-weight:700;
+    margin-bottom:28px;
+  }
+  .hero-blurb{
+    max-width:640px;
+    font-size:clamp(17px,2vw,20px);
+    color:var(--mute);
+    margin-bottom:40px;
+    border-left:2px solid var(--orange);
+    padding-left:20px;
+  }
+  .hero-cta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:52px;
+  }
+  .btn{
+    display:inline-block;
+    font-size:13px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    padding:15px 28px;
+    border:1px solid var(--ink);
+    transition:all .15s ease;
+  }
+  .btn-primary{
+    background:var(--ink);
+    color:var(--bg);
+  }
+  .btn-primary:hover{
+    background:var(--orange);
+    border-color:var(--orange);
+    color:var(--ink);
+  }
+  .btn-secondary:hover{
+    background:var(--ink);
+    color:var(--bg);
+  }
+  .btn-accent{
+    background:var(--blue);
+    border-color:var(--blue);
+    color:#fff;
+  }
+  .btn-accent:hover{
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+
+  .hero-social{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+    border-top:1px solid var(--ink);
+  }
+  .hero-social a{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    padding:14px 22px 14px 0;
+    margin-right:22px;
+    border-bottom:1px solid transparent;
+  }
+  .hero-social a:hover{ color:var(--orange); }
+
+  /* ============ ABOUT ============ */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap:clamp(28px,5vw,64px);
+  }
+  .about-copy p{
+    font-size:clamp(15px,1.6vw,17px);
+    margin-bottom:22px;
+    max-width:62ch;
+  }
+  .about-copy .offclock{
+    margin-top:32px;
+    padding-top:24px;
+    border-top:1px solid var(--ink);
+  }
+  .about-copy .offclock .label{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--blue);
+    display:block;
+    margin-bottom:8px;
+  }
+
+  .cred-table{
+    width:100%;
+    border-collapse:collapse;
+  }
+  .cred-table tr{
+    border-bottom:1px solid var(--ink);
+  }
+  .cred-table tr:first-child{
+    border-top:2px solid var(--ink);
+  }
+  .cred-table td{
+    padding:16px 0;
+    vertical-align:top;
+    font-size:14px;
+  }
+  .cred-table td.key{
+    width:42%;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    font-size:11px;
+    color:var(--mute);
+    padding-right:12px;
+  }
+  .cred-table td.val{
+    font-weight:500;
+  }
+
+  /* ============ PROJECTS INDEX ============ */
+  .proj-row{
+    display:grid;
+    grid-template-columns: 56px 1fr;
+    gap:20px;
+    padding:32px 0;
+    border-bottom:1px solid var(--ink);
+    align-items:start;
+  }
+  .proj-row:first-of-type{ border-top:2px solid var(--ink); }
+  .proj-num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:15px;
+    font-weight:600;
+    color:var(--orange);
+    padding-top:4px;
+  }
+  .proj-body{
+    display:grid;
+    grid-template-columns: 1.4fr 0.5fr 1.6fr 1fr;
+    gap:20px;
+    align-items:start;
+  }
+  .proj-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:clamp(20px,2.4vw,26px);
+    font-weight:600;
+  }
+  .proj-status{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    padding-top:6px;
+  }
+  .proj-status.live{ color:var(--blue); }
+  .proj-status.demo{ color:var(--orange); }
+  .proj-status.progress{ color:var(--mute); }
+  .proj-status.service{ color:var(--mute); }
+  .proj-summary{
+    font-size:14px;
+    color:var(--mute);
+    max-width:52ch;
+  }
+  .proj-tags{
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink);
+  }
+  .proj-tags span{
+    display:inline-block;
+    border:1px solid var(--ink);
+    padding:4px 8px;
+    margin:0 6px 6px 0;
+  }
+
+  /* Other projects - simpler list */
+  .other-row{
+    display:grid;
+    grid-template-columns: 56px 1fr 1.6fr;
+    gap:20px;
+    padding:24px 0;
+    border-bottom:1px solid var(--ink);
+    align-items:baseline;
+  }
+  .other-row:first-of-type{ border-top:2px solid var(--ink); }
+  .other-num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:14px;
+    font-weight:600;
+    color:var(--blue);
+  }
+  .other-title-wrap{ display:flex; flex-direction:column; gap:6px; }
+  .other-title{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:18px;
+    font-weight:600;
+  }
+  .other-status{
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--mute);
+  }
+  .other-summary{
+    font-size:14px;
+    color:var(--mute);
+    max-width:56ch;
+  }
+
+  /* ============ SITES DESIGNED ============ */
+  .sites-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--ink);
+    border:2px solid var(--ink);
+  }
+  .site-card{
+    background:var(--bg);
+    padding:28px 22px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-height:180px;
+    justify-content:space-between;
+    transition:background .15s ease;
+  }
+  .site-card:hover{ background:var(--panel); }
+  .site-card .site-name{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:19px;
+    font-weight:600;
+  }
+  .site-card .site-style{
+    font-size:12px;
+    color:var(--mute);
+  }
+  .site-card .site-url{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--blue);
+  }
+
+  /* ============ FOLLOW THE BUILD ============ */
+  .follow-inner{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:32px;
+  }
+  .follow-head h2{ font-size:clamp(26px,4vw,42px); margin-bottom:10px; }
+  .follow-head p{ color:var(--mute); font-size:15px; }
+  .follow-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0;
+  }
+  .follow-links a{
+    font-size:13px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    padding:14px 24px;
+    border:1px solid var(--ink);
+    margin:0 -1px -1px 0;
+  }
+  .follow-links a:hover{
+    background:var(--ink);
+    color:var(--bg);
+  }
+
+  /* ============ CONTACT ============ */
+  .contact-inner{
+    text-align:left;
+  }
+  .contact-inner h2{
+    font-size:clamp(32px,6vw,64px);
+    max-width:16ch;
+    margin-bottom:20px;
+  }
+  .contact-inner p{
+    font-size:clamp(15px,1.8vw,18px);
+    color:var(--mute);
+    max-width:56ch;
+    margin-bottom:36px;
+  }
+  .contact-cta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .contact-cta .btn{
+    font-size:15px;
+    padding:20px 34px;
+  }
+
+  /* ============ FOOTER ============ */
+  footer{
+    padding:28px var(--gutter);
+  }
+  .footer-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+  }
+  .footer-copy{
+    font-size:12px;
+    color:var(--mute);
+  }
+  .footer-links{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+  }
+  .footer-links a{
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--mute);
+  }
+  .footer-links a:hover{ color:var(--orange); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 900px){
+    .about-grid{ grid-template-columns:1fr; }
+    .proj-body{
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    .proj-status{ padding-top:0; }
+    .sites-grid{ grid-template-columns:repeat(2, 1fr); }
+    .other-row{ grid-template-columns: 40px 1fr; }
+    .other-row .other-summary{ grid-column: 2 / 3; }
+  }
+
+  @media (max-width: 640px){
+    .nav-links{
+      display:none;
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+      background:var(--bg);
+      border-bottom:2px solid var(--ink);
+      flex-direction:column;
+      align-items:flex-start;
+      padding:20px var(--gutter) 28px;
+      gap:18px;
+    }
+    .nav-links.open{ display:flex; }
+    .nav-toggle{ display:flex; }
+    .sites-grid{ grid-template-columns:1fr; }
+    .proj-row{ grid-template-columns: 32px 1fr; }
+    .follow-inner{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">Alleman<span>IT</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+    </button>
+    <nav class="nav-links" id="navLinks">
+      <a href="#projects">Projects</a>
+      <a href="#content">Content</a>
+      <a href="#contact">Contact</a>
+      <a href="https://quickitprojects.com" class="btn-outline">Business</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="micro accent-orange">Network engineer · builder · Chicago</p>
+      <h1>Dustin<br>Alleman</h1>
+      <p class="hero-blurb">Over a decade in networking and IT. Off the clock I build AI tools, automation, and a homelab that runs like production.</p>
+      <div class="hero-cta">
+        <a href="https://quickitprojects.com" class="btn btn-primary">Work with me</a>
+        <a href="#contact" class="btn btn-secondary">Get in touch</a>
+      </div>
+      <div class="hero-social">
+        <a href="https://github.com/almnjoy" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/dustin-alleman/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.youtube.com/@Almnjoy" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/alleman_joyy/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <span class="sec-num accent-orange" style="color:var(--orange);">01</span>
+        <h2 class="sec-title">About</h2>
+      </div>
+      <div class="about-grid">
+        <div>
+          <table class="cred-table">
+            <tr><td class="key">Based in</td><td class="val">Chicago, IL</td></tr>
+            <tr><td class="key">Experience</td><td class="val">10+ yrs networking &amp; IT</td></tr>
+            <tr><td class="key">Certifications</td><td class="val">CCNA · CWNA · Meraki Solutions Specialist</td></tr>
+            <tr><td class="key">Education</td><td class="val">B.S. IT, Western Governors University</td></tr>
+            <tr><td class="key">Teaching</td><td class="val">Instructor, Cisco Networking Academy</td></tr>
+            <tr><td class="key">Service</td><td class="val">U.S. Marine Corps veteran</td></tr>
+          </table>
+        </div>
+        <div class="about-copy">
+          <p>I'm Dustin. I've spent over a decade in IT: support, help desk, networking, engineering, infrastructure. It started long before the paycheck. I was the kid taking computers apart, downloading games and music, breaking things and figuring out how to fix them. Too many years of World of Warcraft, still a PC gamer. That curiosity turned into the career.</p>
+          <p>I did IT in the Marine Corps, carried it through a few companies after that, and these days I work on Cisco networking in a FedRAMP environment. I came up on the hands-on side: packet captures, escalations, enterprise gear. The goal was always to architect networks, not just support them, and to build the tools I wished I had along the way.</p>
+          <p>So I build. Dashboards, AI agents, automation, a homelab that grew from scavenged gear into something that runs like production. A lot of it points at one goal: moving into a sales engineer role, which is why so many of these projects are about proving a thing out and explaining it clearly. I also teach CCNA-level networking at colleges around Chicago, which is some of the most rewarding work I do.</p>
+          <div class="offclock">
+            <span class="label">Off the clock</span>
+            <p style="margin-bottom:0;">Chicago lakefront skates, biking, anything outdoors, a Jeep with a permanent project list, and whatever the lab breaks that week.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED PROJECTS ============ -->
+  <section id="projects">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <span class="sec-num" style="color:var(--blue);">02</span>
+        <h2 class="sec-title">Featured Projects</h2>
+      </div>
+
+      <div class="proj-index">
+
+        <div class="proj-row">
+          <div class="proj-num">01</div>
+          <div class="proj-body">
+            <div class="proj-title">MindMap</div>
+            <div class="proj-status live">Live</div>
+            <div class="proj-summary">A self-hosted, white-label AI workspace. Every tool the agent touches becomes a node on a visual canvas, so you can see what it is doing and why. Plugin-based, fully tenant-isolated, with one connector for thousands of apps.</div>
+            <div class="proj-tags"><span>AI</span><span>Automation</span><span>Self-hosted</span></div>
+          </div>
+        </div>
+
+        <div class="proj-row">
+          <div class="proj-num">02</div>
+          <div class="proj-body">
+            <div class="proj-title">Homelab + Hybrid Cloud</div>
+            <div class="proj-status live">Live</div>
+            <div class="proj-summary">A production-grade homelab bridged to the cloud. Proxmox and two-site Cisco Meraki, full observability, automated backups, and a private overlay to Hetzner.</div>
+            <div class="proj-tags"><span>Infrastructure</span><span>Networking</span><span>Observability</span></div>
+          </div>
+        </div>
+
+        <div class="proj-row">
+          <div class="proj-num">03</div>
+          <div class="proj-body">
+            <div class="proj-title">MadeForMeAI</div>
+            <div class="proj-status live">Live</div>
+            <div class="proj-summary">A multi-tenant AI workspace SaaS. Every customer gets their own isolated OpenClaw agent on its own Kubernetes pod, with single sign-on and billing wired end to end.</div>
+            <div class="proj-tags"><span>SaaS</span><span>Kubernetes</span><span>AI</span></div>
+          </div>
+        </div>
+
+        <div class="proj-row">
+          <div class="proj-num">04</div>
+          <div class="proj-body">
+            <div class="proj-title">QuickIT Sales Automation</div>
+            <div class="proj-status live">Live</div>
+            <div class="proj-summary">Inbound calls and chat to booked meetings, automatically. A phone number routes to an AI voice agent, into a CRM, onto a calendar, with no human in the loop for intake.</div>
+            <div class="proj-tags"><span>Automation</span><span>AI</span><span>CRM</span></div>
+          </div>
+        </div>
+
+        <div class="proj-row">
+          <div class="proj-num">05</div>
+          <div class="proj-body">
+            <div class="proj-title">Solar Demo (TrueNorth)</div>
+            <div class="proj-status demo">Demo</div>
+            <div class="proj-summary">A full vertical demo for a solar installer: branded site, CRM, documentation, and a team of role-scoped AI agents handling intake, questions, and follow-up, end to end.</div>
+            <div class="proj-tags"><span>AI</span><span>CRM</span><span>Vertical demo</span></div>
+          </div>
+        </div>
+
+        <div class="proj-row">
+          <div class="proj-num">06</div>
+          <div class="proj-body">
+            <div class="proj-title">AI Agent Ecosystem</div>
+            <div class="proj-status live">Live</div>
+            <div class="proj-summary">A tiered team of AI agents that monitors and troubleshoots my cloud and local infrastructure, escalating from read-only log analysis to SSH to me, with a shared memory brain (Cognee) so they coordinate instead of duplicating work.</div>
+            <div class="proj-tags"><span>AI</span><span>Agents</span><span>Observability</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OTHER PROJECTS ============ -->
+  <section id="other-projects">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <span class="sec-num" style="color:var(--orange);">03</span>
+        <h2 class="sec-title">Other Projects</h2>
+      </div>
+
+      <div class="other-index">
+
+        <div class="other-row">
+          <div class="other-num">01</div>
+          <div class="other-title-wrap">
+            <div class="other-title">CCNP Study Bot + CML Lab</div>
+            <div class="other-status">In Progress</div>
+          </div>
+          <div class="other-summary">A self-hosted study engine that drills me on the CCNP Automation blueprint, paired with a Cisco Modeling Labs environment where the labs actually run.</div>
+        </div>
+
+        <div class="other-row">
+          <div class="other-num">02</div>
+          <div class="other-title-wrap">
+            <div class="other-title">Network Design &amp; Architecture</div>
+            <div class="other-status">Service</div>
+          </div>
+          <div class="other-summary">Secure, segmented, well-documented network design, a homelab that mirrors the enterprise, and a dedicated Cisco Modeling Labs environment for the heavy scenarios.</div>
+        </div>
+
+        <div class="other-row">
+          <div class="other-num">03</div>
+          <div class="other-title-wrap">
+            <div class="other-title">Web Design &amp; Development</div>
+            <div class="other-status">Service</div>
+          </div>
+          <div class="other-summary">Landing pages, docs portals, dashboards, customer portals, and marketing sites, built across plain HTML through React and Astro.</div>
+        </div>
+
+        <div class="other-row">
+          <div class="other-num">04</div>
+          <div class="other-title-wrap">
+            <div class="other-title">Media Stack</div>
+            <div class="other-status">Live</div>
+          </div>
+          <div class="other-summary">A self-hosted media platform: Plex plus the full *arr automation stack and a request portal, so the whole library runs hands-off.</div>
+        </div>
+
+        <div class="other-row">
+          <div class="other-num">05</div>
+          <div class="other-title-wrap">
+            <div class="other-title">MerakiNOC</div>
+            <div class="other-status">Live</div>
+          </div>
+          <div class="other-summary">A network operations dashboard for Cisco Meraki: live device health, alerts, and client visibility in one view, driven through the API.</div>
+        </div>
+
+        <div class="other-row">
+          <div class="other-num">06</div>
+          <div class="other-title-wrap">
+            <div class="other-title">netadmintoolbox.com</div>
+            <div class="other-status">Live</div>
+          </div>
+          <div class="other-summary">A toolbox of network-admin utilities for engineers and students: subnetting, lookups, quick references, and guided troubleshooting.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SITES DESIGNED ============ -->
+  <section id="sites">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <span class="sec-num" style="color:var(--blue);">04</span>
+        <h2 class="sec-title">Sites I've Designed</h2>
+      </div>
+
+      <div class="sites-grid">
+        <a class="site-card" href="https://almnjoy.dev" target="_blank" rel="noopener">
+          <div>
+            <div class="site-name">almnjoy.dev</div>
+            <div class="site-style">Retro Windows 98 desktop</div>
+          </div>
+          <div class="site-url">almnjoy.dev</div>
+        </a>
+        <a class="site-card" href="https://quickitprojects.com" target="_blank" rel="noopener">
+          <div>
+            <div class="site-name">quickitprojects.com</div>
+            <div class="site-style">Clean corporate / consulting</div>
+          </div>
+          <div class="site-url">quickitprojects.com</div>
+        </a>
+        <a class="site-card" href="https://madeformeai.com" target="_blank" rel="noopener">
+          <div>
+            <div class="site-name">madeformeai.com</div>
+            <div class="site-style">Modern SaaS product</div>
+          </div>
+          <div class="site-url">madeformeai.com</div>
+        </a>
+        <a class="site-card" href="https://netadmintoolbox.com" target="_blank" rel="noopener">
+          <div>
+            <div class="site-name">netadmintoolbox.com</div>
+            <div class="site-style">Engineer utility site</div>
+          </div>
+          <div class="site-url">netadmintoolbox.com</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOLLOW THE BUILD / CONTENT ============ -->
+  <section id="content">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <span class="sec-num" style="color:var(--orange);">05</span>
+        <h2 class="sec-title">Content</h2>
+      </div>
+
+      <div class="follow-inner">
+        <div class="follow-head">
+          <h2>Follow the build</h2>
+          <p>Homelab, AI agents, networking, and automation.</p>
+        </div>
+        <div class="follow-links">
+          <a href="https://github.com/almnjoy" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/dustin-alleman/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.youtube.com/@Almnjoy" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://www.instagram.com/alleman_joyy/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://almnjoy.dev" target="_blank" rel="noopener">Blog</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="sec-inner contact-inner">
+      <div class="sec-head">
+        <span class="sec-num" style="color:var(--blue);">06</span>
+        <h2 class="sec-title" style="font-size:clamp(14px,1.6vw,16px); text-transform:uppercase; letter-spacing:0.12em;">Contact</h2>
+      </div>
+      <h2>Want to talk shop or hire me?</h2>
+      <p>Call my AI line for a fun AI game to sign up. Just say "sign up" if you don't want to play. :)</p>
+      <div class="contact-cta">
+        <a href="tel:+15178834473" class="btn btn-accent">(517) 883-4473</a>
+        <a href="mailto:duallema@outlook.com" class="btn btn-secondary">Request lab access</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-copy">&copy; <span id="year"></span> Dustin Alleman · AllemanIT</p>
+    <div class="footer-links">
+      <a href="https://github.com/almnjoy" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/dustin-alleman/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.youtube.com/@Almnjoy" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://www.instagram.com/alleman_joyy/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://almnjoy.dev" target="_blank" rel="noopener">Blog</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', function () {
+      var isOpen = navLinks.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    navLinks.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

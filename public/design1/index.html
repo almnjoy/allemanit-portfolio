@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dustin Alleman — dustin@allemanit:~$</title>
+<meta name="description" content="Dustin Alleman — network engineer and builder in Chicago. AI tools, automation, and a homelab that runs like production.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05080A;
+    --bg-raised:#0B1210;
+    --bg-panel:#0A0F0D;
+    --border:#153322;
+    --border-bright:#1E4A30;
+    --green:#33FF8A;
+    --green-dim:#1F9A56;
+    --amber:#FFB000;
+    --amber-dim:#B37A00;
+    --orange:#FF6A00;
+    --blue:#007BFF;
+    --white:#EAFBF1;
+    --muted:#6FA98A;
+    --mono: 'JetBrains Mono', 'Space Mono', 'Courier New', monospace;
+    --maxw: 1120px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--green);
+    font-family:var(--mono);
+    font-size:15px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+
+  /* CRT scanline + vignette overlay */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9999;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(51,255,138,0.035) 0px,
+      rgba(51,255,138,0.035) 1px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0) 3px
+    );
+    mix-blend-mode:overlay;
+  }
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9998;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+  }
+
+  a{color:inherit;}
+  ::selection{background:var(--green);color:#031007;}
+
+  img{display:none;} /* hard rule: no images in this build */
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .blink{
+    display:inline-block;
+    width:0.58em;
+    height:1.05em;
+    background:var(--green);
+    margin-left:3px;
+    vertical-align:-0.15em;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{
+    0%,49%{opacity:1;}
+    50%,100%{opacity:0;}
+  }
+
+  /* ---------- top chrome bar ---------- */
+  .chrome-bar{
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, #070C0A, #05080A);
+    position:sticky;
+    top:0;
+    z-index:500;
+  }
+  .chrome-bar .wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 24px;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .dots{display:flex;gap:6px;flex:0 0 auto;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .dot.red{background:#FF5F56;}
+  .dot.yellow{background:var(--amber);}
+  .dot.green{background:var(--green);}
+  .chrome-path{
+    color:var(--green-dim);
+    letter-spacing:0.02em;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .chrome-path b{color:var(--green);font-weight:600;}
+  .chrome-status{
+    margin-left:auto;
+    display:flex;
+    gap:14px;
+    color:var(--muted);
+    flex:0 0 auto;
+  }
+  .chrome-status span::before{content:"● ";color:var(--green);}
+  @media (max-width:640px){
+    .chrome-status{display:none;}
+  }
+
+  /* ---------- nav / command bar ---------- */
+  header.site-nav{
+    border-bottom:1px solid var(--border);
+    background:var(--bg);
+    position:sticky;
+    top:29px;
+    z-index:499;
+    backdrop-filter:blur(2px);
+  }
+  .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 24px;
+  }
+  .brand{
+    font-weight:700;
+    color:var(--white);
+    text-decoration:none;
+    font-size:16px;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .brand .brand-glyph{color:var(--green);}
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color:var(--green-dim);
+    font-size:13px;
+    padding:7px 10px;
+    border:1px solid transparent;
+    border-radius:3px;
+    transition:all .15s ease;
+    white-space:nowrap;
+  }
+  .nav-links a:hover{
+    color:var(--green);
+    border-color:var(--border-bright);
+    background:rgba(51,255,138,0.06);
+  }
+  .nav-links a::before{content:"[";color:var(--muted);}
+  .nav-links a::after{content:"]";color:var(--muted);}
+  .nav-links a.cta{
+    color:var(--bg);
+    background:var(--orange);
+    border-color:var(--orange);
+    font-weight:700;
+    margin-left:6px;
+  }
+  .nav-links a.cta::before,
+  .nav-links a.cta::after{content:none;}
+  .nav-links a.cta:hover{
+    background:#ff7f26;
+    color:#05080A;
+  }
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:1px solid var(--border-bright);
+    color:var(--green);
+    font-family:var(--mono);
+    font-size:13px;
+    padding:6px 10px;
+    cursor:pointer;
+    border-radius:3px;
+  }
+  @media (max-width:820px){
+    .nav-links{
+      display:none;
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+      background:var(--bg-panel);
+      border-bottom:1px solid var(--border-bright);
+      flex-direction:column;
+      align-items:stretch;
+      padding:10px 16px 16px;
+      gap:6px;
+    }
+    .nav-links.open{display:flex;}
+    .nav-links a{width:100%;text-align:left;}
+    .nav-toggle{display:inline-block;}
+    header.site-nav{position:relative;top:auto;}
+    .nav-inner{position:relative;}
+  }
+
+  /* ---------- generic section shell ---------- */
+  section{
+    padding:64px 0;
+    border-bottom:1px solid var(--border);
+  }
+  section:last-of-type{border-bottom:none;}
+  .prompt-line{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:18px;
+  }
+  .prompt-line .ps{color:var(--green);}
+  .prompt-line .path{color:var(--blue);}
+  .prompt-line .cmd{color:var(--amber);}
+  .section-title{
+    font-size:22px;
+    color:var(--white);
+    margin:0 0 6px;
+    font-weight:700;
+    letter-spacing:0.01em;
+  }
+  .section-sub{
+    color:var(--muted);
+    margin:0 0 32px;
+    font-size:14px;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:88px 0 72px;
+    border-bottom:1px solid var(--border);
+    position:relative;
+  }
+  .hero-kicker{
+    color:var(--amber);
+    font-size:13px;
+    letter-spacing:0.04em;
+    margin-bottom:18px;
+  }
+  .hero-kicker::before{content:"$ ";color:var(--green);}
+  .hero h1{
+    font-size:clamp(34px, 6vw, 58px);
+    line-height:1.08;
+    margin:0 0 20px;
+    color:var(--white);
+    font-weight:800;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 .accent{color:var(--green);}
+  .hero-blurb{
+    max-width:620px;
+    color:#B8E8CC;
+    font-size:16px;
+    line-height:1.75;
+    margin:0 0 34px;
+  }
+  .hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:36px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 20px;
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    border-radius:3px;
+    border:1px solid transparent;
+    cursor:pointer;
+    letter-spacing:0.01em;
+    transition:all .15s ease;
+  }
+  .btn-primary{
+    background:var(--orange);
+    color:#05080A;
+    border-color:var(--orange);
+  }
+  .btn-primary:hover{background:#ff8433;}
+  .btn-secondary{
+    background:transparent;
+    color:var(--green);
+    border-color:var(--border-bright);
+  }
+  .btn-secondary:hover{
+    background:rgba(51,255,138,0.08);
+    border-color:var(--green);
+  }
+  .btn-outline-blue{
+    background:transparent;
+    color:var(--blue);
+    border-color:#0B3D73;
+  }
+  .btn-outline-blue:hover{
+    background:rgba(0,123,255,0.1);
+    border-color:var(--blue);
+  }
+
+  .hero-socials{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    font-size:13px;
+  }
+  .hero-socials a{
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:1px dashed transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .hero-socials a:hover{
+    color:var(--blue);
+    border-bottom-color:var(--blue);
+  }
+  .hero-socials a::before{content:"~/";color:var(--green-dim);}
+
+  .hero-terminal{
+    margin-top:44px;
+    border:1px solid var(--border-bright);
+    background:var(--bg-panel);
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(51,255,138,0.03), 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .hero-terminal .tbar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 14px;
+    border-bottom:1px solid var(--border);
+    background:#080D0B;
+  }
+  .hero-terminal .tbar .ttitle{
+    margin-left:8px;
+    color:var(--muted);
+    font-size:12px;
+  }
+  .hero-terminal .tbody{
+    padding:18px 20px 22px;
+    font-size:13px;
+  }
+  .hero-terminal .line{margin:0 0 8px;color:var(--green-dim);}
+  .hero-terminal .line .k{color:var(--blue);}
+  .hero-terminal .line .v{color:var(--white);}
+  .hero-terminal .line .comment{color:var(--muted);}
+  .hero-terminal .out{color:var(--amber);}
+
+  /* ---------- about ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  .about-text p{
+    color:#C7ECD6;
+    margin:0 0 18px;
+    font-size:14.5px;
+    line-height:1.8;
+  }
+  .about-text .offclock{
+    margin-top:8px;
+    padding:16px 18px;
+    border-left:3px solid var(--orange);
+    background:rgba(255,106,0,0.06);
+    color:var(--white);
+    font-size:14px;
+  }
+  .about-text .offclock .lbl{
+    color:var(--orange);
+    font-weight:700;
+    display:block;
+    margin-bottom:6px;
+    font-size:12px;
+    letter-spacing:0.05em;
+  }
+
+  .creds-box{
+    border:1px solid var(--border-bright);
+    background:var(--bg-panel);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .creds-box .tbar{
+    padding:9px 14px;
+    border-bottom:1px solid var(--border);
+    background:#080D0B;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .creds-list{
+    padding:16px 18px;
+    font-size:13px;
+  }
+  .creds-list .row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 0;
+    border-bottom:1px dashed var(--border);
+  }
+  .creds-list .row:last-child{border-bottom:none;}
+  .creds-list .key{color:var(--blue);white-space:nowrap;}
+  .creds-list .val{color:var(--white);text-align:right;}
+
+  @media (max-width:860px){
+    .about-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- projects ---------- */
+  .project-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px;
+  }
+  @media (max-width:860px){
+    .project-grid{grid-template-columns:1fr;}
+  }
+  .card{
+    border:1px solid var(--border);
+    background:var(--bg-panel);
+    border-radius:6px;
+    overflow:hidden;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .card:hover{
+    border-color:var(--border-bright);
+    transform:translateY(-2px);
+  }
+  .card .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+    background:#080D0B;
+  }
+  .card .card-idx{
+    color:var(--muted);
+    font-size:11px;
+  }
+  .status-pill{
+    font-size:10.5px;
+    padding:3px 9px;
+    border-radius:20px;
+    border:1px solid;
+    letter-spacing:0.04em;
+    font-weight:700;
+    text-transform:uppercase;
+  }
+  .status-pill.live{color:var(--green);border-color:var(--green-dim);background:rgba(51,255,138,0.08);}
+  .status-pill.demo{color:var(--blue);border-color:#0B3D73;background:rgba(0,123,255,0.08);}
+  .status-pill.progress{color:var(--amber);border-color:var(--amber-dim);background:rgba(255,176,0,0.08);}
+  .status-pill.service{color:var(--orange);border-color:#7A3200;background:rgba(255,106,0,0.08);}
+
+  .card .card-body{padding:16px;}
+  .card h3{
+    margin:0 0 10px;
+    font-size:16px;
+    color:var(--white);
+    font-weight:700;
+  }
+  .card h3 .brkt{color:var(--green-dim);}
+  .card p{
+    margin:0 0 14px;
+    color:#B8E8CC;
+    font-size:13.5px;
+    line-height:1.7;
+  }
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{
+    font-size:11px;
+    color:var(--amber);
+    border:1px solid var(--amber-dim);
+    background:rgba(255,176,0,0.06);
+    padding:3px 8px;
+    border-radius:3px;
+  }
+
+  /* other projects - file listing style */
+  .file-list{
+    border:1px solid var(--border);
+    background:var(--bg-panel);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .file-row{
+    display:grid;
+    grid-template-columns:22px 1fr auto;
+    gap:14px;
+    align-items:baseline;
+    padding:16px 18px;
+    border-bottom:1px solid var(--border);
+  }
+  .file-row:last-child{border-bottom:none;}
+  .file-row .fico{color:var(--green-dim);}
+  .file-row .fname{color:var(--white);font-weight:700;font-size:14px;}
+  .file-row .fdesc{
+    grid-column:2 / span 2;
+    color:#B8E8CC;
+    font-size:13.5px;
+    margin-top:6px;
+    line-height:1.7;
+  }
+  @media (max-width:600px){
+    .file-row{grid-template-columns:18px 1fr;}
+    .file-row .fstatus{grid-column:2;justify-self:start;margin-top:6px;}
+    .file-row .fdesc{grid-column:1 / -1;}
+  }
+
+  /* sites grid */
+  .sites-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:16px;
+  }
+  @media (max-width:700px){
+    .sites-grid{grid-template-columns:1fr;}
+  }
+  .site-card{
+    border:1px solid var(--border);
+    background:var(--bg-panel);
+    border-radius:6px;
+    padding:16px 18px;
+    text-decoration:none;
+    display:block;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .site-card:hover{
+    border-color:var(--blue);
+    transform:translateY(-2px);
+  }
+  .site-card .surl{
+    color:var(--blue);
+    font-size:13px;
+    margin-bottom:6px;
+    word-break:break-all;
+  }
+  .site-card .surl::before{content:"→ ";color:var(--green-dim);}
+  .site-card .sstyle{
+    color:var(--muted);
+    font-size:12.5px;
+  }
+
+  /* follow the build */
+  .follow-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .pill-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:10px 16px;
+    border:1px solid var(--border-bright);
+    border-radius:20px;
+    color:var(--green);
+    text-decoration:none;
+    font-size:13px;
+    transition:all .15s ease;
+  }
+  .pill-link:hover{
+    background:rgba(51,255,138,0.08);
+    border-color:var(--green);
+  }
+  .pill-link .b{color:var(--orange);}
+
+  /* contact */
+  .contact-box{
+    border:1px solid var(--border-bright);
+    background:linear-gradient(180deg, rgba(51,255,138,0.05), transparent 60%);
+    border-radius:8px;
+    padding:44px 36px;
+    text-align:center;
+  }
+  .contact-box h2{
+    font-size:26px;
+    color:var(--white);
+    margin:0 0 14px;
+  }
+  .contact-box p{
+    color:#B8E8CC;
+    max-width:520px;
+    margin:0 auto 28px;
+    font-size:14.5px;
+    line-height:1.75;
+  }
+  .contact-actions{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:14px;
+  }
+
+  /* footer */
+  footer{
+    padding:34px 0 46px;
+    text-align:center;
+  }
+  footer .fline{
+    color:var(--muted);
+    font-size:12.5px;
+    margin-bottom:18px;
+  }
+  footer .fline .p{color:var(--green);}
+  footer .flinks{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:16px;
+    font-size:12.5px;
+  }
+  footer .flinks a{
+    color:var(--muted);
+    text-decoration:none;
+  }
+  footer .flinks a:hover{color:var(--green);}
+
+  code, .inline-code{
+    background:rgba(51,255,138,0.08);
+    color:var(--amber);
+    padding:1px 6px;
+    border-radius:3px;
+    font-size:0.92em;
+  }
+
+  h1,h2,h3{font-family:var(--mono);}
+
+  @media (max-width:560px){
+    section{padding:44px 0;}
+    .contact-box{padding:32px 20px;}
+    .hero{padding:56px 0 48px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="chrome-bar">
+    <div class="wrap">
+      <div class="dots"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+      <div class="chrome-path"><b>dustin</b>@allemanit:~$ <span id="chromeCmd"></span></div>
+      <div class="chrome-status"><span>uptime 10y+</span><span>status ok</span></div>
+    </div>
+  </div>
+
+  <header class="site-nav">
+    <div class="wrap nav-inner">
+      <a href="#" class="brand"><span class="brand-glyph">&gt;_</span>AllemanIT</a>
+      <button class="nav-toggle" id="navToggle" aria-label="toggle menu" aria-expanded="false">menu</button>
+      <nav class="nav-links" id="navLinks">
+        <a href="#projects">Projects</a>
+        <a href="#content">Content</a>
+        <a href="#contact">Contact</a>
+        <a href="https://quickitprojects.com" class="cta" target="_blank" rel="noopener">Business</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-kicker">Network engineer · builder · Chicago</div>
+      <h1>Dustin <span class="accent">Alleman</span><span class="blink"></span></h1>
+      <p class="hero-blurb">Over a decade in networking and IT. Off the clock I build AI tools, automation, and a homelab that runs like production.</p>
+      <div class="hero-actions">
+        <a href="https://quickitprojects.com" class="btn btn-primary" target="_blank" rel="noopener">./work-with-me</a>
+        <a href="#contact" class="btn btn-secondary">./get-in-touch</a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://github.com/almnjoy" target="_blank" rel="noopener">github</a>
+        <a href="https://www.linkedin.com/in/dustin-alleman/" target="_blank" rel="noopener">linkedin</a>
+        <a href="https://www.youtube.com/@Almnjoy" target="_blank" rel="noopener">youtube</a>
+        <a href="https://www.instagram.com/alleman_joyy/" target="_blank" rel="noopener">instagram</a>
+      </div>
+
+      <div class="hero-terminal">
+        <div class="tbar">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="ttitle">whoami.sh</span>
+        </div>
+        <div class="tbody">
+          <p class="line"><span class="ps">$</span> whoami</p>
+          <p class="line out">dustin_alleman — network_engineer, builder, veteran</p>
+          <p class="line"><span class="k">role</span>: <span class="v">Cisco networking · FedRAMP environment</span></p>
+          <p class="line"><span class="k">side_projects</span>: <span class="v">MindMap, MadeForMeAI, homelab, AI agents</span></p>
+          <p class="line"><span class="k">status</span>: <span class="v">open to sales engineering conversations</span> <span class="comment">// see #contact</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT ===================== -->
+  <section id="about">
+    <div class="wrap">
+      <div class="prompt-line"><span class="ps">dustin@allemanit</span>:<span class="path">~</span><span class="ps">$</span> <span class="cmd">./about.sh</span></div>
+      <h2 class="section-title">About</h2>
+      <p class="section-sub">// a decade-plus of networking, IT, and building the tools I wished I had</p>
+
+      <div class="about-grid">
+        <div class="about-text">
+          <p>I'm Dustin. I've spent over a decade in IT: support, help desk, networking, engineering, infrastructure. It started long before the paycheck. I was the kid taking computers apart, downloading games and music, breaking things and figuring out how to fix them. Too many years of World of Warcraft, still a PC gamer. That curiosity turned into the career.</p>
+          <p>I did IT in the Marine Corps, carried it through a few companies after that, and these days I work on Cisco networking in a FedRAMP environment. I came up on the hands-on side: packet captures, escalations, enterprise gear. The goal was always to architect networks, not just support them, and to build the tools I wished I had along the way.</p>
+          <p>So I build. Dashboards, AI agents, automation, a homelab that grew from scavenged gear into something that runs like production. A lot of it points at one goal: moving into a sales engineer role, which is why so many of these projects are about proving a thing out and explaining it clearly. I also teach CCNA-level networking at colleges around Chicago, which is some of the most rewarding work I do.</p>
+          <div class="offclock">
+            <span class="lbl">// off the clock</span>
+            Chicago lakefront skates, biking, anything outdoors, a Jeep with a permanent project list, and whatever the lab breaks that week.
+          </div>
+        </div>
+
+        <div class="creds-box">
+          <div class="tbar">cat credentials.yaml</div>
+          <div class="creds-list">
+            <div class="row"><span class="key">based_in</span><span class="val">Chicago, IL</span></div>
+            <div class="row"><span class="key">experience</span><span class="val">10+ yrs networking &amp; IT</span></div>
+            <div class="row"><span class="key">certifications</span><span class="val">CCNA · CWNA · Meraki Solutions Specialist</span></div>
+            <div class="row"><span class="key">education</span><span class="val">B.S. IT, Western Governors University</span></div>
+            <div class="row"><span class="key">teaching</span><span class="val">Instructor, Cisco Networking Academy</span></div>
+            <div class="row"><span class="key">service</span><span class="val">U.S. Marine Corps veteran</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED PROJECTS ===================== -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="prompt-line"><span class="ps">dustin@allemanit</span>:<span class="path">~</span><span class="ps">$</span> <span class="cmd">cat projects.json</span></div>
+      <h2 class="section-title">Featured projects</h2>
+      <p class="section-sub">// the ones I'd actually walk you through</p>
+
+      <div class="project-grid">
+
+        <div class="card">
+          <div class="card-head"><span class="card-idx">[01]</span><span class="status-pill live">Live</span></div>
+          <div class="card-body">
+            <h3><span class="brkt">./</span>MindMap</h3>
+            <p>A self-hosted, white-label AI workspace. Every tool the agent touches becomes a node on a visual canvas, so you can see what it is doing and why. Plugin-based, fully tenant-isolated, with one connector for thousands of apps.</p>
+            <div class="tag-row"><span class="tag">AI</span><span class="tag">Automation</span><span class="tag">Self-hosted</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="card-idx">[02]</span><span class="status-pill live">Live</span></div>
+          <div class="card-body">
+            <h3><span class="brkt">./</span>Homelab + Hybrid Cloud</h3>
+            <p>A production-grade homelab bridged to the cloud. Proxmox and two-site Cisco Meraki, full observability, automated backups, and a private overlay to Hetzner.</p>
+            <div class="tag-row"><span class="tag">Infrastructure</span><span class="tag">Networking</span><span class="tag">Observability</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="card-idx">[03]</span><span class="status-pill live">Live</span></div>
+          <div class="card-body">
+            <h3><span class="brkt">./</span>MadeForMeAI</h3>
+            <p>A multi-tenant AI workspace SaaS. Every customer gets their own isolated OpenClaw agent on its own Kubernetes pod, with single sign-on and billing wired end to end.</p>
+            <div class="tag-row"><span class="tag">SaaS</span><span class="tag">Kubernetes</span><span class="tag">AI</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="card-idx">[04]</span><span class="status-pill live">Live</span></div>
+          <div class="card-body">
+            <h3><span class="brkt">./</span>QuickIT Sales Automation</h3>
+            <p>Inbound calls and chat to booked meetings, automatically. A phone number routes to an AI voice agent, into a CRM, onto a calendar, with no human in the loop for intake.</p>
+            <div class="tag-row"><span class="tag">Automation</span><span class="tag">AI</span><span class="tag">CRM</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="card-idx">[05]</span><span class="status-pill demo">Demo</span></div>
+          <div class="card-body">
+            <h3><span class="brkt">./</span>Solar Demo (TrueNorth)</h3>
+            <p>A full vertical demo for a solar installer: branded site, CRM, documentation, and a team of role-scoped AI agents handling intake, questions, and follow-up, end to end.</p>
+            <div class="tag-row"><span class="tag">AI</span><span class="tag">CRM</span><span class="tag">Vertical demo</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><span class="card-idx">[06]</span><span class="status-pill live">Live</span></div>
+          <div class="card-body">
+            <h3><span class="brkt">./</span>AI Agent Ecosystem</h3>
+            <p>A tiered team of AI agents that monitors and troubleshoots my cloud and local infrastructure, escalating from read-only log analysis to SSH to me, with a shared memory brain (Cognee) so they coordinate instead of duplicating work.</p>
+            <div class="tag-row"><span class="tag">AI</span><span class="tag">Agents</span><span class="tag">Observability</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== OTHER PROJECTS ===================== -->
+  <section id="other-projects">
+    <div class="wrap">
+      <div class="prompt-line"><span class="ps">dustin@allemanit</span>:<span class="path">~</span><span class="ps">$</span> <span class="cmd">ls other-projects/</span></div>
+      <h2 class="section-title">Other projects</h2>
+      <p class="section-sub">// still running, still worth a look</p>
+
+      <div class="file-list">
+        <div class="file-row">
+          <span class="fico">▸</span>
+          <span class="fname">CCNP Study Bot + CML Lab</span>
+          <span class="fstatus"><span class="status-pill progress">In Progress</span></span>
+          <span class="fdesc">A self-hosted study engine that drills me on the CCNP Automation blueprint, paired with a Cisco Modeling Labs environment where the labs actually run.</span>
+        </div>
+        <div class="file-row">
+          <span class="fico">▸</span>
+          <span class="fname">Network Design &amp; Architecture</span>
+          <span class="fstatus"><span class="status-pill service">Service</span></span>
+          <span class="fdesc">Secure, segmented, well-documented network design, a homelab that mirrors the enterprise, and a dedicated Cisco Modeling Labs environment for the heavy scenarios.</span>
+        </div>
+        <div class="file-row">
+          <span class="fico">▸</span>
+          <span class="fname">Web Design &amp; Development</span>
+          <span class="fstatus"><span class="status-pill service">Service</span></span>
+          <span class="fdesc">Landing pages, docs portals, dashboards, customer portals, and marketing sites, built across plain HTML through React and Astro.</span>
+        </div>
+        <div class="file-row">
+          <span class="fico">▸</span>
+          <span class="fname">Media Stack</span>
+          <span class="fstatus"><span class="status-pill live">Live</span></span>
+          <span class="fdesc">A self-hosted media platform: Plex plus the full *arr automation stack and a request portal, so the whole library runs hands-off.</span>
+        </div>
+        <div class="file-row">
+          <span class="fico">▸</span>
+          <span class="fname">MerakiNOC</span>
+          <span class="fstatus"><span class="status-pill live">Live</span></span>
+          <span class="fdesc">A network operations dashboard for Cisco Meraki: live device health, alerts, and client visibility in one view, driven through the API.</span>
+        </div>
+        <div class="file-row">
+          <span class="fico">▸</span>
+          <span class="fname">netadmintoolbox.com</span>
+          <span class="fstatus"><span class="status-pill live">Live</span></span>
+          <span class="fdesc">A toolbox of network-admin utilities for engineers and students: subnetting, lookups, quick references, and guided troubleshooting.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SITES DESIGNED ===================== -->
+  <section id="sites">
+    <div class="wrap">
+      <div class="prompt-line"><span class="ps">dustin@allemanit</span>:<span class="path">~</span><span class="ps">$</span> <span class="cmd">ls sites/</span></div>
+      <h2 class="section-title">Sites I've designed</h2>
+      <p class="section-sub">// different brand, different build, same discipline</p>
+
+      <div class="sites-grid">
+        <a class="site-card" href="https://almnjoy.dev" target="_blank" rel="noopener">
+          <div class="surl">almnjoy.dev</div>
+          <div class="sstyle">Retro Windows 98 desktop</div>
+        </a>
+        <a class="site-card" href="https://quickitprojects.com" target="_blank" rel="noopener">
+          <div class="surl">quickitprojects.com</div>
+          <div class="sstyle">Clean corporate / consulting</div>
+        </a>
+        <a class="site-card" href="https://madeformeai.com" target="_blank" rel="noopener">
+          <div class="surl">madeformeai.com</div>
+          <div class="sstyle">Modern SaaS product</div>
+        </a>
+        <a class="site-card" href="https://netadmintoolbox.com" target="_blank" rel="noopener">
+          <div class="surl">netadmintoolbox.com</div>
+          <div class="sstyle">Engineer utility site</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTENT / FOLLOW THE BUILD ===================== -->
+  <section id="content">
+    <div class="wrap">
+      <div class="prompt-line"><span class="ps">dustin@allemanit</span>:<span class="path">~</span><span class="ps">$</span> <span class="cmd">tail -f build.log</span></div>
+      <h2 class="section-title">Follow the build</h2>
+      <p class="section-sub">Homelab, AI agents, networking, and automation.</p>
+
+      <div class="follow-links">
+        <a class="pill-link" href="https://github.com/almnjoy" target="_blank" rel="noopener"><span class="b">&gt;</span> GitHub</a>
+        <a class="pill-link" href="https://www.linkedin.com/in/dustin-alleman/" target="_blank" rel="noopener"><span class="b">&gt;</span> LinkedIn</a>
+        <a class="pill-link" href="https://www.youtube.com/@Almnjoy" target="_blank" rel="noopener"><span class="b">&gt;</span> YouTube</a>
+        <a class="pill-link" href="https://www.instagram.com/alleman_joyy/" target="_blank" rel="noopener"><span class="b">&gt;</span> Instagram</a>
+        <a class="pill-link" href="https://almnjoy.dev" target="_blank" rel="noopener"><span class="b">&gt;</span> Blog</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="prompt-line"><span class="ps">dustin@allemanit</span>:<span class="path">~</span><span class="ps">$</span> <span class="cmd">./contact.sh --init</span></div>
+      <div class="contact-box">
+        <h2>Want to talk shop or hire me?</h2>
+        <p>Call my AI line for a fun AI game to sign up. Just say "sign up" if you don't want to play. :)</p>
+        <div class="contact-actions">
+          <a href="tel:+15178834473" class="btn btn-primary">(517) 883-4473</a>
+          <a href="mailto:duallema@outlook.com" class="btn btn-outline-blue">Request lab access</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="fline"><span class="p">$</span> echo "© <span id="year"></span> Dustin Alleman · AllemanIT"</div>
+      <div class="flinks">
+        <a href="https://github.com/almnjoy" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/dustin-alleman/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.youtube.com/@Almnjoy" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/alleman_joyy/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://almnjoy.dev" target="_blank" rel="noopener">Blog</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      // footer year
+      var y = document.getElementById('year');
+      if (y) { y.textContent = new Date().getFullYear(); }
+
+      // mobile nav toggle
+      var toggle = document.getElementById('navToggle');
+      var links = document.getElementById('navLinks');
+      if (toggle && links) {
+        toggle.addEventListener('click', function(){
+          var open = links.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        links.querySelectorAll('a').forEach(function(a){
+          a.addEventListener('click', function(){
+            links.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+
+      // typed command in the chrome bar
+      var target = document.getElementById('chromeCmd');
+      if (target) {
+        var full = './portfolio --run';
+        var i = 0;
+        function type(){
+          if (i <= full.length) {
+            target.textContent = full.slice(0, i);
+            i++;
+            setTimeout(type, 90);
+          } else {
+            setTimeout(function(){ i = 0; type(); }, 4000);
+          }
+        }
+        type();
+      }
+    })();
+  </script>
+
+</body>
+</html>

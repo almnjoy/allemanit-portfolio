@@ -1,0 +1,384 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Public music showcase for allemanit.com/music.
+// Rec form posts here; public wall reads from here. Backend = n8n MUSIC-RECS workflow.
+const REC_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/music-rec';
+const WALL_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/music-wall';
+
+const SPOTIFY_TOP = 'https://open.spotify.com/user/12156555860'; // Groove Bass Skating
+const SOUNDCLOUD = 'https://soundcloud.com/almnjoy';
+
+const lanes = [
+  { tag: 'The core', name: 'Funk-bass / electronic soul', artists: 'GRiZ · Daily Bread · ODESZA · Big Wild · Late Night Radio' },
+  { tag: 'Cruise', name: 'Chill / psych-soul', artists: 'Khruangbin · Leon Bridges · FKJ · Tom Misch' },
+  { tag: 'Send it', name: 'Festival bass / dubstep', artists: 'Zeds Dead · ZHU · Excision · Subtronics · Yultron' },
+  { tag: 'Bars', name: 'Hip-hop', artists: 'Mac Miller · Chance · Smino · Logic · Jack Harlow' },
+  { tag: 'Guitars', name: 'Indie / alt', artists: 'Vampire Weekend · RKS · Quinn XCII · Milky Chance' },
+  { tag: 'Loud', name: 'Pop-punk / rock', artists: 'mgk · The Struts · BMTH · Travis Barker' },
+];
+
+const playlists = [
+  { name: 'Groove Bass Skating', sub: 'the funk-bass core', id: '1CPXMmf71Snil8L5enS3vN' },
+  { name: 'Chill Jazzy Funk', sub: 'cruise / lo-fi groove', id: '34xE5lYYVfmYGfROZ8aPe0' },
+  { name: 'Festival Bass Rager', sub: 'send-it dubstep / trap', id: '0e8c5ZDsc1YB4YKbuTZh1N' },
+  { name: 'Indie Alternative Mix', sub: 'guitars / alt', id: '5iSoryISdGDmy9X84gHiZM' },
+  { name: 'Hip-Hop Mix', sub: 'bars', id: '0azzHIpPNye0n75joxOGNI' },
+  { name: 'Rage Rock Anthems', sub: 'loud / pop-punk', id: '1wtK8HAKoCfDJfBGMyd9U2' },
+];
+---
+<Base title="Dustin's Music — AllemanIT" description="Funk-bass, soulful, always cruising for the next groove. Here's what Dustin listens to — and a place to drop him something he'd dig.">
+  <section class="mz">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-bg" role="img" aria-label="Desert-cruise sunset, a convertible rolling through a funky alien landscape"></div>
+      <div class="hero-shade"></div>
+      <div class="hero-inner container-x">
+        <p class="eyebrow">Funk-bass · soulful · always cruising</p>
+        <h1 class="title">WHAT I'M<br /><span class="grad">LISTENING TO</span></h1>
+        <p class="lede">This is my music. The grooves I live in, the playlists I actually run, the artists I'd put anyone onto. Peep it. Then drop me something I'd dig — I go check out every one.</p>
+        <div class="cta">
+          <a class="btn primary" href={SPOTIFY_TOP} target="_blank" rel="noopener">▶ Listen on Spotify</a>
+          <a class="btn sc" href={SOUNDCLOUD} target="_blank" rel="noopener">☁ SoundCloud</a>
+          <a class="btn ghost" href="#drop">Drop me a rec ↓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASTE -->
+    <div class="container-x block">
+      <h2 class="sec">My taste, in six lanes</h2>
+      <p class="sub">Where I actually live musically. Funk-bass is home base; everything else is a road off it.</p>
+      <div class="lanes">
+        {lanes.map((l) => (
+          <div class="lane">
+            <span class="lane-tag">{l.tag}</span>
+            <h3>{l.name}</h3>
+            <p>{l.artists}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- PLAYLISTS -->
+    <div class="container-x block">
+      <h2 class="sec">Playlists I run</h2>
+      <p class="sub">Real ones, not the AI-generated filler. Hit play.</p>
+      <div class="pls">
+        {playlists.map((p) => (
+          <div class="pl">
+            <div class="pl-top">
+              <div>
+                <b>{p.name}</b>
+                <small>{p.sub}</small>
+              </div>
+              <a class="open" href={`https://open.spotify.com/playlist/${p.id}`} target="_blank" rel="noopener">Open ↗</a>
+            </div>
+            <iframe loading="lazy" title={p.name} src={`https://open.spotify.com/embed/playlist/${p.id}?theme=0`} height="352" allow="encrypted-media"></iframe>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- FIND ME -->
+    <div class="container-x block">
+      <h2 class="sec">Find me on</h2>
+      <div class="finds">
+        <a class="find spot" href={SPOTIFY_TOP} target="_blank" rel="noopener">
+          <span class="fi">▶</span>
+          <div><b>Spotify</b><small>playlists + heavy rotation</small></div>
+        </a>
+        <a class="find scl" href={SOUNDCLOUD} target="_blank" rel="noopener">
+          <span class="fi">☁</span>
+          <div><b>SoundCloud</b><small>sets, edits + deep cuts — @almnjoy</small></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- DROP A REC + WALL -->
+    <div class="container-x block" id="drop">
+      <div class="drop-grid">
+
+        <div class="drop-card">
+          <h2 class="sec tight">Put me onto something</h2>
+          <p class="sub">Artist, track, playlist, whatever. Tell me what you love and I'll go dig into it. Want it seen? Tick the box and it lands on the wall.</p>
+          <form id="rec-form" class="form" data-webhook={REC_WEBHOOK}>
+            <div class="row2">
+              <label>Your name <span class="opt">(optional)</span>
+                <input name="name" placeholder="what should I call you" />
+              </label>
+              <label>Reach you at <span class="opt">(optional)</span>
+                <input name="contact" placeholder="email / @handle" />
+              </label>
+            </div>
+            <label>The rec <span class="req">*</span>
+              <input name="rec" required placeholder="e.g. Vulfpeck – Dean Town" />
+            </label>
+            <label>Why / a note <span class="opt">(optional)</span>
+              <textarea name="note" rows="3" placeholder="what makes it hit for you"></textarea>
+            </label>
+            <label class="check">
+              <input type="checkbox" name="is_public" />
+              <span>Post this on the public wall so others can see it</span>
+            </label>
+            <button type="submit" class="btn primary wide">Send it →</button>
+            <p id="form-msg" class="msg hidden"></p>
+          </form>
+        </div>
+
+        <div class="wall-card">
+          <h2 class="sec tight">The wall</h2>
+          <p class="sub">What people are putting me onto.</p>
+          <div id="wall" class="wall">
+            <p class="wall-empty">Loading the wall…</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="foot-note container-x">Homelab-hosted · no trackers on the music · <a href="/">back to allemanit.com</a></p>
+  </section>
+
+  <script define:vars={{ WALL_WEBHOOK }}>
+    // ---- Rec form ----
+    const form = document.getElementById('rec-form');
+    const msg = document.getElementById('form-msg');
+    function show(text, err) {
+      msg.textContent = text;
+      msg.className = 'msg ' + (err ? 'err' : 'ok');
+    }
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type=submit]');
+      const fd = new FormData(form);
+      const rec = (fd.get('rec') || '').toString().trim();
+      if (!rec) { show('Give me a rec first.', true); return; }
+      const payload = {
+        name: (fd.get('name') || '').toString().trim(),
+        contact: (fd.get('contact') || '').toString().trim(),
+        rec,
+        note: (fd.get('note') || '').toString().trim(),
+        is_public: fd.get('is_public') === 'on',
+        source: 'allemanit.com/music',
+        submittedAt: new Date().toISOString(),
+      };
+      const wasPublic = payload.is_public;
+      btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.dataset.webhook, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('bad status');
+        form.reset();
+        show('Got it — thanks for the rec, going to check it out.', false);
+        if (wasPublic) setTimeout(loadWall, 800);
+      } catch (err) {
+        show('Something broke on my end. Try again, or hit me on socials.', true);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Send it →';
+      }
+    });
+
+    // ---- Public wall ----
+    const wallEl = document.getElementById('wall');
+    function esc(s) {
+      return (s == null ? '' : String(s)).replace(/[&<>"']/g, (c) => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+      ));
+    }
+    function fmt(at) {
+      if (!at) return '';
+      const d = new Date(at);
+      if (isNaN(d)) return '';
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+    async function loadWall() {
+      try {
+        const res = await fetch(WALL_WEBHOOK, { cache: 'no-store' });
+        const data = await res.json();
+        const recs = (data && data.recs) || [];
+        if (!recs.length) {
+          wallEl.innerHTML = '<p class="wall-empty">Nothing here yet. Be the first to put me onto something. ↖</p>';
+          return;
+        }
+        wallEl.innerHTML = recs.map((r) => (
+          '<div class="wrec">' +
+            '<div class="wrec-top">' + esc(r.rec) + '</div>' +
+            (r.note ? '<div class="wrec-note">“' + esc(r.note) + '”</div>' : '') +
+            '<div class="wrec-by">— ' + esc(r.name || 'anonymous') + (fmt(r.at) ? ' · ' + fmt(r.at) : '') + '</div>' +
+          '</div>'
+        )).join('');
+      } catch (e) {
+        wallEl.innerHTML = '<p class="wall-empty">Wall is taking a nap. Refresh in a bit.</p>';
+      }
+    }
+    loadWall();
+  </script>
+
+  <style>
+    .mz {
+      --sun: #ffd98a; --cream: #ffe9c4; --amber: #f7a23b; --heat: #e85d2a;
+      --rock: #b0331f; --teal: #2fb3ac; --deepteal: #1f7a80; --dusk: #7b4bb0;
+      --night: #0b1322;
+      color: #eef2f8;
+    }
+    .block { padding: 34px 0; }
+
+    /* HERO */
+    .hero { position: relative; min-height: 74vh; display: flex; align-items: flex-end; overflow: hidden; }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('/music/cruise.jpg');
+      background-size: cover; background-position: center 42%;
+      transform: scale(1.03);
+    }
+    .hero-shade {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(180deg, rgba(8,12,20,0.30) 0%, rgba(8,12,20,0.05) 30%, rgba(8,12,20,0.55) 78%, #0A0E14 100%),
+        radial-gradient(120% 80% at 20% 100%, rgba(10,14,20,0.60), transparent 60%);
+    }
+    .hero-inner { position: relative; padding-top: 60px; padding-bottom: 46px; width: 100%; }
+    .eyebrow {
+      text-transform: uppercase; letter-spacing: 0.28em; font-size: 12px; font-weight: 700;
+      color: var(--sun); margin-bottom: 14px; text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    }
+    .title {
+      font-weight: 800; line-height: 0.92; letter-spacing: -0.02em;
+      font-size: clamp(46px, 9vw, 104px); color: #fff; margin: 0;
+      text-shadow: 0 4px 30px rgba(0,0,0,0.55);
+    }
+    .grad {
+      background: linear-gradient(92deg, var(--sun) 0%, var(--amber) 42%, var(--heat) 78%, var(--dusk) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .lede {
+      margin: 20px 0 26px; max-width: 620px; font-size: clamp(15px, 2vw, 19px);
+      line-height: 1.55; color: #e7ecf3; text-shadow: 0 2px 14px rgba(0,0,0,0.6);
+    }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; border-radius: 999px;
+      padding: 12px 22px; font-weight: 700; font-size: 15px; transition: transform .15s ease, filter .15s ease, background .15s ease;
+      border: 1px solid transparent; cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.primary { background: linear-gradient(92deg, var(--amber), var(--heat)); color: #1b0f08; }
+    .btn.primary:hover { filter: brightness(1.08); }
+    .btn.sc { background: #ff5500; color: #fff; }
+    .btn.sc:hover { filter: brightness(1.08); }
+    .btn.ghost { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.25); backdrop-filter: blur(4px); }
+    .btn.ghost:hover { background: rgba(255,255,255,0.16); }
+    .btn.wide { width: 100%; justify-content: center; margin-top: 6px; }
+
+    /* SECTION HEADERS */
+    .sec {
+      font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; letter-spacing: -0.02em; color: #fff; margin: 0;
+    }
+    .sec::after {
+      content: ''; display: block; width: 62px; height: 4px; margin-top: 12px; border-radius: 3px;
+      background: linear-gradient(92deg, var(--teal), var(--amber), var(--heat));
+    }
+    .sec.tight::after { width: 46px; }
+    .sub { color: rgba(231,236,243,0.66); margin: 14px 0 22px; max-width: 640px; line-height: 1.5; }
+
+    /* LANES */
+    .lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .lane {
+      position: relative; border-radius: 18px; padding: 20px; overflow: hidden;
+      background: linear-gradient(150deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.09); transition: transform .15s ease, border-color .15s ease;
+    }
+    .lane:hover { transform: translateY(-3px); border-color: rgba(247,162,59,0.5); }
+    .lane-tag {
+      display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em;
+      color: #1b0f08; background: linear-gradient(92deg, var(--sun), var(--amber)); padding: 3px 10px; border-radius: 999px; margin-bottom: 12px;
+    }
+    .lane h3 { font-size: 18px; font-weight: 700; color: #fff; margin: 0 0 8px; }
+    .lane p { font-size: 13.5px; color: rgba(231,236,243,0.6); margin: 0; line-height: 1.5; }
+
+    /* PLAYLISTS */
+    .pls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .pl {
+      border-radius: 18px; padding: 14px; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+    .pl-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+    .pl-top b { color: #fff; font-size: 15px; display: block; }
+    .pl-top small { color: rgba(231,236,243,0.55); font-size: 12px; }
+    .open { font-size: 13px; font-weight: 700; color: var(--amber); white-space: nowrap; }
+    .open:hover { color: var(--sun); }
+    .pl iframe { width: 100%; border: 0; border-radius: 12px; display: block; }
+
+    /* FIND ME */
+    .finds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .find {
+      display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.1); transition: transform .15s ease, border-color .15s ease;
+    }
+    .find:hover { transform: translateY(-3px); }
+    .find .fi { font-size: 26px; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 14px; flex: none; }
+    .find b { color: #fff; font-size: 18px; display: block; }
+    .find small { color: rgba(231,236,243,0.6); font-size: 13px; }
+    .find.spot { background: linear-gradient(150deg, rgba(30,215,96,0.14), rgba(255,255,255,0.02)); }
+    .find.spot .fi { background: #1ed760; color: #04220f; }
+    .find.spot:hover { border-color: rgba(30,215,96,0.55); }
+    .find.scl { background: linear-gradient(150deg, rgba(255,85,0,0.14), rgba(255,255,255,0.02)); }
+    .find.scl .fi { background: #ff5500; color: #fff; }
+    .find.scl:hover { border-color: rgba(255,85,0,0.55); }
+
+    /* DROP + WALL */
+    .drop-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 20px; align-items: start; }
+    .drop-card, .wall-card {
+      border-radius: 22px; padding: 26px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+    }
+    .drop-card { background: linear-gradient(160deg, rgba(247,162,59,0.10), rgba(232,93,42,0.05) 60%, rgba(255,255,255,0.015)); }
+    .form { display: grid; gap: 14px; margin-top: 6px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form label { display: block; font-size: 13.5px; font-weight: 600; color: #e7ecf3; }
+    .opt { color: rgba(231,236,243,0.4); font-weight: 500; }
+    .req { color: var(--heat); }
+    .form input, .form textarea {
+      width: 100%; margin-top: 7px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(10,14,20,0.55); color: #fff; padding: 12px 14px; font-size: 14.5px; font-family: inherit;
+      outline: none; transition: border-color .15s ease;
+    }
+    .form input::placeholder, .form textarea::placeholder { color: rgba(231,236,243,0.32); }
+    .form input:focus, .form textarea:focus { border-color: var(--amber); }
+    .form textarea { resize: vertical; }
+    .check { display: flex; align-items: center; gap: 10px; font-weight: 500; color: rgba(231,236,243,0.85); cursor: pointer; }
+    .check input { width: 18px; height: 18px; margin: 0; accent-color: var(--heat); flex: none; }
+    .msg { margin: 4px 0 0; font-size: 13.5px; text-align: center; }
+    .msg.ok { color: #35d07f; }
+    .msg.err { color: #ff6b6b; }
+    .hidden { display: none; }
+
+    .wall { display: grid; gap: 12px; max-height: 640px; overflow-y: auto; padding-right: 4px; }
+    .wall-empty { color: rgba(231,236,243,0.5); font-size: 14px; padding: 10px 0; }
+    .wrec {
+      border-radius: 14px; padding: 14px 16px; border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+    .wrec-top { color: #fff; font-weight: 700; font-size: 15px; }
+    .wrec-note { color: rgba(231,236,243,0.72); font-size: 13.5px; margin-top: 5px; font-style: italic; }
+    .wrec-by { color: var(--amber); font-size: 12.5px; margin-top: 8px; font-weight: 600; }
+
+    .foot-note { display: block; text-align: center; color: rgba(231,236,243,0.4); font-size: 13px; padding: 30px 0 50px; }
+    .foot-note a { color: rgba(231,236,243,0.6); text-decoration: underline; text-underline-offset: 3px; }
+
+    @media (max-width: 860px) {
+      .lanes, .pls { grid-template-columns: 1fr 1fr; }
+      .finds { grid-template-columns: 1fr; }
+      .drop-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .lanes, .pls { grid-template-columns: 1fr; }
+      .row2 { grid-template-columns: 1fr; }
+      .hero { min-height: 66vh; }
+    }
+  </style>
+</Base>

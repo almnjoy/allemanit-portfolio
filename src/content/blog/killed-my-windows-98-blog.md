@@ -5,9 +5,8 @@ description: almnjoy.dev ran raw notes through n8n and a GPT step into a Windows
 kicker: Meta · the pipeline
 tags: [meta, ai, n8n, homelab, web]
 featured: true
-# Drop a cover image in public/blog/ and uncomment these two lines.
-# cover: /blog/old-almnjoy-win98.jpg
-# coverAlt: The old almnjoy.dev blog dressed up as Windows 98
+cover: /blog/OldBlog.png
+coverAlt: The old almnjoy.dev blog dressed up as Windows 98
 ---
 
 The old almnjoy.dev was a WordPress site cosplaying as Windows 98. Cute for a week. But behind that costume was something I was actually proud of: a little pipeline that took my raw notes, wherever they came from, and turned them into a review-ready draft without me babysitting it.

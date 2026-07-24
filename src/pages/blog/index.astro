@@ -4,9 +4,13 @@ import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog'))
   .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  // Newest post wins the hero. `featured` only breaks ties between same-day posts.
+  .sort((a, b) =>
+    (b.data.date.valueOf() - a.data.date.valueOf()) ||
+    (Number(b.data.featured) - Number(a.data.featured))
+  );
 
-const featured = posts.find((p) => p.data.featured) || posts[0];
+const featured = posts[0];
 const rest = posts.filter((p) => p.slug !== featured?.slug);
 const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 const issue = String(posts.length).padStart(2, '0');

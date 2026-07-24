@@ -1,7 +1,7 @@
 ---
 title: My /daily page runs on feeds I own now
 date: 2026-07-24
-description: Wiring the /daily dashboard to self-hosted n8n feeds, standing up a daily-log store on worker2, and why browser agents keep beating the official APIs.
+description: Wiring the /daily dashboard to self-hosted n8n feeds, standing up a daily-log store on a cloud box, and why browser agents keep beating the official APIs.
 kicker: Build log - the week
 tags: [n8n, automation, homelab, web]
 featured: false
@@ -13,7 +13,7 @@ So this week I made it actually pull its own strings.
 
 ## Standing up a store the page can read
 
-The first real piece was a daily-log store on worker2. Small thing, one endpoint, but it changes how everything downstream works. Instead of the page holding the data, the page just asks for it. I post a note once, tag it, and it lands in the store. The /daily page reads from there and renders whatever is newest.
+The first real piece was a daily-log store on a cloud box. Small thing, one endpoint, but it changes how everything downstream works. Instead of the page holding the data, the page just asks for it. I post a note once, tag it, and it lands in the store. The /daily page reads from there and renders whatever is newest.
 
 That means the "building now" tile is no longer me remembering to update a string. The engine posts into the store, the page reads it, done. I write a log line from wherever I am and the site catches up on its own.
 

@@ -1,0 +1,77 @@
+---
+import Base from '../layouts/Base.astro';
+// Plex access requests POST here → n8n WF (EmUILkGVv0B44j3j) → Discord approval → Plex invite flow.
+const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-00c909d1a7b3';
+---
+<Base title="Request Plex Access — AllemanIT" description="Request access to the AllemanIT Plex media server.">
+  <section class="container-x py-16">
+    <div class="mx-auto max-w-xl">
+      <a href="/status" class="text-sm text-white/50 hover:text-white">← Back to Plex</a>
+
+      <h1 class="mt-4 text-4xl font-extrabold text-white">Request Plex Access</h1>
+      <p class="mt-3 text-white/65">Want in on the AllemanIT Plex server? Drop your name and email below. I review each request and, once approved, email you the last step to get watching.</p>
+
+      <form id="access-form" class="card mt-8 space-y-5 p-7" data-webhook={WEBHOOK_URL}>
+        <div>
+          <label class="mb-1.5 block text-sm font-semibold text-white">Full Name <span class="text-brand-orange">*</span></label>
+          <input name="fullName" required placeholder="Enter your name"
+            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-sm font-semibold text-white">Email Address <span class="text-brand-orange">*</span></label>
+          <input name="email" type="email" required placeholder="Enter your email"
+            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-sm font-semibold text-white">Phone <span class="text-white/40">(optional, for text updates)</span></label>
+          <input name="phone" type="tel" placeholder="(555) 555-5555"
+            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-sm font-semibold text-white">Notes <span class="text-white/40">(optional)</span></label>
+          <textarea name="notes" rows="3" placeholder="Anything you're hoping to watch, or how I know you"
+            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-full">Request Access</button>
+        <p id="form-msg" class="hidden text-center text-sm"></p>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-white/50">Not here for Plex? <a href="/contact" class="text-brand-orange hover:underline">Get in touch →</a></p>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('access-form');
+    const msg = document.getElementById('form-msg');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type=submit]');
+      const data = new FormData(form);
+      const payload = {
+        fullName: data.get('fullName'),
+        email: data.get('email'),
+        phone: data.get('phone'),
+        access: ['Plex'],
+        notes: data.get('notes'),
+        source: 'allemanit.com',
+        submittedAt: new Date().toISOString(),
+      };
+      btn.disabled = true; btn.textContent = 'Sending...';
+      try {
+        const res = await fetch(form.dataset.webhook, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error('bad status');
+        form.reset(); show('Request received. I will follow up by email once approved.', false);
+      } catch (err) {
+        show('Something went wrong. Email duallema@quickitprojects.com and I will sort it.', true);
+      } finally {
+        btn.disabled = false; btn.textContent = 'Request Access';
+      }
+    });
+    function show(text, isError) {
+      msg.textContent = text;
+      msg.className = 'text-center text-sm ' + (isError ? 'text-red-400' : 'text-green-400');
+    }
+  </script>
+</Base>

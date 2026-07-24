@@ -21,6 +21,15 @@ const VIDEO_URL = 'https://youtu.be/m-wiCr5uvXQ';
       </div>
       <p class="mt-2 text-xs text-white/40">If it shows offline, the server is likely rebooting. Give it a few minutes and try again, or let me know.</p>
 
+      <!-- REQUEST ACCESS (primary CTA) -->
+      <a href="/request-access" class="mt-6 flex items-center justify-between gap-4 rounded-2xl border border-brand-orange/40 bg-gradient-to-br from-brand-orange/15 to-transparent p-6 transition hover:border-brand-orange">
+        <div>
+          <div class="text-lg font-bold text-white">✉ New here? Request Plex access</div>
+          <p class="mt-1 text-sm text-white/70">Not on the server yet? Send a quick request and I'll get you set up to watch.</p>
+        </div>
+        <span class="btn btn-primary shrink-0 text-sm">Request access →</span>
+      </a>
+
       <!-- JUST ADDED -->
       <div id="recent-wrap" class="mt-8 hidden">
         <h2 class="text-sm font-semibold uppercase tracking-wide text-brand-orange">Just added</h2>
@@ -40,10 +49,6 @@ const VIDEO_URL = 'https://youtu.be/m-wiCr5uvXQ';
         <a href={VIDEO_URL} target="_blank" rel="noopener" class="card p-6 transition hover:border-brand-orange">
           <div class="text-lg font-bold text-white">🎬 How to accept your invite</div>
           <p class="mt-1 text-sm text-white/60">60-second walkthrough for first-timers.</p>
-        </a>
-        <a href="/contact" class="card p-6 transition hover:border-brand-orange">
-          <div class="text-lg font-bold text-white">✉ New here? Request access</div>
-          <p class="mt-1 text-sm text-white/60">Not on the server yet? Send a quick request.</p>
         </a>
       </div>
 

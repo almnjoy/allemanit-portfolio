@@ -27,6 +27,7 @@ const titleHtml = d.title.replace(/\*(.+?)\*/g, '<em>$1</em>');
       By Dustin Alleman · {fmt(d.date)}
       {d.tags.length > 0 && (<span> · {d.tags.map((t) => `#${t}`).join('  ')}</span>)}
     </div>
+    {d.cover && (<img class="ed-cover" src={d.cover} alt={d.coverAlt || d.title} loading="lazy" />)}
     <div class="ed-prose"><Content /></div>
   </article>
 

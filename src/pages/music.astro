@@ -296,27 +296,35 @@ const playlists = [
     .sec.tight::after { width: 46px; }
     .sub { color: rgba(231,236,243,0.66); margin: 14px 0 22px; max-width: 640px; line-height: 1.5; }
 
-    /* LANES */
-    .lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    /* LANES — neo-brutal blocks */
+    .lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .lane {
-      position: relative; border-radius: 18px; padding: 20px; overflow: hidden;
-      background: linear-gradient(150deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.09); transition: transform .15s ease, border-color .15s ease;
+      position: relative; border-radius: 5px; padding: 20px;
+      border: 3px solid #0a0a0a; box-shadow: 6px 6px 0 #0a0a0a;
+      transition: transform .12s ease, box-shadow .12s ease;
     }
-    .lane:hover { transform: translateY(-3px); border-color: rgba(247,162,59,0.5); }
+    .lane:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 #0a0a0a; }
+    .lane:nth-child(6n+1) { background: #ffd23f; }
+    .lane:nth-child(6n+2) { background: #2fd3c4; }
+    .lane:nth-child(6n+3) { background: #ff6b3d; }
+    .lane:nth-child(6n+4) { background: #ffa94d; }
+    .lane:nth-child(6n+5) { background: #b78cff; }
+    .lane:nth-child(6n+6) { background: #7bd88f; }
     .lane-tag {
-      display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em;
-      color: #1b0f08; background: linear-gradient(92deg, var(--sun), var(--amber)); padding: 3px 10px; border-radius: 999px; margin-bottom: 12px;
+      display: inline-block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em;
+      color: #fff; background: #0a0a0a; padding: 4px 10px; border-radius: 0; margin-bottom: 12px;
     }
-    .lane h3 { font-size: 18px; font-weight: 700; color: #fff; margin: 0 0 8px; }
-    .lane p { font-size: 13.5px; color: rgba(231,236,243,0.6); margin: 0; line-height: 1.5; }
+    .lane h3 { font-size: 19px; font-weight: 800; color: #0a0a0a; margin: 0 0 8px; letter-spacing: -0.01em; }
+    .lane p { font-size: 13.5px; color: rgba(10,10,10,0.72); margin: 0; line-height: 1.5; font-weight: 500; }
 
-    /* PLAYLISTS */
-    .pls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    /* PLAYLISTS — neo-brutal cards */
+    .pls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .pl {
-      border-radius: 18px; padding: 14px; background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 5px; padding: 14px; background: #15120d;
+      border: 3px solid #f3eee2; box-shadow: 6px 6px 0 #ff6b3d;
     }
+    .pl:nth-child(3n+2) { box-shadow: 6px 6px 0 #2fd3c4; }
+    .pl:nth-child(3n) { box-shadow: 6px 6px 0 #ffd23f; }
     .pl-extra { display: none; }
     .pls.expanded .pl-extra { display: block; }
     .pl-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
@@ -326,11 +334,11 @@ const playlists = [
     .open:hover { color: var(--sun); }
     .pl iframe { width: 100%; border: 0; border-radius: 12px; display: block; }
     .more-btn {
-      margin-top: 18px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-      background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.16);
-      border-radius: 999px; padding: 10px 20px; font-weight: 700; font-size: 14px; transition: background .15s ease, border-color .15s ease;
+      margin-top: 26px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+      background: #ffd23f; color: #0a0a0a; border: 3px solid #0a0a0a; box-shadow: 4px 4px 0 #0a0a0a;
+      border-radius: 4px; padding: 10px 20px; font-weight: 800; font-size: 14px; transition: transform .12s ease, box-shadow .12s ease;
     }
-    .more-btn:hover { background: rgba(247,162,59,0.14); border-color: rgba(247,162,59,0.5); }
+    .more-btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #0a0a0a; }
 
     /* FIND ME */
     .finds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }

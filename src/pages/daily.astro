@@ -70,13 +70,12 @@ const predictions = [
         <span class="arr">Open /music →</span>
       </a>
 
-      <!-- WATCHING -->
-      <a class="tile c1 link" href={YT} target="_blank" rel="noopener">
+      <!-- WATCHING (live) -->
+      <div class="tile c2">
         <span class="k">Watching</span>
-        <div class="big">📺</div>
-        <p class="soon">A feed of what I'm watching, coming online. Meanwhile: my channel.</p>
-        <span class="arr">YouTube ↗</span>
-      </a>
+        <span class="live">● channels I follow</span>
+        <div id="watching" class="signal"><p class="soon">Loading…</p></div>
+      </div>
 
       <!-- IDEAS -->
       <div class="tile c2">
@@ -136,24 +135,24 @@ const predictions = [
     </div>
   </section>
 
-  <script define:vars={{ NEWS_API: 'https://n8n.quickitprojects.com/webhook/daily-news' }}>
-    (async () => {
-      const el = document.getElementById('signal');
+  <script define:vars={{ NEWS_API: 'https://n8n.quickitprojects.com/webhook/daily-news', WATCH_API: 'https://n8n.quickitprojects.com/webhook/daily-watching' }}>
+    const esc = (s) => (s == null ? '' : String(s)).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const ago = (iso) => {
+      if (!iso) return '';
+      const d = new Date(iso); if (isNaN(d)) return '';
+      const s = Math.floor((Date.now() - d.getTime()) / 1000);
+      if (s < 3600) return Math.max(1, Math.floor(s / 60)) + 'm ago';
+      const h = Math.floor(s / 3600); if (h < 24) return h + 'h ago';
+      const dd = Math.floor(h / 24); return dd + 'd ago';
+    };
+    async function fill(id, url) {
+      const el = document.getElementById(id);
       if (!el) return;
-      const esc = (s) => (s == null ? '' : String(s)).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-      const ago = (iso) => {
-        if (!iso) return '';
-        const d = new Date(iso); if (isNaN(d)) return '';
-        const s = Math.floor((Date.now() - d.getTime()) / 1000);
-        if (s < 3600) return Math.max(1, Math.floor(s / 60)) + 'm ago';
-        const h = Math.floor(s / 3600); if (h < 24) return h + 'h ago';
-        const dd = Math.floor(h / 24); return dd + 'd ago';
-      };
       try {
-        const r = await fetch(NEWS_API, { cache: 'no-store' });
+        const r = await fetch(url, { cache: 'no-store' });
         const data = await r.json();
-        const items = Array.isArray(data) ? data : (data.news || []);
-        if (!items.length) { el.innerHTML = '<p class="soon">Nothing pinned right now.</p>'; return; }
+        const items = Array.isArray(data) ? data : (data.news || data.items || []);
+        if (!items.length) { el.innerHTML = '<p class="soon">Nothing here yet.</p>'; return; }
         el.innerHTML = items.slice(0, 6).map((n) => (
           '<a class="sig" href="' + esc(n.url) + '" target="_blank" rel="noopener">' +
             '<span class="st">' + esc(n.title) + '</span>' +
@@ -163,7 +162,9 @@ const predictions = [
       } catch (e) {
         el.innerHTML = '<p class="soon">Feed is napping. Refresh in a bit.</p>';
       }
-    })();
+    }
+    fill('signal', NEWS_API);
+    fill('watching', WATCH_API);
   </script>
 
   <style is:global>

@@ -11,25 +11,23 @@ const YT = 'https://www.youtube.com/@Almnjoy';
 // const UPDATES_API   = 'https://n8n.quickitprojects.com/webhook/daily-log';
 
 const ideas = [
-  'The best automation is the one you forget is running.',
-  'A homelab that runs like prod teaches you more than any cert.',
-  'Most "AI products" are a good prompt and a database. The moat is the workflow.',
-  'Your tools should fan out from one source, not live in ten browser tabs.',
+  'AI should feel like a teammate, not another tool.',
+  'Share everything—someone else might build something even better.',
+  "If I solve a problem twice, it's time to automate it.",
 ];
 const goals = [
-  'Whole fleet running off one shared brain.',
-  'A CCIE-level lab, just to prove I can.',
-  'Ship an AI product a stranger pays for without me touching it.',
-  'Build a synth from parts.',
+  'Inspire at least one person to build something cool.',
+  "Finish my Bachelor's degree. (5 classes to go! 🎉)",
+  'Earn my CCNP. (Study bot is keeping me honest.)',
+  'Build tools that people actually enjoy using.',
 ];
 const questions = [
-  "What's the smallest agent that's actually useful every day?",
-  'Can a personal site be a real API that AI queries? (this page, eventually)',
-  "Where's the line between automating and over-engineering?",
+  'What skills will still be uniquely human ten years from now?',
+  'What\'s the next "internet moment" after AI?',
 ];
 const predictions = [
-  { t: 'Most SMB "CRMs" get replaced by a chat plus a canvas within a few years.', d: 'Jul 2026' },
-  { t: 'Browser-driving agents beat official social APIs for indie posting.', d: 'Jul 2026' },
+  "AI will become as common as the internet—by 2030 it'll just be part of everyday life.",
+  'The people who know how to work with AI will outperform those who simply use it.',
 ];
 ---
 <Editorial title="Daily — Dustin Alleman" description="A living page: what I'm building, the ideas I'm chewing on, and what I want to try. Updated as it happens.">
@@ -39,14 +37,14 @@ const predictions = [
   </div>
 
   <section class="dm">
-    <p class="dm-intro">A running record of what I'm making, what I'm chewing on, and what I want to try next. Some of it I write. Some of it my agents keep current.</p>
+    <p class="dm-intro">This is basically my digital notebook. A place to share what I'm building, what I'm learning, random ideas I'm chasing, and the occasional rabbit hole. Some posts are written by me, some are kept up to date by my AI agents.</p>
 
     <div class="dm-grid">
 
       <!-- MISSION -->
       <div class="tile c4 accent">
         <span class="k">Mission</span>
-        <p class="lead">Ten years in networking and IT. Cisco in a FedRAMP shop by day; AI agents, automation, and a homelab that runs like production by night. I build because building is the point. Money's a bonus, not the north star.</p>
+        <p class="lead">I build because it's fun. Money's a bonus, not the goal. If something I make helps someone else, sparks a new idea, or inspires them to build their own thing, that's a win.</p>
       </div>
 
       <!-- BUILDING NOW / daily log (live) -->
@@ -106,7 +104,7 @@ const predictions = [
       <div class="tile c2">
         <span class="k">Predictions</span>
         <ul class="preds">
-          {predictions.map((p) => (<li><span class="pt">{p.t}</span><span class="pd">{p.d}</span></li>))}
+          {predictions.map((p) => (<li><span class="pt">{p}</span></li>))}
         </ul>
       </div>
 
@@ -167,7 +165,7 @@ const predictions = [
         if (!items.length) { el.innerHTML = '<p class="soon">First entries are coming.</p>'; return; }
         el.innerHTML = items.slice(0, 5).map((j) => (
           '<div class="jot">' +
-            '<div class="jt">' + esc(j.text) + '</div>' +
+            '<div class="jt">' + esc(j.text).replace(/\n+/g, '<br>') + '</div>' +
             '<div class="jm">' + (j.tag ? '<span class="jtag">#' + esc(j.tag) + '</span>' : '') + (ago(j.at) ? '<span class="jd">' + ago(j.at) + '</span>' : '') + '</div>' +
           '</div>'
         )).join('');

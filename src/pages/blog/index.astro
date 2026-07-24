@@ -1,0 +1,52 @@
+---
+import Editorial from '../../layouts/Editorial.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const featured = posts.find((p) => p.data.featured) || posts[0];
+const rest = posts.filter((p) => p.slug !== featured?.slug);
+const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const issue = String(posts.length).padStart(2, '0');
+---
+<Editorial title="The Dispatch — Dustin Alleman" description="Long-form from Dustin Alleman: networking, AI, homelab, and the tools in between.">
+  <div class="ed-mast">
+    <a class="ed-name" href="/blog">ALMNJOY <b>DISPATCH</b></a>
+    <div class="ed-meta">Networking · AI · Homelab — Issue {issue}</div>
+  </div>
+
+  {featured && (
+    <div class="ed-featured">
+      <span class="ed-kicker">{featured.data.kicker}</span>
+      <h1 class="ed-h1"><a href={`/blog/${featured.slug}`} set:html={featured.data.title.replace(/\*(.+?)\*/g, '<em>$1</em>')}></a></h1>
+      <div class="ed-byline">By Dustin Alleman · <span>allemanit.com/blog</span> · {fmt(featured.data.date)}</div>
+      <p class="ed-lede">{featured.data.description}</p>
+      <a class="ed-more" href={`/blog/${featured.slug}`}>Read it →</a>
+    </div>
+  )}
+
+  {rest.length > 0 && (
+    <div>
+      <div class="ed-listhead">More from the dispatch</div>
+      {rest.map((p, i) => (
+        <div class="ed-r">
+          <span class="n">{String(i + 1).padStart(2, '0')}</span>
+          <div class="rbody">
+            <a class="t" href={`/blog/${p.slug}`}>{p.data.title}</a>
+            <div class="desc">{p.data.description}</div>
+            {p.data.tags.length > 0 && (
+              <div class="ed-tags">{p.data.tags.map((t) => (<span class="ed-tag">#{t}</span>))}</div>
+            )}
+          </div>
+          <span class="d">{fmt(p.data.date)}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {posts.length === 0 && (<p class="ed-lede" style="margin-top:40px">Nothing published yet. First issue is coming.</p>)}
+
+  <span class="ed-footnote">Written by hand, sometimes with a little help. Homelab-hosted, no trackers on the reading. <a href="/daily">The daily log →</a></span>
+</Editorial>

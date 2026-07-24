@@ -1,0 +1,89 @@
+---
+// Dark editorial shell: loads Fraunces + Spectral, provides the .ed design system.
+// Used by /blog, /blog/[slug], and /daily. Styles are is:global (scoped under .ed) so
+// they also attach to JS-injected content on /daily.
+const { title, description } = Astro.props;
+import Base from './Base.astro';
+---
+<Base title={title} description={description}>
+  <Fragment slot="head">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  </Fragment>
+
+  <section class="ed"><div class="ed-wrap"><slot /></div></section>
+
+  <style is:global>
+    .ed {
+      --accent:#ff6a00; --accent2:#4f9dff; --ink:#e9e4d8; --mute:#8f8a7d; --rule:#2a2721; --rule2:#3a3630;
+      color:var(--ink); font-family:'Spectral', Georgia, serif;
+    }
+    .ed-wrap { max-width:1080px; margin:0 auto; padding:0 40px 70px; }
+
+    /* masthead */
+    .ed-mast { display:flex; justify-content:space-between; align-items:baseline; gap:20px; padding:34px 0 14px; border-bottom:3px double var(--rule2); font-family:'Inter',sans-serif; flex-wrap:wrap; }
+    .ed-name { font-family:'Fraunces',serif; font-weight:800; font-size:26px; letter-spacing:-0.01em; color:#fff; }
+    .ed-name b { color:var(--accent); }
+    .ed-meta { font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--mute); }
+
+    /* section bits */
+    .ed-kicker { font-family:'Inter',sans-serif; font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); }
+    .ed-h1 { font-family:'Fraunces',serif; font-weight:800; font-size:clamp(40px,6vw,74px); line-height:0.98; letter-spacing:-0.02em; color:#fff; }
+    .ed-h1 em { font-style:italic; color:var(--accent); }
+    .ed-byline { font-family:'Inter',sans-serif; font-size:13px; color:var(--mute); letter-spacing:0.02em; }
+    .ed-byline a, .ed-byline span { color:var(--accent2); }
+
+    /* featured post block on index */
+    .ed-featured { padding:40px 0 34px; border-bottom:1px solid var(--rule); }
+    .ed-featured .ed-kicker { margin-bottom:14px; display:block; }
+    .ed-featured .ed-h1 { max-width:15ch; }
+    .ed-featured .ed-h1 a { color:inherit; }
+    .ed-featured .ed-h1 a:hover { color:var(--accent); }
+    .ed-featured .ed-byline { margin:20px 0 22px; }
+    .ed-featured .ed-lede { font-size:19px; line-height:1.65; max-width:60ch; }
+    .ed-featured .ed-lede::first-letter { font-family:'Fraunces',serif; font-weight:800; float:left; font-size:72px; line-height:0.72; padding:6px 12px 0 0; color:var(--accent); }
+    .ed-more { display:inline-block; margin-top:20px; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:0.04em; color:var(--accent); }
+    .ed-more:hover { color:var(--accent2); }
+
+    /* recent / archive list */
+    .ed-listhead { font-family:'Inter',sans-serif; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:var(--mute); margin:36px 0 4px; }
+    .ed-r { display:flex; gap:18px; align-items:baseline; padding:18px 0; border-top:1px solid var(--rule); }
+    .ed-r .n { font-family:'Inter',sans-serif; font-size:12px; color:var(--accent); width:34px; flex:none; font-weight:700; padding-top:5px; }
+    .ed-r .rbody { min-width:0; }
+    .ed-r .t { font-family:'Fraunces',serif; font-size:23px; font-weight:600; color:#f3eee2; line-height:1.15; display:block; }
+    .ed-r a.t:hover { color:var(--accent); }
+    .ed-r .desc { font-size:14.5px; color:#b7b1a3; margin-top:6px; line-height:1.5; max-width:64ch; }
+    .ed-r .d { font-family:'Inter',sans-serif; font-size:11px; color:var(--mute); margin-left:auto; letter-spacing:0.1em; white-space:nowrap; padding-top:6px; }
+    .ed-tags { display:flex; flex-wrap:wrap; gap:7px; margin-top:9px; }
+    .ed-tag { font-family:'Inter',sans-serif; font-size:11px; color:var(--mute); border:1px solid var(--rule2); border-radius:999px; padding:2px 9px; }
+
+    /* article body (markdown) */
+    .ed-article { padding:36px 0 0; }
+    .ed-article .ed-kicker { display:block; margin-bottom:14px; }
+    .ed-article .ed-h1 { max-width:16ch; }
+    .ed-article .ed-byline { margin:22px 0 30px; padding-bottom:22px; border-bottom:1px solid var(--rule); }
+    .ed-prose { max-width:68ch; font-size:18px; line-height:1.72; color:#d8d2c4; }
+    .ed-prose > p:first-of-type::first-letter { font-family:'Fraunces',serif; font-weight:800; float:left; font-size:74px; line-height:0.7; padding:8px 12px 0 0; color:var(--accent); }
+    .ed-prose p { margin:0 0 20px; }
+    .ed-prose h2 { font-family:'Fraunces',serif; font-weight:700; font-size:30px; color:#fff; margin:38px 0 14px; letter-spacing:-0.01em; }
+    .ed-prose h3 { font-family:'Fraunces',serif; font-weight:600; font-size:22px; color:#f3eee2; margin:28px 0 10px; }
+    .ed-prose a { color:var(--accent2); text-decoration:underline; text-underline-offset:3px; }
+    .ed-prose a:hover { color:var(--accent); }
+    .ed-prose ul, .ed-prose ol { margin:0 0 20px; padding-left:24px; }
+    .ed-prose li { margin-bottom:8px; }
+    .ed-prose code { font-family:ui-monospace,Menlo,monospace; font-size:14.5px; background:rgba(79,157,255,0.12); color:#bcd8ff; padding:2px 7px; border-radius:5px; }
+    .ed-prose pre { background:#0b0e14; border:1px solid var(--rule); border-radius:12px; padding:18px; overflow:auto; margin:0 0 22px; }
+    .ed-prose pre code { background:none; color:#cfd8e6; padding:0; }
+    .ed-prose blockquote { border-left:3px solid var(--accent); padding-left:18px; margin:0 0 22px; font-style:italic; color:#c7c1b3; }
+    .ed-prose hr { border:0; border-top:1px solid var(--rule); margin:34px 0; }
+    .ed-back { display:inline-block; font-family:'Inter',sans-serif; font-size:13px; color:var(--mute); margin-bottom:6px; }
+    .ed-back:hover { color:#fff; }
+
+    .ed-footnote { display:block; margin-top:54px; padding-top:22px; border-top:3px double var(--rule2); font-family:'Inter',sans-serif; font-size:12.5px; color:var(--mute); }
+    .ed-footnote a { color:var(--accent2); }
+
+    @media (max-width:620px) {
+      .ed-wrap { padding:0 22px 60px; }
+      .ed-r .d { margin-left:0; width:100%; order:3; padding-top:8px; }
+    }
+  </style>
+</Base>

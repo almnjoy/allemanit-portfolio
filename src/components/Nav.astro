@@ -1,18 +1,49 @@
 ---
 const links = [
   { href: '/#projects', label: 'Projects' },
-  { href: '/#content', label: 'Content' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/daily', label: 'Daily' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/music', label: 'Music' },
+  { href: 'https://quickitprojects.com', label: 'Business', external: true },
 ];
+const cta = { href: 'https://madeformeai.com/#story', label: 'Try Your Own AI' };
 ---
 <header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/70 backdrop-blur">
   <nav class="container-x flex h-16 items-center justify-between">
     <a href="/" class="flex items-center gap-2">
       <img src="/AllemanITLogo.svg" alt="AllemanIT" class="h-8 w-auto" />
     </a>
-    <div class="flex items-center gap-6">
-      {links.map((l) => (<a href={l.href} class="text-sm text-white/70 hover:text-white transition">{l.label}</a>))}
-      <a href="https://quickitprojects.com" target="_blank" rel="noopener" class="rounded-lg border border-brand-orange/60 px-3 py-1.5 text-sm font-semibold text-brand-orange hover:bg-brand-orange hover:text-white transition">Business</a>
+
+    <!-- desktop -->
+    <div class="hidden items-center gap-6 md:flex">
+      {links.map((l) => (
+        <a href={l.href} {...(l.external ? { target: '_blank', rel: 'noopener' } : {})} class="text-sm text-white/70 hover:text-white transition">{l.label}</a>
+      ))}
+      <a href={cta.href} target="_blank" rel="noopener" class="rounded-lg bg-brand-orange px-3.5 py-1.5 text-sm font-semibold text-white hover:brightness-110 transition">{cta.label}</a>
     </div>
+
+    <!-- mobile toggle -->
+    <button id="navToggle" class="md:hidden inline-flex items-center justify-center rounded-lg border border-white/15 p-2 text-white/80" aria-label="Menu" aria-expanded="false">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
   </nav>
+
+  <!-- mobile panel -->
+  <div id="navPanel" class="hidden md:hidden border-t border-white/10 bg-ink-950/95 backdrop-blur">
+    <div class="container-x flex flex-col py-3">
+      {links.map((l) => (
+        <a href={l.href} {...(l.external ? { target: '_blank', rel: 'noopener' } : {})} class="py-2.5 text-sm text-white/80 hover:text-white transition">{l.label}</a>
+      ))}
+      <a href={cta.href} target="_blank" rel="noopener" class="mt-2 rounded-lg bg-brand-orange px-4 py-2.5 text-center text-sm font-semibold text-white">{cta.label}</a>
+    </div>
+  </div>
+
+  <script>
+    const t = document.getElementById('navToggle');
+    const p = document.getElementById('navPanel');
+    t?.addEventListener('click', () => {
+      const open = p.classList.toggle('hidden') === false;
+      t.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  </script>
 </header>

@@ -1,0 +1,34 @@
+---
+import Editorial from '../../layouts/Editorial.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter((p) => !p.data.draft);
+  return posts.map((p) => ({ params: { slug: p.slug }, props: { post: p } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const d = post.data;
+const fmt = (x) => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+const titleHtml = d.title.replace(/\*(.+?)\*/g, '<em>$1</em>');
+---
+<Editorial title={`${d.title} — The Dispatch`} description={d.description}>
+  <div class="ed-mast">
+    <a class="ed-name" href="/blog">ALMNJOY <b>DISPATCH</b></a>
+    <div class="ed-meta">Networking · AI · Homelab</div>
+  </div>
+
+  <article class="ed-article">
+    <a class="ed-back" href="/blog">← All posts</a>
+    <span class="ed-kicker">{d.kicker}</span>
+    <h1 class="ed-h1" set:html={titleHtml}></h1>
+    <div class="ed-byline">
+      By Dustin Alleman · {fmt(d.date)}
+      {d.tags.length > 0 && (<span> · {d.tags.map((t) => `#${t}`).join('  ')}</span>)}
+    </div>
+    <div class="ed-prose"><Content /></div>
+  </article>
+
+  <span class="ed-footnote">Got a take or a correction? <a href="/contact">Hit me →</a> · <a href="/daily">The daily log →</a></span>
+</Editorial>

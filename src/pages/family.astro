@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+// TEMP page for the family: what the Family Zone is + how to get in.
+// Linked from the walkthrough video + the welcome emails. Safe to delete later.
+const VIDEO_ID = 'vXlDFJr9yL4';
+const HUB = 'https://family.allemanit.com';
+---
+<Base title="The Family Zone — how to get in" description="Our family's private corner of the internet. Watch the tour, grab your login, and come ask for anything.">
+  <section class="container-x py-14">
+    <div class="mx-auto max-w-3xl">
+
+      <!-- HERO -->
+      <div class="text-center">
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-brand-orange">Family only 🏡</p>
+        <h1 class="mt-2 text-4xl font-extrabold text-white sm:text-5xl">Our family has its <span class="text-brand-orange">own app</span> now</h1>
+        <p class="mx-auto mt-4 max-w-xl text-white/70">
+          I built us a private website. Nobody outside the family can see it or get in.
+          It has a helper you can literally talk to, and whatever you ask for comes straight to me — I build it, and it shows up in your own tab.
+        </p>
+      </div>
+
+      <!-- VIDEO -->
+      <div class="mt-8 overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+        <div class="aspect-video">
+          <iframe class="h-full w-full" src={`https://www.youtube.com/embed/${VIDEO_ID}`} title="Family Zone tour"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+      <p class="mt-3 text-center text-sm text-white/50">3½ minutes. Watch it once and you know the whole thing.</p>
+
+      <!-- GET IN -->
+      <div class="mt-10 rounded-2xl border border-brand-orange/30 bg-gradient-to-br from-brand-orange/10 to-transparent p-7">
+        <h2 class="text-2xl font-extrabold text-white">Get in. Takes about 60 seconds.</h2>
+        <ol class="mt-5 space-y-4 text-white/80">
+          <li class="flex gap-3"><span class="flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 border-brand-orange text-sm font-extrabold text-brand-orange">1</span>
+            <span><b class="text-white">Check your email.</b> I sent you a personal note with your username, and a password link right after it. Your username is your first and last name with a dot, like <span class="text-brand-orange">firstname.lastname</span>.</span></li>
+          <li class="flex gap-3"><span class="flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 border-brand-orange text-sm font-extrabold text-brand-orange">2</span>
+            <span><b class="text-white">Click the link, pick a password.</b> Can't find the email? Go to <a href={HUB} class="text-brand-orange hover:underline">family.allemanit.com</a>, hit <b class="text-white">Sign in</b>, type your username, then tap <b class="text-white">"Forgot password?"</b> — a fresh link lands in your inbox.</span></li>
+          <li class="flex gap-3"><span class="flex h-7 w-7 flex-none items-center justify-center rounded-full border-2 border-brand-orange text-sm font-extrabold text-brand-orange">3</span>
+            <span><b class="text-white">You're in.</b> Phone or computer, both work. Say hi to the helper — tap the microphone and just talk if typing isn't your thing.</span></li>
+        </ol>
+        <a href={HUB} class="btn btn-primary mt-6 w-full text-base">Open the Family Zone →</a>
+      </div>
+
+      <!-- WHAT'S INSIDE -->
+      <div class="mt-12">
+        <h2 class="text-2xl font-extrabold text-white">What's in there right now</h2>
+        <div class="mt-5 grid gap-3 sm:grid-cols-2">
+          <div class="card p-4"><b class="text-white">🤖 The Helper</b><p class="mt-1 text-sm text-white/60">Ask for anything — a fix, an idea, a thing you wish existed. It comes straight to me and I build it. No question is too small.</p></div>
+          <div class="card p-4"><b class="text-white">🍲 Recipe Box</b><p class="mt-1 text-sm text-white/60">Tell it a recipe, even from memory, and it makes a real printable recipe card the whole family keeps.</p></div>
+          <div class="card p-4"><b class="text-white">🔧 The Garage Log</b><p class="mt-1 text-sm text-white/60">Dad wrenches, it gets written down: whose ride, what got done, and when it's due again.</p></div>
+          <div class="card p-4"><b class="text-white">📅 Family Calendar</b><p class="mt-1 text-sm text-white/60">Birthdays, visits, parties. Add a date and everybody sees it.</p></div>
+          <div class="card p-4"><b class="text-white">🧭 Trip Planner</b><p class="mt-1 text-sm text-white/60">Plan a trip with the helper and it builds a real trip page — it already made our NYC one.</p></div>
+          <div class="card p-4"><b class="text-white">🆕 What's New</b><p class="mt-1 text-sm text-white/60">A live feed of everything the family adds — recipes, garage jobs, dates, trips — the moment it happens.</p></div>
+        </div>
+        <p class="mt-4 text-sm text-white/50">Plus personal stuff: Hunter's EMT study corner and the comic, Jeanna's Daycare HQ, and whatever you ask for next.</p>
+      </div>
+
+      <!-- SCREENSHOTS -->
+      <div class="mt-12">
+        <h2 class="text-2xl font-extrabold text-white">Sneak peek</h2>
+        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+          <figure class="overflow-hidden rounded-xl border border-white/10"><img src="/family/resources.png" alt="The Resources tab with the live What's New feed" class="w-full" loading="lazy" /><figcaption class="p-3 text-xs text-white/50">The Resources tab — live family feed on the left</figcaption></figure>
+          <figure class="overflow-hidden rounded-xl border border-white/10"><img src="/family/recipes.png" alt="The Recipe Box" class="w-full" loading="lazy" /><figcaption class="p-3 text-xs text-white/50">The Recipe Box — chili card is already in there</figcaption></figure>
+          <figure class="overflow-hidden rounded-xl border border-white/10"><img src="/family/calendar.png" alt="The Family Calendar" class="w-full" loading="lazy" /><figcaption class="p-3 text-xs text-white/50">The Family Calendar</figcaption></figure>
+          <figure class="overflow-hidden rounded-xl border border-white/10"><img src="/family/mobile.png" alt="The hub on a phone" class="w-full" loading="lazy" /><figcaption class="p-3 text-xs text-white/50">Works great on your phone</figcaption></figure>
+        </div>
+      </div>
+
+      <!-- HELP -->
+      <div class="card mt-12 p-6 text-center">
+        <h2 class="text-lg font-bold text-white">Stuck? That's fine.</h2>
+        <p class="mt-1 text-sm text-white/60">Call or text me and we'll do it together in five minutes. That's literally what I'm for.</p>
+        <a href="tel:+15178834473" class="btn btn-ghost mt-4 !px-5">Call Dustin</a>
+      </div>
+
+      <p class="mt-10 text-center text-xs text-white/40">This page is just for us and will retire once everyone's in. ❤️</p>
+    </div>
+  </section>
+</Base>

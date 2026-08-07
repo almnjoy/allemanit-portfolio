@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>66 Unique Antiques, a website concept</title>
+<meta name="description" content="An unofficial redesign concept for 66 Unique Antiques in Nashville, Michigan. Built as a demo by Dustin Alleman. Not the shop's official site.">
+<meta property="og:title" content="66 Unique Antiques, a website concept">
+<meta property="og:description" content="What a new site for the shop on M-66 could look like. Unofficial demo, built for fun.">
+<meta property="og:image" content="https://allemanit.com/66unique/img/hero-cases.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:url" content="https://allemanit.com/66unique/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<!--
+  ============================================================================
+  MOCKUP, DIRECTION B: M66 ROADSIDE.  Rebuilt 2026-08-07 with REAL content.
+
+  Every fact, hour, price, phone number and testimonial on this page was taken
+  from 66uniqueantiques.weebly.com, their Facebook page, or TripAdvisor.
+  Every photograph is THEIR OWN, pulled from their Weebly uploads folder and
+  re-optimised (date stamps cropped off, resized to 1200px, 1.9MB for all 27).
+  Photos remain the property of 66 Unique Antiques and are used here only to
+  show them their own site rebuilt. Nothing here is live.
+
+  The one invented section is JUST IN, which is a proposal rather than a
+  record. It is flagged in the markup and on the page itself.
+  ============================================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900&family=Bitter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------------------
+   TOKENS. shadcn HSL-triple convention, ready to lift into
+   Websites/brand/src/66unique.tokens.css if this direction gets picked.
+   Palette is porcelain enamel road sign: asphalt, sign white, highway red,
+   caution yellow, and one interstate blue.
+   --------------------------------------------------------------------------*/
+:root{
+  --asphalt: 220 16% 8%;
+  --asphalt-2: 220 15% 12%;
+  --asphalt-3: 220 13% 17%;
+  --sign: 45 24% 96%;
+  --sign-2: 42 18% 90%;
+  --ink: 220 20% 10%;
+  --fg: 45 20% 95%;
+  --muted-fg: 220 8% 64%;
+  --muted-ink: 220 10% 38%;
+  --border: 220 12% 24%;
+
+  --red: 353 78% 46%;
+  --yellow: 44 96% 54%;
+  --blue: 205 72% 46%;
+  --green: 152 48% 40%;
+
+  --radius: 3px;
+  --sans: 'Archivo', system-ui, sans-serif;
+  --serif: 'Bitter', Georgia, serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;background:hsl(var(--asphalt));color:hsl(var(--fg));
+  font:400 16px/1.62 var(--serif);-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;height:auto;display:block}
+a{color:hsl(var(--yellow))}
+:focus-visible{outline:3px solid hsl(var(--yellow));outline-offset:3px}
+h1,h2,h3,h4{font-family:var(--sans);margin:0}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- shared bits ---------- */
+.eyebrow{
+  font:700 11px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;
+  color:hsl(var(--yellow));margin:0 0 14px;
+}
+.eyebrow.dark{color:hsl(var(--red))}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+  font:700 12px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;
+  padding:16px 24px;border-radius:var(--radius);border:2px solid transparent;
+  transition:background-color .16s, color .16s, border-color .16s, transform .16s;
+}
+.btn:active{transform:translateY(1px)}
+.btn-red{background:hsl(var(--red));color:hsl(var(--sign));border-color:hsl(var(--red))}
+.btn-red:hover{background:hsl(353 78% 39%);border-color:hsl(353 78% 39%);color:hsl(var(--sign))}
+.btn-out{background:hsl(var(--sign));color:hsl(var(--ink));border-color:hsl(var(--sign))}
+.btn-out:hover{background:transparent;color:hsl(var(--sign))}
+.btn-ink{background:hsl(var(--ink));color:hsl(var(--sign));border-color:hsl(var(--ink))}
+.btn-ink:hover{background:transparent;color:hsl(var(--ink))}
+
+/* caution stripe divider */
+.stripe{
+  height:14px;
+  background:repeating-linear-gradient(-45deg,
+    hsl(var(--yellow)) 0 18px, hsl(var(--asphalt)) 18px 36px);
+}
+.stripe.thin{height:8px}
+
+/* ---------- top bar ---------- */
+.topbar{background:hsl(var(--ink));border-bottom:1px solid hsl(var(--border))}
+.topbar .wrap{
+  display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  padding:9px 20px;font:600 11px/1.5 var(--mono);letter-spacing:.13em;text-transform:uppercase;
+}
+.topbar a{color:hsl(var(--fg));text-decoration:none;transition:color .15s}
+.topbar a:hover{color:hsl(var(--yellow))}
+.topbar .now{display:inline-flex;align-items:center;gap:7px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.dot.open{background:hsl(var(--green));box-shadow:0 0 0 3px hsl(var(--green)/.25)}
+.dot.shut{background:hsl(var(--red));box-shadow:0 0 0 3px hsl(var(--red)/.25)}
+
+/* ---------- header ---------- */
+.hdr{background:hsl(var(--asphalt));border-bottom:1px solid hsl(var(--border));position:sticky;top:0;z-index:50}
+.hdr .wrap{display:flex;align-items:center;gap:16px;padding:12px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand .shield{width:40px;height:40px;flex:none}
+.brand b{display:block;font:800 19px/1 var(--sans);letter-spacing:.005em;text-transform:uppercase}
+.brand small{
+  display:block;font:600 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;
+  color:hsl(var(--muted-fg));margin-top:5px;
+}
+.hdr nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+.hdr nav a{
+  font:700 11px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;
+  color:hsl(var(--fg));text-decoration:none;padding:11px 12px;border-radius:var(--radius);
+  transition:background-color .15s, color .15s;
+}
+.hdr nav a:hover{background:hsl(var(--asphalt-3));color:hsl(var(--yellow))}
+
+/* ---------- hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:-2;
+  background:url("img/hero-cases.jpg") center/cover no-repeat;
+  transform:scale(1.04);
+}
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(100deg, hsl(var(--asphalt)/.97) 0%, hsl(var(--asphalt)/.9) 42%, hsl(var(--asphalt)/.55) 72%, hsl(var(--asphalt)/.72) 100%),
+    linear-gradient(hsl(var(--asphalt)/.4), hsl(var(--asphalt)/.86));
+}
+.hero .wrap{padding:64px 20px 40px;display:grid;grid-template-columns:minmax(0,1.35fr) auto;gap:36px;align-items:center}
+@media (max-width:900px){ .hero .wrap{grid-template-columns:1fr;padding-top:44px} }
+.hero h1{
+  font-weight:900;font-size:clamp(2.9rem,8.4vw,5.6rem);line-height:.92;
+  letter-spacing:-.028em;text-transform:uppercase;margin:0 0 22px;
+  text-shadow:0 3px 22px hsl(var(--asphalt)/.75);
+}
+.hero h1 .y{color:hsl(var(--yellow));display:block}
+.hero h1 .r{color:hsl(var(--red));display:block}
+.hero p.lede{
+  font-size:clamp(1.02rem,2.1vw,1.2rem);max-width:46ch;margin:0 0 28px;
+  color:hsl(var(--sign-2));text-shadow:0 2px 12px hsl(var(--asphalt)/.8);
+}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+.shield-big{width:min(240px,58vw);height:auto;filter:drop-shadow(0 12px 34px hsl(0 0% 0% / .6))}
+@media (max-width:900px){ .shield-big{width:150px} }
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;padding:0 20px 46px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.stat{
+  background:hsl(var(--sign));color:hsl(var(--ink));border-radius:var(--radius);
+  padding:16px 14px 13px;text-align:center;border-bottom:5px solid hsl(var(--red));
+}
+.stat:nth-child(2){border-bottom-color:hsl(var(--blue))}
+.stat:nth-child(3){border-bottom-color:hsl(var(--yellow))}
+.stat:nth-child(5){border-bottom-color:hsl(var(--blue))}
+.stat b{display:block;font:900 clamp(1.5rem,3.6vw,2rem)/1 var(--sans);letter-spacing:-.02em}
+.stat span{display:block;margin-top:7px;font:700 9.5px/1.3 var(--mono);letter-spacing:.17em;text-transform:uppercase;color:hsl(var(--muted-ink))}
+
+/* ---------- open now ---------- */
+.hours-band{background:hsl(var(--asphalt-2));border-block:1px solid hsl(var(--border))}
+.hours-band .wrap{padding:44px 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:36px;align-items:start}
+@media (max-width:820px){ .hours-band .wrap{grid-template-columns:1fr;gap:26px} }
+.openbox{background:hsl(var(--asphalt-3));border:1px solid hsl(var(--border));border-left:5px solid hsl(var(--green));border-radius:var(--radius);padding:22px 24px}
+.openbox.shut{border-left-color:hsl(var(--red))}
+.openbox h2{font-size:clamp(1.5rem,3.6vw,2rem);font-weight:900;text-transform:uppercase;letter-spacing:-.015em;margin-bottom:8px}
+.openbox h2 .state{color:hsl(var(--green))}
+.openbox.shut h2 .state{color:hsl(var(--red))}
+.openbox p{margin:0;color:hsl(var(--muted-fg));font-size:15px}
+.openbox .callnow{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+table.hours{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13.5px}
+table.hours th{text-align:left;padding:0 0 12px;font:700 10px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:hsl(var(--yellow))}
+table.hours td{padding:9px 0;border-bottom:1px solid hsl(var(--border));letter-spacing:.04em}
+table.hours td:last-child{text-align:right;color:hsl(var(--muted-fg))}
+table.hours tr.today td{color:hsl(var(--yellow));font-weight:600}
+table.hours tr.today td:last-child{color:hsl(var(--yellow))}
+
+/* ---------- generic section ---------- */
+.sec{padding:66px 0}
+.sec.light{background:hsl(var(--sign));color:hsl(var(--ink))}
+.sec.light .eyebrow{color:hsl(var(--red))}
+.sec.light a{color:hsl(var(--red))}
+.sec h2{font-size:clamp(1.9rem,5vw,3rem);font-weight:900;text-transform:uppercase;letter-spacing:-.025em;line-height:1;margin-bottom:14px}
+.sec .sub{max-width:62ch;color:hsl(var(--muted-fg));margin:0 0 34px;font-size:17px}
+.sec.light .sub{color:hsl(var(--muted-ink))}
+
+/* ---------- category grid ---------- */
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:14px}
+.cat{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;background:hsl(var(--asphalt-3));display:block}
+.cat img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.cat:hover img{transform:scale(1.06)}
+.cat figcaption{
+  position:absolute;left:0;right:0;bottom:0;padding:34px 14px 13px;
+  background:linear-gradient(transparent, hsl(var(--asphalt)/.93) 62%);
+  font:800 14px/1.2 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:hsl(var(--fg));
+}
+.cat figcaption em{display:block;font:400 11.5px/1.4 var(--serif);font-style:normal;letter-spacing:0;text-transform:none;color:hsl(var(--muted-fg));margin-top:5px}
+
+/* ---------- just in (the proposal) ---------- */
+.proposal-flag{
+  background:hsl(var(--yellow));color:hsl(var(--ink));border-radius:var(--radius);
+  padding:13px 16px;margin-bottom:26px;font:600 13.5px/1.5 var(--sans);
+  display:flex;gap:11px;align-items:flex-start;
+}
+.proposal-flag b{font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:11px;white-space:nowrap;padding-top:2px}
+.feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px}
+.item{background:hsl(var(--sign));color:hsl(var(--ink));border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.item .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:hsl(var(--sign-2))}
+.item .ph img{width:100%;height:100%;object-fit:cover}
+.item .flag{
+  position:absolute;top:9px;left:9px;font:800 9.5px/1 var(--mono);letter-spacing:.14em;
+  text-transform:uppercase;padding:6px 8px;border-radius:2px;background:hsl(var(--red));color:hsl(var(--sign));
+}
+.item .flag.sold{background:hsl(var(--ink))}
+.item .flag.hold{background:hsl(var(--blue))}
+.item.is-sold .ph img{filter:grayscale(1);opacity:.5}
+.item .body{padding:13px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.item h3{font-size:16px;font-weight:800;letter-spacing:-.005em;line-height:1.22}
+.item p{margin:0;font-size:13.5px;color:hsl(var(--muted-ink));line-height:1.45}
+.item .row{
+  margin-top:auto;padding-top:11px;border-top:1px solid hsl(var(--sign-2));
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  font:600 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:hsl(var(--muted-ink));
+}
+.item .price{font:900 19px/1 var(--sans);color:hsl(var(--red));letter-spacing:-.02em}
+.item.is-sold .price{color:hsl(var(--muted-ink));text-decoration:line-through}
+
+/* ---------- proof ---------- */
+.proof{display:grid;grid-template-columns:300px minmax(0,1fr);gap:34px;align-items:center}
+@media (max-width:820px){ .proof{grid-template-columns:1fr} }
+.proof img{border-radius:var(--radius);border:5px solid hsl(var(--sign))}
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.badge{border:1px solid hsl(var(--border));border-radius:var(--radius);padding:17px;background:hsl(var(--asphalt-2))}
+.badge b{display:block;font:900 24px/1 var(--sans);color:hsl(var(--yellow));margin-bottom:8px}
+.badge span{font-size:14px;color:hsl(var(--muted-fg));line-height:1.45;display:block}
+
+/* ---------- testimonials ---------- */
+.quotes{columns:3 300px;column-gap:16px}
+.quote{
+  break-inside:avoid;margin:0 0 16px;background:hsl(var(--sign));color:hsl(var(--ink));
+  border-radius:var(--radius);padding:20px 21px;border-left:5px solid hsl(var(--red));
+}
+.quote:nth-child(3n+2){border-left-color:hsl(var(--blue))}
+.quote:nth-child(3n+3){border-left-color:hsl(var(--yellow))}
+.quote p{margin:0 0 12px;font-size:15.5px;line-height:1.55}
+.quote cite{font:700 11px/1.4 var(--mono);letter-spacing:.13em;text-transform:uppercase;font-style:normal;color:hsl(var(--muted-ink))}
+
+/* ---------- vendor / buy split ---------- */
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
+.panel{background:hsl(var(--asphalt-2));border:1px solid hsl(var(--border));border-radius:var(--radius);padding:28px}
+.panel.sign{background:hsl(var(--sign));color:hsl(var(--ink));border-color:hsl(var(--sign-2))}
+.panel h3{font-size:clamp(1.3rem,3vw,1.7rem);font-weight:900;text-transform:uppercase;letter-spacing:-.015em;margin-bottom:14px}
+.panel p{margin:0 0 16px;font-size:15.5px}
+.panel.sign p{color:hsl(var(--muted-ink))}
+.rates{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:1px;background:hsl(var(--sign-2));border-radius:var(--radius);overflow:hidden}
+.rates li{background:hsl(var(--sign));display:flex;justify-content:space-between;gap:12px;padding:13px 15px;font:600 13px/1.35 var(--mono);letter-spacing:.04em;color:hsl(var(--ink))}
+.rates li b{font-family:var(--sans);font-weight:900;font-size:17px;color:hsl(var(--red))}
+.formrow{display:flex;gap:9px;flex-wrap:wrap}
+.formrow input{
+  flex:1 1 190px;min-width:0;border:2px solid hsl(var(--sign-2));border-radius:var(--radius);
+  padding:14px;font:400 15px/1 var(--serif);background:#fff;color:hsl(var(--ink));
+}
+.formrow input:focus{border-color:hsl(var(--red));outline:none}
+
+/* ---------- visit ---------- */
+.visit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:32px;align-items:start}
+@media (max-width:880px){ .visit{grid-template-columns:1fr} }
+.mapslot{
+  aspect-ratio:16/11;border-radius:var(--radius);border:1px solid hsl(var(--border));
+  background:
+    repeating-linear-gradient(0deg, hsl(var(--asphalt-3)) 0 1px, transparent 1px 34px),
+    repeating-linear-gradient(90deg, hsl(var(--asphalt-3)) 0 1px, transparent 1px 34px),
+    hsl(var(--asphalt-2));
+  display:grid;place-items:center;position:relative;overflow:hidden;
+}
+.mapslot .m66line{position:absolute;top:0;bottom:0;left:38%;width:12px;background:hsl(var(--yellow)/.28)}
+.mapslot .pin{position:relative;text-align:center}
+.mapslot .pin svg{filter:drop-shadow(0 6px 12px hsl(0 0% 0%/.55))}
+.mapslot .pin span{display:block;margin-top:9px;font:700 10.5px/1.5 var(--mono);letter-spacing:.15em;text-transform:uppercase;color:hsl(var(--muted-fg))}
+.drives{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px;background:hsl(var(--border));border-radius:var(--radius);overflow:hidden}
+.drives li{background:hsl(var(--asphalt-2));display:flex;justify-content:space-between;gap:14px;padding:13px 15px;font:500 14px/1.4 var(--mono);letter-spacing:.03em}
+.drives li b{color:hsl(var(--yellow));font-weight:600}
+.addr{font:600 15px/1.75 var(--mono);letter-spacing:.05em;margin:0 0 20px}
+.addr a{color:hsl(var(--yellow));text-decoration:none}
+.addr a:hover{text-decoration:underline}
+
+.daymap{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:16px}
+.daycard{border:1px solid hsl(var(--border));border-radius:var(--radius);padding:15px;background:hsl(var(--asphalt-2))}
+.daycard b{display:block;font:800 14px/1.25 var(--sans);letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+.daycard span{font-size:13.5px;color:hsl(var(--muted-fg));line-height:1.45}
+
+/* ---------- watch ---------- */
+.watch{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.vid{
+  aspect-ratio:16/9;border-radius:var(--radius);border:1px solid hsl(var(--border));
+  background:hsl(var(--asphalt-2));display:grid;place-items:center;text-decoration:none;
+  color:hsl(var(--fg));position:relative;overflow:hidden;transition:border-color .16s;
+}
+.vid:hover{border-color:hsl(var(--red))}
+.vid .play{width:60px;height:60px;border-radius:50%;background:hsl(var(--red));display:grid;place-items:center;margin:0 auto 12px}
+.vid .play::after{content:"";border-left:19px solid hsl(var(--sign));border-block:12px solid transparent;margin-left:5px}
+.vid .t{text-align:center;padding:16px;font:700 13px/1.4 var(--sans);letter-spacing:.09em;text-transform:uppercase}
+.vid .t em{display:block;font:400 12px/1.4 var(--serif);font-style:normal;text-transform:none;letter-spacing:0;color:hsl(var(--muted-fg));margin-top:6px}
+
+/* ---------- gallery strip ---------- */
+.strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+.strip img{aspect-ratio:1;object-fit:cover;border-radius:2px;width:100%}
+
+/* ---------- footer ---------- */
+footer{background:hsl(var(--ink));padding:48px 0 34px;border-top:1px solid hsl(var(--border))}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:28px;margin-bottom:30px}
+.fgrid h4{font:800 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:hsl(var(--yellow));margin-bottom:14px}
+.fgrid p, .fgrid li{font-size:14.5px;color:hsl(var(--muted-fg));margin:0 0 8px}
+.fgrid ul{list-style:none;margin:0;padding:0}
+.fgrid a{color:hsl(var(--fg));text-decoration:none;transition:color .15s}
+.fgrid a:hover{color:hsl(var(--yellow))}
+.legal{border-top:1px solid hsl(var(--border));padding-top:20px;font-size:12.5px;color:hsl(var(--muted-fg));line-height:1.65}
+
+
+/* ---- public demo banner. Sits above everything, including the sticky header. ---- */
+.demobar{background:hsl(var(--yellow));color:hsl(var(--ink));border-bottom:3px solid hsl(var(--ink))}
+.demobar .wrap{padding:13px 20px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.demobar b{font:800 11px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  background:hsl(var(--ink));color:hsl(var(--yellow));padding:5px 9px;border-radius:2px;white-space:nowrap;flex:none}
+.demobar p{margin:0;font:500 14px/1.55 var(--sans);flex:1 1 380px;min-width:0}
+.demobar a{color:hsl(var(--ink));font-weight:700;text-underline-offset:3px}
+
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .cat img{transition:none}
+}
+</style>
+</head>
+<body>
+
+<a class="sr" href="#main">Skip to content</a>
+
+
+<!-- Public demo notice. Deliberately the first thing on the page. -->
+<div class="demobar">
+  <div class="wrap">
+    <b>Demo, not the real site</b>
+    <p>This is an unofficial concept for what a new 66 Unique Antiques website could look like, put together by <a href="https://allemanit.com">Dustin Alleman</a> for fun. It is not affiliated with the shop, nothing here can be bought, and the prices in the Just In section are made up. All photographs belong to 66 Unique Antiques and came from their own site. Their real one is <a href="https://66uniqueantiques.weebly.com/">66uniqueantiques.weebly.com</a>. Happy to take this down any time, just ask.</p>
+  </div>
+</div>
+
+<!-- =================== TOP BAR =================== -->
+<div class="topbar">
+  <div class="wrap">
+    <span>220 N Main St &middot; Nashville, Michigan 49073</span>
+    <span class="now" id="topnow"><span class="dot shut" id="topdot"></span><span id="topstate">Checking hours</span></span>
+    <a href="tel:+15178529080">517-852-9080</a>
+  </div>
+</div>
+
+<!-- =================== HEADER =================== -->
+<header class="hdr">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <!-- Michigan state trunkline route marker: a white diamond on a black square.
+           This is the real M-66 shield shape, drawn rather than copied. -->
+      <svg class="shield" viewBox="0 0 64 64" role="img" aria-label="Michigan M-66 route marker">
+        <rect width="64" height="64" rx="3" fill="hsl(var(--ink))"/>
+        <path d="M32 5 L59 32 L32 59 L5 32 Z" fill="hsl(var(--sign))"/>
+        <text x="32" y="27" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="12" fill="hsl(var(--ink))">MICH</text>
+        <text x="32" y="49" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="900" font-size="21" fill="hsl(var(--ink))">66</text>
+      </svg>
+      <span>
+        <b>66 Unique Antiques</b>
+        <small>Nashville, Michigan</small>
+      </span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#hours">Hours</a>
+      <a href="#inside">What's inside</a>
+      <a href="#justin">Just in</a>
+      <a href="#watch">Watch</a>
+      <a href="#booth">Rent a booth</a>
+      <a href="#webuy">We buy</a>
+      <a href="#visit">Visit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- =================== HERO =================== -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Exit onto Main Street &middot; Open six days a week</p>
+      <h1>Get your<span class="y">antique fix</span><span class="r">on M66</span></h1>
+      <p class="lede">Nine thousand square feet of it. Two floors, more than a hundred vendors, and a building that has been on Main Street since the 1800s. Pull over.</p>
+      <div class="cta">
+        <a class="btn btn-red" href="https://www.google.com/maps/dir/?api=1&amp;destination=220+N+Main+St+Nashville+MI+49073" target="_blank" rel="noopener">Get directions</a>
+        <a class="btn btn-out" href="https://youtube.com/channel/UC4zPHW5PcD7r1ioipYpYTtw" target="_blank" rel="noopener">Watch the store tour</a>
+      </div>
+    </div>
+    <svg class="shield-big" viewBox="0 0 200 200" role="img" aria-label="Michigan M-66 highway marker">
+      <rect width="200" height="200" rx="8" fill="hsl(var(--ink))"/>
+      <path d="M100 12 L188 100 L100 188 L12 100 Z" fill="hsl(var(--sign))" stroke="hsl(var(--ink))" stroke-width="3"/>
+      <text x="100" y="82" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="800" font-size="30" fill="hsl(var(--ink))">MICH</text>
+      <text x="100" y="152" text-anchor="middle" font-family="Archivo, sans-serif" font-weight="900" font-size="62" fill="hsl(var(--ink))">66</text>
+    </svg>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>9,000+</b><span>Square feet</span></div>
+    <div class="stat"><b>2</b><span>Full floors</span></div>
+    <div class="stat"><b>100+</b><span>Vendors</span></div>
+    <div class="stat"><b>66K</b><span>Facebook followers</span></div>
+    <div class="stat"><b>Since 2013</b><span>On Main Street</span></div>
+  </div>
+</section>
+
+<div class="stripe"></div>
+
+<!-- =================== HOURS =================== -->
+<section class="hours-band" id="hours">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Before you drive out</p>
+      <div class="openbox" id="openbox">
+        <h2>We are <span class="state" id="openstate">checking</span> right now</h2>
+        <p id="opendetail">Reading the clock in Michigan.</p>
+        <div class="callnow">
+          <a class="btn btn-red" href="tel:+15178529080">Call 517-852-9080</a>
+          <a class="btn btn-out" href="https://www.google.com/maps/dir/?api=1&amp;destination=220+N+Main+St+Nashville+MI+49073" target="_blank" rel="noopener">Directions</a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <table class="hours">
+        <caption class="sr">Store hours</caption>
+        <thead><tr><th scope="col">Day</th><th scope="col" style="text-align:right">Open</th></tr></thead>
+        <tbody id="hoursbody"></tbody>
+      </table>
+      <p style="margin:16px 0 0;font-size:14px;color:hsl(var(--muted-fg))">Reviewers keep saying the same thing, so it is worth repeating: give yourself a couple of hours. People come in for a look and leave two hours later.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =================== WHAT'S INSIDE =================== -->
+<section class="sec" id="inside">
+  <div class="wrap">
+    <p class="eyebrow">Two floors, 100+ vendors</p>
+    <h2>What's inside</h2>
+    <p class="sub">Every one of these photographs was taken inside the shop. The stock turns over constantly, so treat this as the flavor rather than the inventory. Regulars say they see something new every visit.</p>
+    <div class="cats">
+      <figure class="cat"><img src="img/cat-gas-signs.jpg" alt="A wall of porcelain enamel road and gas station signs inside the shop" loading="lazy"><figcaption>Gas &amp; Oil Signs<em>Porcelain enamel, road signs, service station</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-oil-cans.jpg" alt="Shelves of vintage oil cans including Polly, Gulf and Penn brands" loading="lazy"><figcaption>Oil Cans<em>Polly, Gulf, Pennzoil, Conoco</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-records.jpg" alt="Crates of vinyl records including Michael Jackson Thriller and Aerosmith" loading="lazy"><figcaption>Records<em>Crates of vinyl, flip through them</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-sportscards.jpg" alt="Framed sports cards displayed on a wall" loading="lazy"><figcaption>Sports Cards<em>Framed sets and singles</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-furniture.jpg" alt="An antique oak roll top desk and other wooden furniture" loading="lazy"><figcaption>Antique Furniture<em>Oak, roll tops, cabinets, chairs</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-primitives.jpg" alt="Primitive wooden farm tools and implements" loading="lazy"><figcaption>Primitives<em>Farm tools, wood, cast iron</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-glassware.jpg" alt="A white kitchen cabinet with glassware and kitchen collectibles" loading="lazy"><figcaption>Pyrex &amp; Fenton<em>Kitchenware and art glass</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-seasonal.jpg" alt="Ceramic Christmas trees and seasonal decorations" loading="lazy"><figcaption>Seasonal<em>Ceramic trees, holiday, decor</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-arcade.jpg" alt="Vintage arcade and gumball machines on the shop floor" loading="lazy"><figcaption>Machines<em>Gumball, arcade, coin op</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-advertising.jpg" alt="A Veedol advertising sign above an antique cabinet with lamps" loading="lazy"><figcaption>Advertising<em>Tins, signs, store display</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-posters.jpg" alt="Framed Ringling Bros and Barnum and Bailey circus posters" loading="lazy"><figcaption>Circus Posters<em>Ringling Bros, Barnum &amp; Bailey</em></figcaption></figure>
+      <figure class="cat"><img src="img/cat-tools.jpg" alt="A treadle sewing machine base repurposed as a table with hand tools" loading="lazy"><figcaption>Vintage Tools<em>Hand tools, shop, workbench</em></figcaption></figure>
+    </div>
+    <p style="margin-top:26px;font-size:15.5px;color:hsl(var(--muted-fg))">Also on the floor: clocks, toys, wicker, dolls, coins, comics, cast iron cookware, fishing gear, architectural pieces, vintage train sets, Coca-Cola and Pepsi, and the Pinterest project stock people come in specifically to hunt for.</p>
+  </div>
+</section>
+
+<div class="stripe thin"></div>
+
+<!-- =================== JUST IN (the proposal) =================== -->
+<section class="sec" id="justin" style="background:hsl(var(--asphalt-2))">
+  <div class="wrap">
+    <div class="proposal-flag">
+      <b>Proposal</b>
+      <span>This is the one section on the page that is not real yet. Sixty six thousand people follow the Facebook page and there is currently nothing anywhere for them to click. A feed like this, updated from a phone in about thirty seconds per item, is what turns a follower into someone driving out on Saturday. Items below are real photos with invented prices and booth numbers.</span>
+    </div>
+    <p class="eyebrow">Updated as things hit the floor</p>
+    <h2>Just in</h2>
+    <p class="sub">No cart and no checkout. Antique mall stock is one of one and it sells off the floor, so the button says call to hold. Sold items stay up and go grey, because sold items are the proof that things move.</p>
+
+    <div class="feed">
+      <article class="item">
+        <div class="ph"><span class="flag">Just in</span><img src="img/g-neon.jpg" alt="A working neon sign glowing above a wooden door frame" loading="lazy"></div>
+        <div class="body">
+          <h3>Working neon sign</h3>
+          <p>Lights up, hung and running on the main floor. Come see it on before you decide.</p>
+          <div class="row"><span class="price">$385</span><span>Booth 14</span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ph"><span class="flag">Just in</span><img src="img/g-pepsi.jpg" alt="A blue Pepsi Cola metal picnic cooler" loading="lazy"></div>
+        <div class="body">
+          <h3>Pepsi-Cola metal cooler</h3>
+          <p>Original paint, handle intact, no rust through. Sits under a table and looks right anywhere.</p>
+          <div class="row"><span class="price">$145</span><span>Booth 31</span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ph"><span class="flag hold">On hold</span><img src="img/g-safe.jpg" alt="A black cast iron floor safe with gold pinstriping" loading="lazy"></div>
+        <div class="body">
+          <h3>Cast iron floor safe</h3>
+          <p>Heavy. Bring help and a truck. Pinstriping is original and the door swings clean.</p>
+          <div class="row"><span class="price">$650</span><span>Booth 6</span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ph"><span class="flag">Just in</span><img src="img/g-roadsigns.jpg" alt="Vintage metal road signs including a five miles per hour sign and an axle weight limit sign" loading="lazy"></div>
+        <div class="body">
+          <h3>Road sign lot</h3>
+          <p>Six signs, real steel, real fade. Priced each or take the wall.</p>
+          <div class="row"><span class="price">$40 up</span><span>Booth 22</span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ph"><span class="flag">Just in</span><img src="img/g-lamp.jpg" alt="A stained glass table lamp with a brass base" loading="lazy"></div>
+        <div class="body">
+          <h3>Stained glass table lamp</h3>
+          <p>Rewired and safe to plug in. No cracks in the shade.</p>
+          <div class="row"><span class="price">$210</span><span>Booth 9</span></div>
+        </div>
+      </article>
+
+      <article class="item">
+        <div class="ph"><span class="flag">Just in</span><img src="img/g-trunk.jpg" alt="A vintage steamer trunk and leather luggage" loading="lazy"></div>
+        <div class="body">
+          <h3>Steamer trunk</h3>
+          <p>Liner is intact, hardware all there. Upstairs by the window.</p>
+          <div class="row"><span class="price">$120</span><span>Booth 47</span></div>
+        </div>
+      </article>
+
+      <article class="item is-sold">
+        <div class="ph"><span class="flag sold">Sold</span><img src="img/g-rocker.jpg" alt="A red upholstered antique rocking chair with a sun motif" loading="lazy"></div>
+        <div class="body">
+          <h3>Upholstered rocker</h3>
+          <p>Went the same weekend it was posted. More seating on the second floor.</p>
+          <div class="row"><span class="price">$175</span><span>Booth 12</span></div>
+        </div>
+      </article>
+
+      <article class="item is-sold">
+        <div class="ph"><span class="flag sold">Sold</span><img src="img/g-milkcan.jpg" alt="A painted milk can beside an oak chair and a gumball machine" loading="lazy"></div>
+        <div class="body">
+          <h3>Hand painted milk can</h3>
+          <p>Sold off the floor. The vendor paints these, so there is usually another one.</p>
+          <div class="row"><span class="price">$85</span><span>Booth 3</span></div>
+        </div>
+      </article>
+    </div>
+
+    <p style="margin-top:26px;font-size:15.5px;color:hsl(var(--muted-fg))">
+      Something catch your eye? Call <a href="tel:+15178529080">517-852-9080</a> and we will put your name on it until close.
+    </p>
+  </div>
+</section>
+
+<!-- =================== WATCH =================== -->
+<section class="sec" id="watch">
+  <div class="wrap">
+    <p class="eyebrow">On YouTube and Facebook</p>
+    <h2>Watch the shop</h2>
+    <p class="sub">Mike films store tours, auction runs, on-site picks, and the Collecting 101 and Antique Talk videos. Subscribing is free and it is the fastest way to see what came in this week.</p>
+    <div class="watch">
+      <a class="vid" href="https://youtube.com/channel/UC4zPHW5PcD7r1ioipYpYTtw" target="_blank" rel="noopener">
+        <div><div class="play" aria-hidden="true"></div><div class="t">Store tour, first floor<em>Walk the whole main floor</em></div></div>
+      </a>
+      <a class="vid" href="https://www.facebook.com/66UniqueAntiques/" target="_blank" rel="noopener">
+        <div><div class="play" aria-hidden="true"></div><div class="t">Store tour, part two<em>Posted this week on Facebook</em></div></div>
+      </a>
+      <a class="vid" href="https://youtube.com/channel/UC4zPHW5PcD7r1ioipYpYTtw" target="_blank" rel="noopener">
+        <div><div class="play" aria-hidden="true"></div><div class="t">Collecting 101<em>What a thing is and what it is worth</em></div></div>
+      </a>
+    </div>
+    <!-- Real build: swap these three cards for the YouTube Data API feed so the
+         newest three videos appear without anyone editing the page. -->
+    <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap">
+      <a class="btn btn-red" href="https://youtube.com/channel/UC4zPHW5PcD7r1ioipYpYTtw" target="_blank" rel="noopener">Subscribe on YouTube</a>
+      <a class="btn btn-out" href="https://www.facebook.com/66UniqueAntiques/" target="_blank" rel="noopener">Follow on Facebook</a>
+    </div>
+  </div>
+</section>
+
+<div class="stripe thin"></div>
+
+<!-- =================== PROOF =================== -->
+<section class="sec" style="background:hsl(var(--asphalt-2))">
+  <div class="wrap">
+    <p class="eyebrow">People keep stopping</p>
+    <h2>Worth the drive</h2>
+    <div class="proof">
+      <img src="img/storagewars.jpg" alt="Kenny and Everett from Storage Wars Texas standing inside 66 Unique Antiques" loading="lazy">
+      <div class="badges">
+        <div class="badge"><b>Top 10</b><span>Must Visit Antique Shops, Flea Markets and Vendor Spots in Michigan, ranked by OnlyInYourState.</span></div>
+        <div class="badge"><b>98%</b><span>Recommend on Facebook, across 77 reviews.</span></div>
+        <div class="badge"><b>4.7</b><span>On TripAdvisor, and the number two thing to do in Nashville.</span></div>
+        <div class="badge"><b>Storage Wars</b><span>Kenny and Everett from Storage Wars: Texas stopped in and got their antique fix on M66.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== TESTIMONIALS =================== -->
+<section class="sec light">
+  <div class="wrap">
+    <p class="eyebrow dark">In their own words</p>
+    <h2>What people say</h2>
+    <p class="sub">Pulled straight from the reviews. The pattern is hard to miss: most of them were only driving through.</p>
+    <div class="quotes">
+      <blockquote class="quote">
+        <p>An absolute treat to visit 66 Unique Antiques. We were just driving through and stopped in and was there for about 2 hours just looking at all the unique items. We will now be adding this shop to our antique trips.</p>
+        <cite>Jerry P. &middot; Battle Creek, MI</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>Just driving through on my way up north and see this shop and was amazed at how big it was. Mike and Amber are great people to deal with and they made sure I was satisfied with my experience. Have made a mark on my map to stop here everytime I'm coming through Michigan.</p>
+        <cite>Kenny S. &middot; Dallas, TX</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>I expected a small antique store, boy was I wrong. There is 2 floors with a little bit of something for everyone. Give yourself some time to really see all the beautiful things in here.</p>
+        <cite>Ray L. &middot; Chicago, IL</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>Wow this was a clean and beautiful store that smells amazing. I was not expecting it to be what it was. I will be back again and I will be telling everyone.</p>
+        <cite>William H. &middot; Grand Rapids, MI</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>This local antique store has 2 floors loaded with a wide variety of things. The items change frequently and every time you go you see something new. Many affordable items for re-purposing or well kept antiques as is.</p>
+        <cite>travelwkc &middot; TripAdvisor</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>Two floors and lots of booths containing everything from flat irons to calliopes. A great place to stop when traveling Route M66.</p>
+        <cite>Dynomitepraise &middot; TripAdvisor</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>A lovely store with plenty of room to shop and the store doesn't feel cluttered. Will be returning to buy more items.</p>
+        <cite>Janice H. &middot; Okemos, MI</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>A destination for sure, it has a little bit of everything that sparked my interest on so many levels.</p>
+        <cite>Hope N. &middot; Appleton, WI</cite>
+      </blockquote>
+      <blockquote class="quote">
+        <p>I'm glad a shop like this has come to our community, it has added a business to attract more people to Nashville.</p>
+        <cite>Julie S. &middot; Nashville, MI</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<div class="stripe"></div>
+
+<!-- =================== BOOTH + WE BUY =================== -->
+<section class="sec" id="booth">
+  <div class="wrap">
+    <p class="eyebrow">For vendors and for sellers</p>
+    <h2>Rent a booth, or sell us the lot</h2>
+    <p class="sub">More than a hundred vendors already sell here. You pick the size, you keep every dollar your booth takes in, and there is no storefront overhead hanging over you.</p>
+
+    <div class="split">
+      <div class="panel sign" id="rent">
+        <h3>Rent a booth</h3>
+        <p>Sell your goods without the risk of high overhead from owning your own store front. Any size space you choose. All monthly sales from your booth come straight back to you, by check, on the 1st of every month.</p>
+        <ul class="rates">
+          <li><span>Main floor, per square foot</span><b>$1.50</b></li>
+          <li><span>Second floor, per square foot</span><b>$1.00</b></li>
+          <li><span>Your cut of booth sales</span><b>100%</b></li>
+          <li><span>Paid out</span><b>1st of the month</b></li>
+        </ul>
+        <form class="formrow" onsubmit="event.preventDefault();this.querySelector('button').textContent='Thanks, we will call you'">
+          <label class="sr" for="vname">Your name</label>
+          <input id="vname" type="text" placeholder="Your name" autocomplete="name">
+          <label class="sr" for="vphone">Phone</label>
+          <input id="vphone" type="tel" placeholder="Phone number" autocomplete="tel">
+          <button class="btn btn-ink" type="submit">Ask about space</button>
+        </form>
+        <p style="margin:14px 0 0;font-size:13.5px">Or just call <a href="tel:+15178529080">517-852-9080</a> and stop in.</p>
+      </div>
+
+      <div class="panel" id="webuy">
+        <h3>We buy, and we pick</h3>
+        <p>Not everybody wants a booth. We also buy antiques and collectibles outright. Bring the item in, or call us and we will come out to you, take a look at what you have, and offer a reasonable price.</p>
+        <p>We also like to do some American Picking. If you have an old barn or a house full of old items, give us a call and we will come out, pick through it, and make you an offer on the lot.</p>
+        <p style="margin-bottom:22px"><strong style="color:hsl(var(--yellow))">Appraisals too.</strong> Want to know what something is worth? Bring it in or call with the details and we will do the research and tell you. Fees can apply.</p>
+        <div style="display:flex;gap:11px;flex-wrap:wrap">
+          <a class="btn btn-red" href="tel:+15178529080">Call about a collection</a>
+          <a class="btn btn-out" href="#visit">Store hours</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== VISIT =================== -->
+<section class="sec" id="visit" style="background:hsl(var(--asphalt-2))">
+  <div class="wrap">
+    <p class="eyebrow">Downtown Nashville, Michigan</p>
+    <h2>Come see us</h2>
+    <p class="sub">Right on M-66 in the middle of town. Free parking on Main Street and behind the building.</p>
+
+    <div class="visit">
+      <div>
+        <!-- Real build: this slot takes a Google Maps embed iframe for
+             220 N Main St, Nashville, MI 49073. Drawn placeholder for now. -->
+        <div class="mapslot">
+          <span class="m66line" aria-hidden="true"></span>
+          <div class="pin">
+            <svg width="52" height="66" viewBox="0 0 52 66" role="img" aria-label="Map pin at 220 North Main Street">
+              <path d="M26 2C13.3 2 3 12.3 3 25c0 16.5 20.3 36.4 21.2 37.2a2.6 2.6 0 0 0 3.6 0C28.7 61.4 49 41.5 49 25 49 12.3 38.7 2 26 2Z" fill="hsl(var(--red))" stroke="hsl(var(--sign))" stroke-width="3"/>
+              <circle cx="26" cy="25" r="8.5" fill="hsl(var(--sign))"/>
+            </svg>
+            <span>220 N Main St<br>Map embed goes here</span>
+          </div>
+        </div>
+        <p style="margin:14px 0 0;font-size:13.5px;color:hsl(var(--muted-fg))">Nearby: MOO-ville Creamery is 2.5 miles up the road, Country Kettle Cafe is across the street, and Historic Charlton Park is a short drive in Hastings.</p>
+      </div>
+
+      <div>
+        <p class="addr">
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=220+N+Main+St+Nashville+MI+49073" target="_blank" rel="noopener">220 N Main Street<br>Nashville, Michigan 49073</a><br>
+          <a href="tel:+15178529080">517-852-9080</a>
+        </p>
+
+        <h3 style="font:800 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:hsl(var(--yellow));margin-bottom:12px">How far out are you</h3>
+        <ul class="drives">
+          <li><span>Lansing</span><b>40 min</b></li>
+          <li><span>Battle Creek</span><b>30 min</b></li>
+          <li><span>Grand Rapids</span><b>55 min</b></li>
+          <li><span>Kalamazoo</span><b>50 min</b></li>
+          <li><span>Ann Arbor</span><b>1 hr 20 min</b></li>
+        </ul>
+
+        <h3 style="font:800 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:hsl(var(--yellow));margin:26px 0 12px">Make a day of it</h3>
+        <div class="daymap">
+          <div class="daycard"><b>MOO-ville Creamery</b><span>2.5 miles. Ice cream and a working dairy. 4.7 stars across 94 reviews.</span></div>
+          <div class="daycard"><b>Country Kettle Cafe</b><span>Across the street. Breakfast before you shop.</span></div>
+          <div class="daycard"><b>Historic Charlton Park</b><span>Hastings. A whole 1890s village you can walk through.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== GALLERY STRIP =================== -->
+<section class="sec">
+  <div class="wrap">
+    <p class="eyebrow">Odds and ends</p>
+    <h2>A few of the unique ones</h2>
+    <p class="sub">The shop calls this its most unique items page, and it is worth keeping. This is a fraction of it.</p>
+    <div class="strip">
+      <img src="img/g-carving.jpg" alt="A large carved wooden face mounted on a wall" loading="lazy">
+      <img src="img/g-saw.jpg" alt="A hand painted saw blade with a cardinal on it" loading="lazy">
+      <img src="img/g-barrel.jpg" alt="A wooden barrel on a stand beside burlap feed sacks" loading="lazy">
+      <img src="img/g-desk.jpg" alt="An antique table with advertising items and small collectibles on it" loading="lazy">
+      <img src="img/storefront.jpg" alt="The brick storefront of 66 Unique Antiques on Main Street" loading="lazy">
+      <img src="img/cat-arcade.jpg" alt="Vintage arcade and gumball machines on the shop floor" loading="lazy">
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- =================== FOOTER =================== -->
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <div>
+        <h4>66 Unique Antiques</h4>
+        <p>220 N Main Street<br>Nashville, Michigan 49073</p>
+        <p><a href="tel:+15178529080">517-852-9080</a></p>
+        <p>Owners: Mike &amp; Amber Fetterhoff</p>
+      </div>
+      <div>
+        <h4>Hours</h4>
+        <ul>
+          <li>Monday, closed</li>
+          <li>Tuesday to Friday, 9am to 5pm</li>
+          <li>Saturday, 9am to 4pm</li>
+          <li>Sunday, 9am to 4pm</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="https://www.facebook.com/66UniqueAntiques/" target="_blank" rel="noopener">Facebook, 66K followers</a></li>
+          <li><a href="https://youtube.com/channel/UC4zPHW5PcD7r1ioipYpYTtw" target="_blank" rel="noopener">YouTube</a></li>
+          <li>Instagram, 66 Unique Antiques</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Since 2013</h4>
+        <p>Found the building in January 2013, came to terms in June, and vendors started moving in that August. Main floor opened that October, upstairs the following March.</p>
+      </div>
+    </div>
+    <p class="legal">
+      Unofficial concept, built 2026-08-07 by Dustin Alleman of Quick IT Projects. Not the official website of 66 Unique Antiques and not affiliated with them. All photographs are the property of 66 Unique Antiques and were taken from their own website purely to show them their own content in a new layout. Facts, hours, prices and reviews are quoted from their site, their Facebook page and TripAdvisor. The Just In section is a proposal and its prices and booth numbers are invented.
+    </p>
+  </div>
+</footer>
+
+  <p>Mockup &middot; B &middot; M66</p>
+</div>
+
+<script>
+/* ---------------------------------------------------------------------------
+   Real store hours, read against the clock in Michigan rather than the
+   visitor's own timezone. Somebody in Chicago should not be told the shop is
+   shut when it is 9:30 in Nashville.
+   Hours: Mon closed. Tue to Fri 9 to 5. Sat and Sun 9 to 4.
+   --------------------------------------------------------------------------*/
+(function(){
+  var HOURS = [
+    {d:"Sunday",    open:9*60, close:16*60},
+    {d:"Monday",    open:null, close:null},
+    {d:"Tuesday",   open:9*60, close:17*60},
+    {d:"Wednesday", open:9*60, close:17*60},
+    {d:"Thursday",  open:9*60, close:17*60},
+    {d:"Friday",    open:9*60, close:17*60},
+    {d:"Saturday",  open:9*60, close:16*60}
+  ];
+  var DAYIDX = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+
+  function michiganNow(){
+    var f = new Intl.DateTimeFormat("en-US",{
+      timeZone:"America/Detroit", weekday:"short", hour:"2-digit", minute:"2-digit", hour12:false
+    }).formatToParts(new Date());
+    var g = {};
+    f.forEach(function(p){ g[p.type] = p.value; });
+    var h = parseInt(g.hour,10); if(h===24) h=0;
+    return { day: DAYIDX[g.weekday], mins: h*60 + parseInt(g.minute,10) };
+  }
+  function label(m){
+    var h = Math.floor(m/60), mm = m%60;
+    var ap = h>=12 ? "pm" : "am";
+    var hh = h%12; if(hh===0) hh=12;
+    return hh + (mm ? ":"+String(mm).padStart(2,"0") : "") + ap;
+  }
+
+  var now = michiganNow();
+  var today = HOURS[now.day];
+  var isOpen = today.open !== null && now.mins >= today.open && now.mins < today.close;
+
+  // next opening, for the closed message
+  var nextTxt = "";
+  if(!isOpen){
+    for(var i=0;i<8;i++){
+      var idx = (now.day + i) % 7, day = HOURS[idx];
+      if(day.open === null) continue;
+      if(i === 0 && now.mins < day.open){ nextTxt = "Opening today at " + label(day.open) + "."; break; }
+      if(i > 0){ nextTxt = (i===1 ? "Open tomorrow" : "Open " + day.d) + " at " + label(day.open) + "."; break; }
+    }
+  }
+
+  var box = document.getElementById("openbox");
+  var state = document.getElementById("openstate");
+  var detail = document.getElementById("opendetail");
+  var topdot = document.getElementById("topdot");
+  var topstate = document.getElementById("topstate");
+
+  if(isOpen){
+    state.textContent = "open";
+    detail.textContent = "It is " + label(now.mins) + " in Nashville and the doors are open until " + label(today.close) + " today. Give yourself a couple of hours.";
+    topdot.className = "dot open";
+    topstate.textContent = "Open now until " + label(today.close);
+  } else {
+    box.classList.add("shut");
+    state.textContent = "closed";
+    detail.textContent = (today.open === null ? "Mondays are the one day we are shut. " : "It is " + label(now.mins) + " in Nashville and we are closed for the day. ") + nextTxt;
+    topdot.className = "dot shut";
+    topstate.textContent = "Closed right now";
+  }
+
+  document.getElementById("hoursbody").innerHTML = HOURS.map(function(h,i){
+    var when = h.open === null ? "Closed" : label(h.open) + " to " + label(h.close);
+    return '<tr class="' + (i === now.day ? "today" : "") + '"><td>' + h.d +
+           (i === now.day ? " (today)" : "") + "</td><td>" + when + "</td></tr>";
+  }).join("");
+})();
+</script>
+</body>
+</html>

@@ -1,9 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-// Short, memorable pointer at the Big Apple Roll 2026 hub. The hub itself lives
-// on madeformeai.com/skatenyc; this page exists so "allemanit.com/skate" is a
-// thing you can say out loud in a hotel lobby. Safe to delete after August.
-const HUB = 'https://madeformeai.com/skatenyc';
+// Short, memorable pointer at the Skate NYC 2026 hub. The hub moved to its own home
+// on skate-map.com (2026-08-04; the old madeformeai.com/skatenyc 301s there too).
+// This page exists so "allemanit.com/skate" is a thing you can say out loud in a
+// hotel lobby. Safe to delete whenever.
+const HUB = 'https://skate-map.com/skatenyc';
 ---
 <Base
   title="Big Apple Roll 2026 — the crew hub"
@@ -30,7 +31,7 @@ const HUB = 'https://madeformeai.com/skatenyc';
         </div>
         <div class="min-w-0 flex-1 text-center sm:text-left">
           <p class="text-xs font-bold uppercase tracking-[0.18em] text-white/50">Point a camera at it</p>
-          <p class="mt-1 break-all text-xl font-extrabold text-white sm:text-2xl">madeformeai.com/skatenyc</p>
+          <p class="mt-1 break-all text-xl font-extrabold text-white sm:text-2xl">skate-map.com/skatenyc</p>
           <a href={HUB} class="btn btn-primary mt-5 w-full text-base sm:w-auto">Open the hub →</a>
         </div>
       </div>

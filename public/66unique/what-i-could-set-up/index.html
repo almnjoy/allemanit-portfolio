@@ -122,11 +122,17 @@ h2 .n{color:hsl(var(--accent));font-size:.52em;vertical-align:.45em;margin-right
 
 /* pricing */
 .prices{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:26px}
-.p{background:#fff;border:1px solid hsl(var(--border));border-radius:12px;padding:24px;display:flex;flex-direction:column}
+.p{background:#fff;color:hsl(var(--foreground));border:1px solid hsl(var(--border));border-radius:12px;padding:24px;display:flex;flex-direction:column}
 .p.hero{border:2px solid hsl(var(--primary));box-shadow:0 10px 30px hsl(var(--primary)/.13)}
 .p .lbl{font:700 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:hsl(var(--muted-foreground))}
-.p.hero .lbl{color:hsl(var(--primary))}
-.p .amt{font-size:36px;font-weight:800;letter-spacing:-.035em;margin:12px 0 2px}
+/* 11px uppercase in brand blue is only 3.98:1 on white, under AA.
+   primary-600 is the same hue a shade darker and clears 4.5. */
+.p.hero .lbl{color:hsl(var(--primary-600))}
+/* These cards are white and they sit inside section.dark, which sets
+   color:#fff on everything. Without an explicit colour the price
+   inherits white and vanishes on the white card. */
+.p .amt{font-size:36px;font-weight:800;letter-spacing:-.035em;margin:12px 0 2px;
+  color:hsl(var(--foreground))}
 .p .amt.zero{color:hsl(var(--primary))}
 .p .per{font-size:13px;color:hsl(var(--muted-foreground));font-weight:500}
 .p .desc{margin:14px 0 0;font-size:15px;color:hsl(var(--muted-foreground));line-height:1.6}

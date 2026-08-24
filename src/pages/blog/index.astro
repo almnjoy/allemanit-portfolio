@@ -27,7 +27,7 @@ const issue = String(posts.length).padStart(2, '0');
       <h1 class="ed-h1"><a href={`/blog/${featured.slug}`} set:html={featured.data.title.replace(/\*(.+?)\*/g, '<em>$1</em>')}></a></h1>
       <div class="ed-byline">By Dustin Alleman · <span>allemanit.com/blog</span> · {fmt(featured.data.date)}</div>
       <p class="ed-lede">{featured.data.description}</p>
-      <a class="ed-more" href={`/blog/${featured.slug}`}>Read it →</a>
+      <a class="ed-more" data-umami-event="cta-click" data-umami-event-site="allemanit" data-umami-event-cta="blog-open" data-umami-event-destination={featured.slug} data-umami-event-placement="featured" href={`/blog/${featured.slug}`}>Read it →</a>
     </div>
   )}
 
@@ -38,7 +38,7 @@ const issue = String(posts.length).padStart(2, '0');
         <div class="ed-r">
           <span class="n">{String(i + 1).padStart(2, '0')}</span>
           <div class="rbody">
-            <a class="t" href={`/blog/${p.slug}`}>{p.data.title}</a>
+            <a class="t" data-umami-event="cta-click" data-umami-event-site="allemanit" data-umami-event-cta="blog-open" data-umami-event-destination={p.slug} data-umami-event-placement="list" href={`/blog/${p.slug}`}>{p.data.title}</a>
             <div class="desc">{p.data.description}</div>
             {p.data.tags.length > 0 && (
               <div class="ed-tags">{p.data.tags.map((t) => (<span class="ed-tag">#{t}</span>))}</div>

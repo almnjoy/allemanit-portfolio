@@ -20,7 +20,7 @@ const cta = { href: 'https://madeformeai.com/#story', label: 'Try Your Own AI' }
       {links.map((l) => (
         <a href={l.href} {...(l.external ? { target: '_blank', rel: 'noopener' } : {})} class="text-sm text-white/70 hover:text-white transition">{l.label}</a>
       ))}
-      <a href={cta.href} target="_blank" rel="noopener" class="rounded-lg bg-brand-orange px-3.5 py-1.5 text-sm font-semibold text-white hover:brightness-110 transition">{cta.label}</a>
+      <a href={cta.href} data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="madeformeai" data-umami-event-placement="nav" target="_blank" rel="noopener" class="rounded-lg bg-brand-orange px-3.5 py-1.5 text-sm font-semibold text-white hover:brightness-110 transition">{cta.label}</a>
     </div>
 
     <!-- mobile toggle -->

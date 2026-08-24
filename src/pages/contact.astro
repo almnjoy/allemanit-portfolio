@@ -24,7 +24,7 @@ const SIGNUP_URL = 'https://madeformeai.com/signup';
         <h2 class="text-lg font-bold text-white">Just want to reach me?</h2>
         <p class="mt-1 text-sm text-white/55">No funnel, no bot. This sends straight to my inbox (<span class="text-white/75">duallema@quickitprojects.com</span>) and I read every one.</p>
 
-        <form id="contact-form" class="card mt-5 space-y-4 p-6" data-webhook={CONTACT_WEBHOOK}>
+        <form id="contact-form" class="card mt-5 space-y-4 p-6" data-webhook={CONTACT_WEBHOOK} onfocusin="if(!window.__aitFS){window.__aitFS=1;window.umami&&window.umami.track('form-start',{site:'allemanit',form:'contact'})}">
           <div class="grid gap-4 sm:grid-cols-2">
             <div>
               <label class="mb-1.5 block text-sm font-semibold text-white">Name</label>
@@ -52,7 +52,7 @@ const SIGNUP_URL = 'https://madeformeai.com/signup';
         <div class="text-base font-bold text-white">🖧 Work with me · Quick IT</div>
         <p class="mt-1 text-sm text-white/60">IT, networking, infrastructure, automation. Call the AI line for a quick setup game, or just say "sign up." :)</p>
         <div class="mt-3 flex flex-wrap gap-2">
-          <a href="tel:+15178834473" class="btn btn-primary !py-2 !px-4 text-sm">(517) 883-4473</a>
+          <a href="tel:+15178834473" data-umami-event="contact-click" data-umami-event-site="allemanit" data-umami-event-method="phone" data-umami-event-placement="contact-page" class="btn btn-primary !py-2 !px-4 text-sm">(517) 883-4473</a>
           <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" class="btn btn-ghost !py-2 !px-4 text-sm">Start online</a>
           <a href="https://quickitprojects.com" target="_blank" rel="noopener" class="btn btn-ghost !py-2 !px-4 text-sm">Quick IT Projects →</a>
         </div>
@@ -85,7 +85,7 @@ const SIGNUP_URL = 'https://madeformeai.com/signup';
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error('bad status');
-        form.reset(); show('Got it. I read every message and will get back to you.', false);
+        window.umami?.track('form-submit', { site: 'allemanit', form: 'contact', outcome: 'success' }); form.reset(); show('Got it. I read every message and will get back to you.', false);
       } catch (err) {
         show('Something broke. Email me directly at duallema@quickitprojects.com.', true);
       } finally {

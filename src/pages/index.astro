@@ -86,7 +86,7 @@ const credentials = [
     <h2 class="mb-6 text-2xl font-bold text-white">Featured projects</h2>
     <div class="grid gap-5 sm:grid-cols-2">
       {featured.map((p) => (
-        <a href={`/projects/${p.slug}`} class="card group block overflow-hidden">
+        <a href={`/projects/${p.slug}`} data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project={p.slug} data-umami-event-placement="featured" class="card group block overflow-hidden">
           <Thumb image={p.data.cardImage ?? p.data.image} alt={p.data.title} />
           <div class="p-5">
             <div class="mb-2 flex items-center justify-between"><h3 class="text-lg font-bold text-white">{p.data.title}</h3><span class="tag">{p.data.status}</span></div>
@@ -102,7 +102,7 @@ const credentials = [
     <h2 class="mb-6 text-2xl font-bold text-white">Other projects</h2>
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {others.map((p) => (
-        <a href={`/projects/${p.slug}`} class="card group block p-5">
+        <a href={`/projects/${p.slug}`} data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project={p.slug} data-umami-event-placement="all-projects" class="card group block p-5">
           <div class="mb-1.5 flex items-center justify-between gap-2"><h3 class="font-bold text-white">{p.data.title}</h3><span class="tag shrink-0">{p.data.status}</span></div>
           <p class="text-sm text-white/65">{p.data.summary}</p>
         </a>
@@ -137,7 +137,7 @@ const credentials = [
         <p class="mt-1 text-white/60">Call my AI line for a fun AI game to sign up. Just say "sign up" if you don't want to play. :)</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
-        <a href="tel:+15178834473" class="btn btn-primary text-sm">(517) 883-4473</a>
+        <a href="tel:+15178834473" data-umami-event="contact-click" data-umami-event-site="allemanit" data-umami-event-method="phone" data-umami-event-placement="homepage" class="btn btn-primary text-sm">(517) 883-4473</a>
         <a href="/contact" class="btn btn-ghost text-sm">Request lab access</a>
       </div>
     </div>

@@ -38,6 +38,15 @@ const playlists = [
   { name: 'Indie Rotation Deep Cuts', sub: 'guitars / further out', id: '14Icis9ptJufWdFzUWZg4c' },
   { name: 'Bars Deep Cuts', sub: 'bars / further out', id: '2dwrGSNv8SPbQfTdhOIPHe' },
 ];
+
+const digs = [
+  { tag: 'Free', name: 'Pretty Lights', note: 'The whole discography, 2006 to now, still free on his own site. Start with A Color Map of the Sun.', href: 'https://prettylightsmusic.com/music' },
+  { tag: 'Free', name: 'Gramatik', note: 'Built Lowtemp on the idea that music should be free and never really stopped.', href: 'https://gramatik.bandcamp.com' },
+  { tag: 'Buy', name: 'GRiZ', note: 'All four Chasing the Golden Hour parts, in FLAC, direct from him.', href: 'https://mynameisgriz.bandcamp.com' },
+  { tag: 'Buy', name: 'The Floozies', note: 'Funk-bass with real guitar and drums. Do the Thing first.', href: 'https://flooziesduo.bandcamp.com' },
+  { tag: 'Buy', name: 'Stick Figure', note: 'Fifty-odd releases, some in 24-bit. The reggae-rock end of the crate.', href: 'https://stickfigure.bandcamp.com' },
+  { tag: 'Tip', name: 'Pick FLAC', note: 'Bandcamp defaults that dropdown to MP3. FLAC costs the same. Take the FLAC.', href: 'https://bandcamp.com' },
+];
 ---
 <Base title="Dustin's Music — AllemanIT" description="Funk-bass, soulful, always cruising. Here's what Dustin listens to, plus a spot to send him something new.">
   <section class="mz">
@@ -91,6 +100,21 @@ const playlists = [
         ))}
       </div>
       <button id="more-pls" class="more-btn" type="button" aria-expanded="false">Show all playlists ↓</button>
+    </div>
+
+    <!-- WHERE TO GET IT -->
+    <div class="container-x block">
+      <h2 class="sec">Where I actually get it</h2>
+      <p class="sub">Streaming is for finding things. When something sticks I go buy the file, because a playlist is a rental. Most of this scene sells direct.</p>
+      <div class="lanes">
+        {digs.map((d) => (
+          <a class="lane dig" href={d.href} target="_blank" rel="noopener">
+            <span class="lane-tag">{d.tag}</span>
+            <h3>{d.name}</h3>
+            <p>{d.note}</p>
+          </a>
+        ))}
+      </div>
     </div>
 
     <!-- FIND ME -->
@@ -326,6 +350,9 @@ const playlists = [
     }
     .lane h3 { font-size: 19px; font-weight: 800; color: #0a0a0a; margin: 0 0 8px; letter-spacing: -0.01em; }
     .lane p { font-size: 13.5px; color: rgba(10,10,10,0.72); margin: 0; line-height: 1.5; font-weight: 500; }
+    /* dig cards are links, keep the block look but kill anchor styling */
+    a.lane.dig { text-decoration: none; display: block; }
+    a.lane.dig h3::after { content: ' ↗'; font-size: 14px; opacity: 0.55; }
 
     /* PLAYLISTS — neo-brutal cards */
     .pls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }

@@ -12,21 +12,31 @@ const SOUNDCLOUD_SET = 'https://soundcloud.com/almnjoy/sets/afternoonvibes';
 const SC_EMBED = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(SOUNDCLOUD_SET) + '&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true';
 
 const lanes = [
-  { tag: 'The core', name: 'Funk-bass / electronic soul', artists: 'GRiZ · Daily Bread · ODESZA · Big Wild · Late Night Radio' },
+  { tag: 'The core', name: 'Funk-bass / electronic soul', artists: 'GRiZ · Daily Bread · Manic Focus · The Floozies · Pretty Lights' },
+  { tag: 'Golden hour', name: 'Melodic / future', artists: 'Big Wild · Louis The Child · ODESZA · Madeon · Flume' },
+  { tag: 'Island', name: 'Reggae rock', artists: 'Dirty Heads · Stick Figure · Sublime With Rome · KBong' },
+  { tag: 'Horns', name: 'Live brass funk', artists: 'Too Many Zooz · Jennifer Hartswick · Lettuce · Trombone Shorty' },
   { tag: 'Cruise', name: 'Chill / psych-soul', artists: 'Khruangbin · Leon Bridges · FKJ · Tom Misch' },
-  { tag: 'Send it', name: 'Festival bass / dubstep', artists: 'Zeds Dead · ZHU · Excision · Subtronics · Yultron' },
-  { tag: 'Bars', name: 'Hip-hop', artists: 'Mac Miller · Chance · Smino · Logic · Jack Harlow' },
-  { tag: 'Guitars', name: 'Indie / alt', artists: 'Vampire Weekend · RKS · Quinn XCII · Milky Chance' },
-  { tag: 'Loud', name: 'Pop-punk / rock', artists: 'mgk · The Struts · BMTH · Travis Barker' },
+  { tag: 'Send it', name: 'Festival bass / dubstep', artists: 'Zeds Dead · Excision · Subtronics · NGHTMRE · Zomboy' },
+  { tag: 'Bars', name: 'Hip-hop', artists: 'Mac Miller · Chance · Smino · JID · Nipsey Hussle' },
+  { tag: 'Guitars', name: 'Indie / alt', artists: 'Vampire Weekend · RKS · Mt. Joy · Milky Chance' },
+  { tag: 'Loud', name: 'Rage / rap-rock', artists: 'Tech N9ne · mgk · Hollywood Undead · BMTH · Travis Barker' },
 ];
 
 const playlists = [
   { name: 'Groove Bass Skating', sub: 'the funk-bass core', id: '1CPXMmf71Snil8L5enS3vN' },
+  { name: 'Golden Hour Cruise', sub: 'melodic / future', id: '26O9vWLmHGg8GbyZk0HVmq' },
+  { name: 'Reggae Rock Cruise', sub: 'island / sunny', id: '33mDVxdxBupQLUsAQ2r1rV' },
+  { name: 'Live Brass Funk', sub: 'horns / live funk', id: '1ShnKfP4vwGzg1vuQCVV4f' },
   { name: 'Chill Jazzy Funk', sub: 'cruise / lo-fi groove', id: '34xE5lYYVfmYGfROZ8aPe0' },
-  { name: 'Festival Bass Rager', sub: 'send-it dubstep / trap', id: '0e8c5ZDsc1YB4YKbuTZh1N' },
-  { name: 'Indie Alternative Mix', sub: 'guitars / alt', id: '5iSoryISdGDmy9X84gHiZM' },
-  { name: 'Hip-Hop Mix', sub: 'bars', id: '0azzHIpPNye0n75joxOGNI' },
-  { name: 'Rage Rock Anthems', sub: 'loud / pop-punk', id: '1wtK8HAKoCfDJfBGMyd9U2' },
+  { name: 'Festival Bass Rager v2', sub: 'send-it dubstep / trap', id: '1WjRwwqN7XMj6XbuOdlYle' },
+  { name: 'RAGE Strange Energy', sub: 'loud / rap-rock', id: '1V1olttoK8c0AS47uVqjrb' },
+  { name: 'Indie Rotation v2', sub: 'guitars / alt', id: '7yFwKwJiD3VULl8pN5dawC' },
+  { name: 'Bars v2', sub: 'bars', id: '27wrQ3yIeYd5KwxJMkz3q8' },
+  { name: 'Indie Alternative Mix', sub: 'guitars / the original run', id: '5iSoryISdGDmy9X84gHiZM' },
+  { name: 'Hip-Hop Mix', sub: 'bars / the original run', id: '0azzHIpPNye0n75joxOGNI' },
+  { name: 'Indie Rotation Deep Cuts', sub: 'guitars / further out', id: '14Icis9ptJufWdFzUWZg4c' },
+  { name: 'Bars Deep Cuts', sub: 'bars / further out', id: '2dwrGSNv8SPbQfTdhOIPHe' },
 ];
 ---
 <Base title="Dustin's Music — AllemanIT" description="Funk-bass, soulful, always cruising. Here's what Dustin listens to, plus a spot to send him something new.">
@@ -50,8 +60,8 @@ const playlists = [
 
     <!-- TASTE -->
     <div class="container-x block">
-      <h2 class="sec">My taste, in six lanes</h2>
-      <p class="sub">Where I actually live musically. Funk-bass is home base; everything else is a road off it.</p>
+      <h2 class="sec">My taste, in nine lanes</h2>
+      <p class="sub">Where I actually live musically. Funk-bass is home base; everything else is a road off it. These get re-cut against my real listening stats, not vibes.</p>
       <div class="lanes">
         {lanes.map((l) => (
           <div class="lane">

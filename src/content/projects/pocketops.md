@@ -11,19 +11,7 @@ image: "/projects/pocketops/feature.png"
 cardImage: "/projects/pocketops/feature.png"
 gallery:
   - src: "/projects/pocketops/today.png"
-    caption: "The Today screen: appointments, tasks due, money collected, and a morning brief generated from the CRM itself."
-  - src: "/projects/pocketops/chat.png"
-    caption: "Ask your CRM anything. Any answer that would change data shows an approval card before it touches a record."
-  - src: "/projects/pocketops/people.png"
-    caption: "People, companies, and deals with server-side search. Tested against a real book of 3,500+ clients."
-  - src: "/projects/pocketops/workflow.png"
-    caption: "One-tap workflow buttons on a client record: welcome email, newsletter add, whatever the workspace has wired up."
-  - src: "/projects/pocketops/money.png"
-    caption: "Payments collected today, this week, and this month, synced in from Square."
-  - src: "/projects/pocketops/subscribers.png"
-    caption: "Recurring revenue at a glance: active, pending, and inactive subscribers by platform."
-  - src: "/projects/pocketops/settings.png"
-    caption: "Multiple environments on one phone. Point it at any self-hosted Twenty and the app reshapes itself."
+    caption: "The Today screen: appointments, tasks due, money collected, and a morning brief generated from the CRM itself. More screenshots on the store pages."
 ---
 
 Twenty is an open source CRM you can run on your own server. I run several of them: my own business CRM, plus one for each customer I build for. The gap was always the phone. There was no good mobile client for self-hosted Twenty, so I built one, and in August 2026 it shipped to the [App Store](https://apps.apple.com/us/app/pocketops-for-twenty/id6801201669) and [Google Play](https://play.google.com/store/apps/details?id=com.quickitprojects.pocketops).

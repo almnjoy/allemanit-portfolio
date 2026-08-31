@@ -3,7 +3,7 @@ title: "Solar Demo (TrueNorth)"
 summary: "A full vertical demo for a solar installer: branded site, CRM, documentation, and a team of role-scoped AI agents handling intake, questions, and follow-up, end to end."
 status: "Demo"
 featured: true
-order: 5
+order: 6
 tags: ["AI", "CRM", "Vertical demo"]
 stack: ["Twenty CRM", "n8n", "OpenClaw", "Discord", "AI agents", "Web"]
 image: "/projects/solar-demo/signin.png"

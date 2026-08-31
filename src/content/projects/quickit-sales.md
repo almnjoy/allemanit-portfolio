@@ -3,7 +3,7 @@ title: "QuickIT Sales Automation"
 summary: "Inbound calls and chat to booked meetings, automatically. A phone number routes to an AI voice agent, into a CRM, onto a calendar, with no human in the loop for intake."
 status: "Live"
 featured: true
-order: 4
+order: 5
 tags: ["Automation", "AI", "CRM"]
 stack: ["Twilio", "Retell", "n8n", "Twenty CRM", "cal.com", "Microsoft Graph"]
 image: "/projects/quickit-sales/header.png"

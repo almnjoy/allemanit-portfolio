@@ -3,7 +3,7 @@ title: "MadeForMeAI"
 summary: "A multi-tenant AI workspace SaaS. Every customer gets their own isolated OpenClaw agent on its own Kubernetes pod, with single sign-on and billing wired end to end."
 status: "Live"
 featured: true
-order: 3
+order: 4
 tags: ["SaaS", "Kubernetes", "AI"]
 stack: ["K3s", "Docker", "OpenClaw", "Authentik", "Stripe", "Hetzner", "GitHub Actions"]
 liveUrl: "https://madeformeai.com"

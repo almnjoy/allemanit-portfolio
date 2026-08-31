@@ -3,7 +3,7 @@ title: "AI Agent Ecosystem"
 summary: "A tiered team of AI agents that monitors and troubleshoots my cloud and local infrastructure, escalating from read-only log analysis to SSH to me. They now share one Git-backed memory brain across every machine, so a lesson learned on one box is known everywhere, and I can drive any of them from my phone."
 status: "Live"
 featured: true
-order: 6
+order: 7
 tags: ["AI", "Agents", "Observability"]
 stack: ["OpenClaw", "Claude Code", "Git", "Cognee", "Grafana / Loki / Alloy", "n8n", "SSH"]
 image: "/projects/ai-agents/roster.png"

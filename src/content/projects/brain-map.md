@@ -3,7 +3,7 @@ title: "MindMap"
 summary: "A self-hosted, white-label AI workspace. Every tool the agent touches becomes a node on a visual canvas, so you can see what it is doing and why. Plugin-based, fully tenant-isolated, now running real paying customers with a live marketplace, public docs, and a CRM that shapes itself to each business."
 status: "Live"
 featured: true
-order: 1
+order: 3
 tags: ["AI", "Automation", "Self-hosted"]
 stack: ["React", "Node", "Docker", "Postgres", "Twenty CRM", "n8n", "Claude / OpenRouter", "Grafana", "Loki", "Meraki API"]
 liveUrl: "https://madeformeai.com"

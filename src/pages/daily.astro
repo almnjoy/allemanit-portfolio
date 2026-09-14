@@ -48,19 +48,20 @@ const predictions = [
       </div>
 
       <!-- BUILDING NOW / daily log (live) -->
-      <div class="tile c2 r2">
+      <div class="tile c4">
         <span class="k">Building now</span>
         <span class="live">● daily log</span>
         <div id="log" class="logfeed"><p class="soon">Loading the log…</p></div>
       </div>
 
-      <!-- LISTENING -->
-      <a class="tile c1 link" href="/music">
-        <span class="k">Listening</span>
-        <div class="big">🎧</div>
-        <p class="soon">Funk-bass, always. The full rotation lives on /music.</p>
-        <span class="arr">Open /music →</span>
-      </a>
+
+      <!-- CURRENTLY -->
+      <div class="tile c1">
+        <span class="k">Currently</span>
+        <div class="cur"><span>📍</span> Chicago, IL</div>
+        <div class="cur"><span>🎧</span> Funk-bass, always</div>
+        <div class="cur"><span>🛠</span> Rebuilding this site</div>
+      </div>
 
       <!-- WATCHING (live) -->
       <div class="tile c2">
@@ -106,14 +107,6 @@ const predictions = [
         <ul class="preds">
           {predictions.map((p) => (<li><span class="pt">{p}</span></li>))}
         </ul>
-      </div>
-
-      <!-- CURRENTLY -->
-      <div class="tile c1">
-        <span class="k">Currently</span>
-        <div class="cur"><span>📍</span> Chicago, IL</div>
-        <div class="cur"><span>🎧</span> Funk-bass, always</div>
-        <div class="cur"><span>🛠</span> Rebuilding this site</div>
       </div>
 
       <!-- LONG-FORM -->
@@ -163,7 +156,7 @@ const predictions = [
         const data = await r.json();
         const items = Array.isArray(data) ? data : (data.log || []);
         if (!items.length) { el.innerHTML = '<p class="soon">First entries are coming.</p>'; return; }
-        el.innerHTML = items.slice(0, 5).map((j) => (
+        el.innerHTML = items.slice(0, 4).map((j) => (
           '<div class="jot">' +
             '<div class="jt">' + esc(j.text).replace(/\n+/g, '<br>') + '</div>' +
             '<div class="jm">' + (j.tag ? '<span class="jtag">#' + esc(j.tag) + '</span>' : '') + (ago(j.at) ? '<span class="jd">' + ago(j.at) + '</span>' : '') + '</div>' +
@@ -230,7 +223,7 @@ const predictions = [
     .dm .sm { display:block; font-family:'Inter',sans-serif; font-size:10.5px; color:var(--mute); margin-top:3px; letter-spacing:0.04em; text-transform:uppercase; }
     .dm .sm b { color:var(--accent); font-weight:700; }
 
-    .dm .logfeed { display:flex; flex-direction:column; margin-top:12px; }
+    .dm .logfeed { display:grid; grid-template-columns:repeat(2,1fr); gap:0 28px; margin-top:12px; align-items:start; }
     .dm .jot { padding:12px 0; border-top:1px solid var(--rule); }
     .dm .jot:first-child { border-top:0; padding-top:2px; }
     .dm .jt { font-family:'Spectral',serif; font-size:15px; line-height:1.5; color:#e2ddd0; }
@@ -245,6 +238,7 @@ const predictions = [
     @media (max-width:520px) {
       .dm-grid { grid-template-columns:1fr; }
       .dm .c1, .dm .c2, .dm .c4 { grid-column:span 1; }
+      .dm .logfeed { grid-template-columns:1fr; }
     }
   </style>
 </Editorial>

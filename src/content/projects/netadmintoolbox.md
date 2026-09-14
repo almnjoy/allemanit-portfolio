@@ -1,11 +1,12 @@
 ---
 title: "Packet Labs"
 summary: "Guided packet analysis for ARP conflicts, RADIUS rejection, TCP connection failures, DNS, path MTU, and EAP-TLS. The useful learning material from NetAdminToolbox, rebuilt inside AllemanIT."
-status: "Rebuilt"
+status: "Live"
 order: 15
 tags: ["Networking", "Learning"]
 stack: ["Astro", "JavaScript"]
-liveUrl: "/packet-labs/"
+liveUrl: "https://allemanit.com/packet-labs/"
+directUrl: "/packet-labs/"
 ---
 
 NetAdminToolbox is offline. Its packet analysis material now has a focused home in [Packet Labs](/packet-labs/).

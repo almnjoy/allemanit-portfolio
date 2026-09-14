@@ -9,6 +9,7 @@ const projects = defineCollection({
     tags: z.array(z.string()).default([]),
     stack: z.array(z.string()).default([]),
     liveUrl: z.string().optional(),
+    directUrl: z.string().optional(), // card links straight here instead of /projects/<slug>
     repoUrl: z.string().optional(),
     repos: z.array(z.object({ url: z.string(), label: z.string() })).default([]),
     image: z.string().optional(),

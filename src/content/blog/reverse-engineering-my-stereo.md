@@ -5,7 +5,7 @@ description: I bought a Stinger HORIZON12 for my Jeep and wanted it to actually 
 kicker: Build log, the Jeep
 tags: [android, jeep, hardware, reverse-engineering, ai]
 featured: true
-draft: true
+draft: false
 cover: /blog/stereo/horizon-on-dash.jpg
 coverAlt: My Horizon launcher running on the Stinger HORIZON12 in the Jeep
 ---

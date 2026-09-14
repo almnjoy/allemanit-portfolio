@@ -1,11 +1,14 @@
 ---
-title: "Web Design & Development"
-summary: "The common thread under most of my projects: landing pages, docs portals, dashboards, customer portals, and marketing sites, built across plain HTML through React and Astro."
-status: "Service"
-order: 10
+title: "Design Lab"
+summary: "Every project needed a front end, so I got good at making them. The explorations, the rejects, a style engine that skins one page 32 ways, and the sites that shipped."
+status: "Live"
+order: 3
+featured: true
+directUrl: "/design-lab/"
+cardImage: "/design-lab/shots/style-engine.jpg"
 tags: ["Web", "Design", "Front-end"]
 stack: ["HTML / CSS / JS", "React", "Astro", "Tailwind", "Static + dynamic"]
-image: "/sites/quickit.png"
+image: "/design-lab/shots/quickit-v2.jpg"
 ---
 
 Website design crept up on me. Every project I built, home lab services, AI apps, business ideas, automation, eventually needed a front end: a landing page, a docs portal, a dashboard, a customer portal, a marketing site. So I learned to build them myself instead of leaning on templates.
@@ -22,7 +25,7 @@ After enough builds, the same pieces kept showing up: navigation, contact forms,
 
 ## Sites you can poke at
 
-A few are live: [almnjoy.dev](https://almnjoy.dev) (a retro Windows 98 desktop), [quickitprojects.com](https://quickitprojects.com) (clean consulting), [madeformeai.com](https://madeformeai.com) (a modern SaaS product), and [netadmintoolbox.com](https://netadmintoolbox.com) (an engineer utility site).
+A few are live: [almnjoy.dev](https://almnjoy.dev) (a retro Windows 98 desktop), [quickitprojects.com](https://quickitprojects.com) (clean consulting), [madeformeai.com](https://madeformeai.com) (a modern SaaS product), and [Packet Labs](/packet-labs/) (what the old netadmintoolbox.com became).
 
 ## What it taught me
 

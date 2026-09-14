@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="quickit">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Style Engine — 32 design styles, one markup tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=Archivo+Black&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Spectral:wght@400;500;600&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@500;700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================================
+   STYLE ENGINE — hallmark's [data-theme] switch layer on Dustin's HSL tokens.
+   ONE markup tree (.demo). 32 themes just re-set the token contract. Token names
+   + bare-HSL-triple convention match Websites/brand/src/*.tokens.css so any block
+   here lifts into the real brand system. Theme CSS is generated from the JS
+   registry at the bottom (30+ hand-written blocks is a maintenance trap).
+   Kept HSL (not OKLCH) on purpose: hsl(var(--x)/.1) opacity is load-bearing.
+   ========================================================================== */
+
+/* ---- default token contract (a theme overrides what it needs) ------------- */
+:root{
+  --primary:211 100% 50%; --primary-fg:0 0% 100%;
+  --accent:25 100% 50%;   --accent-fg:0 0% 100%;
+  --bg:0 0% 100%; --fg:0 0% 7%; --card:0 0% 100%; --card-fg:0 0% 7%;
+  --muted-fg:0 0% 45%; --border:0 0% 90%; --ink:0 0% 10%; --ink-fg:0 0% 98%;
+  --font-display:'Inter',system-ui,sans-serif; --font-body:'Inter',system-ui,sans-serif;
+  --display-weight:800; --display-tracking:-0.02em; --display-transform:none;
+  --btn-radius:12px; --card-radius:16px; --shadow:0 10px 30px rgba(2,8,23,.10);
+  --card-bg:hsl(var(--card)); --card-blur:none; --card-border:1.5px solid hsl(var(--border));
+  --bg-pattern:none;
+  --grad: radial-gradient(900px 460px at 82% -10%, hsl(var(--primary)/.14), transparent 60%),
+          radial-gradient(720px 420px at -6% 12%, hsl(var(--accent)/.10), transparent 55%);
+}
+
+/* ===================== ONE MARKUP TREE (reskinned by tokens) =============== */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:hsl(var(--bg));color:hsl(var(--fg));font-family:var(--font-body)}
+
+/* app chrome — theme-neutral, stays dark to frame the preview */
+.chrome{position:sticky;top:0;z-index:30;background:#0a0d13;border-bottom:1px solid #1b2130;color:#e7ecf3;font-family:'Inter',sans-serif}
+.chrome .row{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 20px;flex-wrap:wrap}
+.chrome h1{font-size:14px;font-weight:800;white-space:nowrap}
+.chrome h1 span{color:#ff6a00}
+.count{font-size:11px;color:#7dd3fc;background:#0e1626;border:1px solid #1e2a3f;border-radius:999px;padding:3px 9px}
+.tabs{display:flex;gap:4px;background:#0e1420;border:1px solid #1e2431;border-radius:9px;padding:3px}
+.tabs button{font-size:12px;font-weight:600;color:#9aa6b8;background:transparent;border:0;padding:6px 12px;border-radius:6px;cursor:pointer}
+.tabs button.on{background:#ff6a00;color:#fff}
+.spacer{flex:1}
+.ctrl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.ctrl button{font-size:12px;font-weight:600;color:#e7ecf3;background:#141b26;border:1px solid #263041;border-radius:8px;padding:7px 11px;cursor:pointer}
+.ctrl button:hover{border-color:#3b465c}
+
+/* preview-mode sub-bar: category-grouped switcher */
+.subbar{max-width:1280px;margin:0 auto;padding:2px 20px 10px}
+.switch{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.nav{display:flex;gap:5px}
+.nav button{font-size:13px;color:#e7ecf3;background:#141b26;border:1px solid #263041;border-radius:8px;padding:6px 10px;cursor:pointer}
+.pick{position:relative}
+.pick select{appearance:none;font:600 12px 'Inter',sans-serif;color:#e7ecf3;background:#141b26;border:1px solid #263041;border-radius:8px;padding:7px 30px 7px 12px;cursor:pointer;max-width:280px}
+.pick::after{content:"▾";position:absolute;right:11px;top:7px;color:#7a8698;pointer-events:none}
+.now{font-size:12px;color:#9aa6b8}
+.now b{color:#fff}
+.now .cat{color:#ff6a00;font-weight:700}
+.axes{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+.axis{font-size:11px;color:#8fa0b6;background:#0e1420;border:1px solid #1e2431;border-radius:7px;padding:5px 10px}
+.axis b{color:#e7ecf3;font-weight:700}
+
+/* the reskinnable component */
+.demo{min-height:calc(100vh - 130px);background:var(--bg-pattern),var(--grad),hsl(var(--bg))}
+.wrap{max-width:1100px;margin:0 auto;padding:60px 28px 80px}
+.kick{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:hsl(var(--accent))}
+.hero{margin-top:14px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.hero h2{font-family:var(--font-display);font-weight:var(--display-weight);letter-spacing:var(--display-tracking);text-transform:var(--display-transform);font-size:clamp(36px,6vw,66px);line-height:1.03;color:hsl(var(--fg))}
+.hero p{margin-top:18px;color:hsl(var(--muted-fg));font-size:17px;line-height:1.6;max-width:460px;font-family:var(--font-body)}
+.btns{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{font-family:var(--font-body);font-weight:700;font-size:14px;padding:12px 22px;border-radius:var(--btn-radius);cursor:pointer;border:2px solid transparent}
+.btn.pri{background:hsl(var(--accent));color:hsl(var(--accent-fg));box-shadow:var(--shadow)}
+.btn.sec{background:transparent;color:hsl(var(--fg));border:2px solid hsl(var(--border))}
+.orb{aspect-ratio:4/5;border-radius:var(--card-radius);border:var(--card-border);background:
+   linear-gradient(160deg,hsl(var(--primary)/.30),hsl(var(--accent)/.20));display:flex;align-items:center;justify-content:center;color:hsl(var(--fg)/.5);font-size:13px;font-family:var(--font-body)}
+.cards{margin-top:54px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:820px){.cards{grid-template-columns:1fr}}
+.card{background:var(--card-bg);-webkit-backdrop-filter:var(--card-blur);backdrop-filter:var(--card-blur);border:var(--card-border);border-radius:var(--card-radius);padding:22px;box-shadow:var(--shadow)}
+.card .dot{width:34px;height:34px;border-radius:9px;background:hsl(var(--primary)/.16);display:flex;align-items:center;justify-content:center;color:hsl(var(--primary));font-weight:800;font-family:var(--font-display)}
+.card h3{font-family:var(--font-display);font-weight:var(--display-weight);font-size:18px;margin:14px 0 6px;color:hsl(var(--fg));letter-spacing:var(--display-tracking);text-transform:var(--display-transform)}
+.card p{color:hsl(var(--muted-fg));font-size:14px;line-height:1.55;font-family:var(--font-body)}
+.stats{margin-top:20px;display:flex;gap:26px;flex-wrap:wrap;padding:22px;background:hsl(var(--ink));border-radius:var(--card-radius);color:hsl(var(--ink-fg))}
+.stat .n{font-family:var(--font-display);font-weight:var(--display-weight);font-size:30px;color:hsl(var(--accent))}
+.stat .l{font-size:12px;color:hsl(var(--ink-fg)/.65);margin-top:2px;font-family:var(--font-body)}
+
+/* ---- ALL STYLES contact sheet ---- */
+.grid{display:none;max-width:1400px;margin:0 auto;padding:20px}
+.grid.on{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.mini{border-radius:14px;overflow:hidden;border:1px solid #1e2431;cursor:pointer;transition:transform .12s,box-shadow .12s;background:#0e1420}
+.mini:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.mini .prev{height:150px;padding:16px;background:var(--bg-pattern),var(--grad),hsl(var(--bg));display:flex;flex-direction:column;justify-content:space-between}
+.mini .mk{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:hsl(var(--accent))}
+.mini .mh{font-family:var(--font-display);font-weight:var(--display-weight);letter-spacing:var(--display-tracking);text-transform:var(--display-transform);font-size:22px;line-height:1.05;color:hsl(var(--fg))}
+.mini .mrow{display:flex;gap:8px;align-items:center}
+.mini .chipbtn{font:700 11px var(--font-body);padding:6px 12px;border-radius:var(--btn-radius);background:hsl(var(--accent));color:hsl(var(--accent-fg))}
+.mini .sw{width:20px;height:20px;border-radius:6px;border:1px solid rgba(255,255,255,.2)}
+.mini .foot{background:#0a0d13;padding:10px 14px;font-family:'Inter',sans-serif}
+.mini .fname{font-size:13px;font-weight:700;color:#e7ecf3;display:flex;justify-content:space-between;align-items:center}
+.mini .fcat{font-size:10px;color:#ff6a00;font-weight:700}
+.mini .fax{font-size:10px;color:#8593a6;margin-top:4px;line-height:1.4}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#0a0d13;color:#e7ecf3;border:1px solid #263041;border-radius:10px;padding:10px 16px;font:600 13px 'Inter',sans-serif;opacity:0;transition:.2s;z-index:60}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+  <header class="chrome">
+    <div class="row">
+      <h1>Style <span>Engine</span></h1>
+      <span class="count" id="count">32 styles</span>
+      <div class="tabs" id="tabs">
+        <button data-v="preview" class="on">Preview</button>
+        <button data-v="grid">All styles</button>
+      </div>
+      <div class="spacer"></div>
+      <div class="ctrl">
+        <button id="mode">&#9789; Dark</button>
+        <button id="rand">&#127922; Surprise</button>
+        <button id="copyTheme">Copy theme block</button>
+        <button id="copyDesign">Copy design.md</button>
+      </div>
+    </div>
+    <div class="subbar" id="subbar">
+      <div class="switch">
+        <div class="nav"><button id="prev">&#8592;</button><button id="next">&#8594;</button></div>
+        <div class="pick"><select id="sel"></select></div>
+        <div class="now" id="now"></div>
+        <div class="axes" id="axes"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ONE markup tree. Never changes. Only the tokens change. -->
+  <main class="demo" id="demo">
+    <div class="wrap">
+      <div class="kick" id="kick">Quick IT Projects</div>
+      <div class="hero">
+        <div>
+          <h2 id="headline">Networks that just work.</h2>
+          <p id="sub">Design, deployment, and monitoring for small-business networks.</p>
+          <div class="btns">
+            <button class="btn pri" id="b1">Get a quote</button>
+            <button class="btn sec">See the work</button>
+          </div>
+        </div>
+        <div class="orb">brand visual</div>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="dot">1</div><h3>Assess</h3><p>Full topology audit, gaps and risks mapped, one clear plan.</p></div>
+        <div class="card"><div class="dot">2</div><h3>Deploy</h3><p>Switching, firewalls, Wi-Fi, segmentation, done right the first time.</p></div>
+        <div class="card"><div class="dot">3</div><h3>Watch</h3><p>Monitoring and backups so problems page us, not you.</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n">10y</div><div class="l">Cisco engineering</div></div>
+        <div class="stat"><div class="n">24/7</div><div class="l">Monitored uptime</div></div>
+        <div class="stat"><div class="n">1</div><div class="l">Number to call</div></div>
+      </div>
+    </div>
+  </main>
+
+  <section class="grid" id="grid"></section>
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================================
+   THEME REGISTRY — 32 styles. token keys map to --vars. missing -> default.
+   color values are shadcn HSL triples "H S% L%" (his convention). treatment
+   values (gr grad, sh shadow, pat pattern, cbg card-bg, cbl blur, cb border)
+   are full CSS. dark: optional dark-mode overrides.
+   ========================================================================== */
+const F={inter:"'Inter',sans-serif",grotesk:"'Space Grotesk',sans-serif",archivo:"'Archivo Black',sans-serif",
+  fraunces:"'Fraunces',serif",spectral:"'Spectral',serif",mono:"'JetBrains Mono',monospace",
+  playfair:"'Playfair Display',serif",quick:"'Quicksand',sans-serif"};
+
+const THEMES={
+/* ---- Brands (real, from Websites/brand/src) ---- */
+quickit:{name:"QuickIT",cat:"Brand",real:1,axes:["light","grotesk (Inter)","cool blue + warm orange"],
+  copy:["Quick IT Projects","Networks that just work.","Design, deployment, and monitoring for small-business networks. Cisco-grade engineering without the enterprise invoice."],
+  t:{p:"211 100% 50%",a:"25 100% 50%",bg:"0 0% 100%",fg:"0 0% 7%",card:"0 0% 100%",m:"0 0% 45%",b:"0 0% 90%",ink:"0 0% 10%",fd:F.inter,fb:F.inter},
+  dark:{p:"211 100% 58%",a:"25 100% 55%",bg:"0 0% 7%",fg:"0 0% 98%",card:"0 0% 10%",m:"0 0% 64%",b:"0 0% 20%",ink:"0 0% 4%"}},
+madeformeai:{name:"MadeForMeAI",cat:"Brand",real:1,axes:["light cream","sans (Inter)","navy + orange + violet/sky"],
+  copy:["MadeForMeAI","Your workspace, built for you.","A hosted AI workspace that maps to how you actually run. Set it up once, let it run the busywork."],
+  t:{p:"224 64% 33%",a:"21 95% 53%",bg:"30 100% 97%",fg:"222 47% 11%",card:"0 0% 100%",m:"215 16% 47%",b:"30 20% 88%",ink:"0 0% 4%",fd:F.inter,fb:F.inter,
+     gr:"radial-gradient(820px 440px at 80% -10%,hsl(258 90% 66%/.16),transparent 58%),radial-gradient(680px 420px at -4% 10%,hsl(21 95% 53%/.12),transparent 55%),radial-gradient(520px 360px at 60% 120%,hsl(199 89% 48%/.12),transparent 60%)"},
+  dark:{p:"224 64% 45%",a:"21 95% 53%",bg:"222 47% 11%",fg:"30 100% 97%",card:"222 40% 15%",m:"215 16% 65%",b:"222 30% 25%",ink:"0 0% 2%"}},
+
+/* ---- Dark & Tech ---- */
+"dark-saas":{name:"Dark SaaS",cat:"Dark & Tech",axes:["near-black","grotesk (Inter)","blue + orange glow"],
+  copy:["The Platform","Ship faster, sleep better.","A dark, focused product surface with a single confident accent. The default for modern tools."],
+  t:{p:"211 100% 60%",a:"25 100% 56%",bg:"213 33% 6%",fg:"210 20% 92%",card:"216 28% 10%",m:"214 12% 62%",b:"216 20% 18%",ink:"216 33% 4%",fd:F.inter,fb:F.inter}},
+terminal:{name:"Terminal",cat:"Dark & Tech",axes:["near-black","mono (JetBrains)","phosphor green"],
+  copy:["root@allemanit","> build freely_","Monospace everything, phosphor green, hard contrast. For dashboards and anything that should feel like a shell."],
+  t:{p:"145 80% 45%",a:"145 80% 45%",bg:"150 20% 5%",fg:"140 30% 88%",card:"150 18% 8%",m:"145 12% 60%",b:"150 20% 16%",ink:"150 20% 4%",fd:F.mono,fb:F.mono,br:"4px",cr:"6px",sh:"0 0 0 1px hsl(145 80% 45%/.25)",gr:"none",
+     pat:"repeating-linear-gradient(hsl(145 80% 45%/.04) 0 1px,transparent 1px 3px)"}},
+cyberpunk:{name:"Cyberpunk",cat:"Dark & Tech",axes:["black","grotesk","neon magenta + cyan"],
+  copy:["Night City","Jack in.","Neon on black, magenta against cyan, everything glowing. High-energy, high-contrast, slightly dangerous."],
+  t:{p:"315 100% 62%",a:"180 100% 50%",bg:"265 45% 6%",fg:"300 30% 93%",card:"270 40% 10%",m:"280 22% 70%",b:"300 60% 26%",ink:"270 45% 4%",fd:F.grotesk,fb:F.grotesk,cr:"6px",sh:"0 0 24px hsl(315 100% 62%/.35)",
+     gr:"radial-gradient(700px 380px at 85% -8%,hsl(315 100% 62%/.24),transparent 60%),radial-gradient(620px 380px at -6% 12%,hsl(180 100% 50%/.18),transparent 58%)",cb:"1px solid hsl(315 100% 62%/.4)"}},
+blueprint:{name:"Blueprint",cat:"Dark & Tech",axes:["blueprint blue","mono","white/cyan lines"],
+  copy:["Rev. C","Drawn to spec.","Blueprint blue, white technical lines, a fine grid. Reads like a network as-built. Right at home for a homelab."],
+  t:{p:"205 90% 78%",a:"190 90% 70%",bg:"214 72% 22%",fg:"205 60% 94%",card:"214 62% 18%",m:"205 40% 80%",b:"205 55% 48%",ink:"214 72% 14%",fd:F.mono,fb:F.mono,cr:"4px",sh:"none",
+     pat:"linear-gradient(hsl(205 60% 92%/.10) 1px,transparent 1px),linear-gradient(90deg,hsl(205 60% 92%/.10) 1px,transparent 1px)",gr:"none",cb:"1px solid hsl(205 55% 60%/.5)"}},
+aurora:{name:"Aurora Gradient",cat:"Dark & Tech",axes:["dark","grotesk","mesh purple/pink/teal"],
+  copy:["Northern Lights","Color, on tap.","Big blurred mesh gradients over near-black. Lush, current, a little bit hero-section-of-2025."],
+  t:{p:"280 90% 66%",a:"330 92% 62%",bg:"244 40% 8%",fg:"0 0% 98%",card:"250 30% 14%",m:"250 20% 78%",b:"270 35% 30%",ink:"244 45% 5%",fd:F.grotesk,fb:F.inter,cr:"18px",
+     gr:"radial-gradient(600px 420px at 15% 10%,hsl(280 90% 60%/.4),transparent 60%),radial-gradient(560px 420px at 85% 20%,hsl(330 90% 60%/.32),transparent 60%),radial-gradient(620px 480px at 60% 110%,hsl(180 90% 55%/.26),transparent 60%)",
+     cbg:"hsl(250 30% 14% / .6)",cbl:"blur(8px)",cb:"1px solid hsl(0 0% 100%/.12)"}},
+
+/* ---- Movements ---- */
+brutalist:{name:"Neo-Brutalist",cat:"Movement",axes:["chromatic (yellow)","heavy (Archivo Black)","hot orange-red"],
+  copy:["No Nonsense","Loud. Fast. Yours.","Big type, hard edges, offset shadows, zero fluff. The message hits before the design does."],
+  t:{p:"47 100% 62%",a:"14 100% 50%",bg:"47 100% 62%",fg:"0 0% 7%",card:"0 0% 100%",m:"0 0% 20%",b:"0 0% 7%",ink:"0 0% 7%",fd:F.archivo,fb:F.grotesk,dw:"400",dt:"0",tr:"uppercase",br:"0",cr:"0",sh:"6px 6px 0 hsl(0 0% 7%)",gr:"none",cb:"2px solid hsl(0 0% 7%)"},
+  dark:{bg:"0 0% 7%",fg:"47 100% 62%",card:"0 0% 12%",m:"0 0% 75%",b:"47 100% 62%",ink:"47 100% 62%",sh:"6px 6px 0 hsl(14 100% 50%)"}},
+swiss:{name:"Swiss",cat:"Movement",axes:["light off-white","grotesk tight","signal red"],
+  copy:["International Style","Order. Grid. Clarity.","Structure first. A disciplined grid, restrained accent, typography doing the heavy lifting."],
+  t:{p:"0 0% 7%",a:"2 78% 51%",bg:"40 6% 96%",fg:"0 0% 7%",card:"0 0% 100%",m:"0 0% 32%",b:"0 0% 84%",ink:"0 0% 7%",fd:F.inter,fb:F.inter,dt:"-0.03em",br:"0",cr:"0",sh:"none",gr:"none"},
+  dark:{bg:"0 0% 9%",fg:"0 0% 96%",card:"0 0% 13%",m:"0 0% 68%",b:"0 0% 24%",ink:"0 0% 96%"}},
+bauhaus:{name:"Bauhaus",cat:"Movement",axes:["warm off-white","geometric heavy","primary red/blue/yellow"],
+  copy:["Form Follows","Circle. Square. Line.","Primary colors, hard geometry, no decoration that isn't structure. 1920s, still undefeated."],
+  t:{p:"224 78% 46%",a:"0 78% 50%",bg:"40 20% 93%",fg:"0 0% 8%",card:"0 0% 100%",m:"0 0% 30%",b:"0 0% 12%",ink:"0 0% 8%",fd:F.archivo,fb:F.grotesk,tr:"uppercase",br:"0",cr:"0",sh:"none",gr:"none",cb:"2px solid hsl(0 0% 8%)"}},
+"art-deco":{name:"Art Deco",cat:"Movement",axes:["dark","serif (Playfair)","gold"],
+  copy:["Est. MCMXXV","Gilded, and geometric.","Gold on deep black, symmetry, elegant high-contrast serifs. The Gatsby of design systems."],
+  t:{p:"45 62% 54%",a:"45 62% 54%",bg:"200 30% 8%",fg:"45 40% 90%",card:"200 26% 12%",m:"45 18% 70%",b:"45 40% 40%",ink:"200 30% 5%",fd:F.playfair,fb:F.spectral,dw:"700",cr:"4px",sh:"none",cb:"1px solid hsl(45 50% 50%/.5)",
+     gr:"radial-gradient(700px 400px at 50% -10%,hsl(45 62% 54%/.12),transparent 60%)"}},
+memphis:{name:"Memphis",cat:"Movement",axes:["white","heavy playful","pink + teal + yellow"],
+  copy:["Milano 1981","Squiggles allowed.","80s postmodern: clashing shapes, bold primaries, playful confetti. Loud on purpose, fun on purpose."],
+  t:{p:"340 82% 62%",a:"175 70% 42%",bg:"0 0% 98%",fg:"0 0% 10%",card:"0 0% 100%",m:"0 0% 32%",b:"0 0% 10%",ink:"0 0% 10%",fd:F.archivo,fb:F.grotesk,tr:"uppercase",br:"999px",cr:"10px",sh:"4px 4px 0 hsl(48 100% 55%)",cb:"2px solid hsl(0 0% 10%)",
+     pat:"radial-gradient(hsl(48 100% 55%/.5) 2px,transparent 2px)",gr:"none"}},
+"pop-art":{name:"Pop Art",cat:"Movement",axes:["cream-yellow","comic heavy","red + blue"],
+  copy:["POW!","Bold. Outlined. Loud.","Ben-Day dots, thick black outlines, primary punch. Lichtenstein by way of a landing page."],
+  t:{p:"350 85% 54%",a:"210 100% 50%",bg:"50 100% 92%",fg:"0 0% 8%",card:"0 0% 100%",m:"0 0% 25%",b:"0 0% 8%",ink:"0 0% 8%",fd:F.archivo,fb:F.grotesk,tr:"uppercase",br:"999px",cr:"8px",sh:"5px 5px 0 hsl(0 0% 8%)",cb:"3px solid hsl(0 0% 8%)",
+     pat:"radial-gradient(hsl(350 85% 54%/.35) 2.5px,transparent 2.5px)",gr:"none"}},
+
+/* ---- Retro ---- */
+vaporwave:{name:"Vaporwave",cat:"Retro",axes:["deep purple","grotesk","pink + cyan"],
+  copy:["A E S T H E T I C","Sunset on a grid.","Neon pink and cyan, retro sun, perspective grid floor. 1984 imagining 2024."],
+  t:{p:"315 90% 66%",a:"190 95% 58%",bg:"265 55% 12%",fg:"300 60% 93%",card:"280 45% 18%",m:"290 30% 78%",b:"315 70% 46%",ink:"270 60% 8%",fd:F.grotesk,fb:F.grotesk,cr:"8px",sh:"0 0 22px hsl(315 90% 66%/.3)",
+     gr:"linear-gradient(180deg,hsl(265 60% 14%) 0%,hsl(300 55% 24%) 60%,hsl(25 90% 55%/.5) 100%)",cb:"1px solid hsl(315 80% 60%/.45)"}},
+y2k:{name:"Y2K / Aero",cat:"Retro",axes:["sky blue","rounded","aqua + green gloss"],
+  copy:["Frutiger Aero","Glossy optimism.","Aqua gloss, bubbles, sky gradients, a little chrome. The 2000s future that felt clean and friendly."],
+  t:{p:"205 90% 50%",a:"140 68% 44%",bg:"200 70% 90%",fg:"210 45% 16%",card:"0 0% 100%",m:"210 22% 40%",b:"200 40% 78%",ink:"210 60% 22%",fd:F.quick,fb:F.quick,dw:"700",cr:"18px",br:"999px",sh:"0 8px 22px hsl(205 90% 50%/.25)",
+     gr:"radial-gradient(600px 340px at 80% -6%,hsl(190 90% 70%/.5),transparent 60%),radial-gradient(520px 340px at 10% 10%,hsl(140 68% 60%/.35),transparent 58%)"}},
+"retro-70s":{name:"Retro 70s",cat:"Retro",axes:["cream","rounded groovy","burnt orange + mustard"],
+  copy:["Far Out","Warm, and groovy.","Burnt orange, mustard, avocado. Rounded, earthy, and unmistakably 1974."],
+  t:{p:"25 72% 46%",a:"42 78% 48%",bg:"35 45% 90%",fg:"20 34% 20%",card:"35 40% 96%",m:"25 20% 40%",b:"30 30% 80%",ink:"20 40% 15%",fd:F.quick,fb:F.quick,dw:"700",cr:"22px",br:"999px",sh:"0 6px 0 hsl(20 40% 15%/.12)",
+     gr:"radial-gradient(600px 360px at 82% -8%,hsl(42 78% 55%/.5),transparent 60%),radial-gradient(520px 340px at 8% 12%,hsl(160 30% 45%/.28),transparent 58%)"}},
+
+/* ---- UI trends ---- */
+glassmorphism:{name:"Glassmorphism",cat:"UI Trend",axes:["vivid gradient","sans","frosted translucent"],
+  copy:["Frosted","See through it.","Translucent frosted panels over a vivid gradient, soft borders, real blur. Depth without weight."],
+  t:{p:"250 80% 64%",a:"190 90% 56%",bg:"245 55% 16%",fg:"0 0% 98%",card:"0 0% 100%",m:"240 18% 82%",b:"0 0% 100%",ink:"245 55% 10%",fd:F.inter,fb:F.inter,cr:"18px",
+     gr:"radial-gradient(600px 420px at 12% 8%,hsl(280 90% 62%/.5),transparent 60%),radial-gradient(560px 420px at 88% 16%,hsl(190 90% 58%/.4),transparent 60%),radial-gradient(600px 460px at 60% 110%,hsl(330 90% 62%/.32),transparent 60%)",
+     cbg:"hsl(0 0% 100% / .1)",cbl:"blur(14px)",cb:"1px solid hsl(0 0% 100%/.2)"}},
+neumorphism:{name:"Neumorphism",cat:"UI Trend",axes:["soft gray","sans","monochrome + soft blue"],
+  copy:["Soft UI","Pressed, not drawn.","One background color, extruded shapes, dual light/dark shadows. Quiet, tactile, very 2020."],
+  t:{p:"222 15% 45%",a:"230 60% 60%",bg:"220 16% 90%",fg:"220 14% 26%",card:"220 16% 90%",m:"220 8% 46%",b:"220 16% 90%",ink:"220 16% 84%",fd:F.inter,fb:F.inter,cr:"20px",br:"14px",
+     sh:"8px 8px 18px hsl(220 16% 78%), -8px -8px 18px hsl(0 0% 100%)",gr:"none",cbg:"hsl(220 16% 90%)",cb:"none"},
+  dark:{bg:"222 16% 16%",fg:"210 12% 82%",card:"222 16% 16%",m:"215 10% 62%",ink:"222 16% 12%",sh:"8px 8px 18px hsl(222 20% 10%), -8px -8px 18px hsl(222 14% 22%)",cbg:"hsl(222 16% 16%)"}},
+claymorphism:{name:"Claymorphism",cat:"UI Trend",axes:["pastel lilac","rounded heavy","violet + peach"],
+  copy:["Squish","Soft and puffy.","Puffy pastel clay, huge radii, inset+outset shadows. Friendly, toy-like, hard to dislike."],
+  t:{p:"250 80% 68%",a:"20 95% 64%",bg:"250 60% 95%",fg:"250 30% 26%",card:"0 0% 100%",m:"250 15% 46%",b:"250 40% 90%",ink:"250 40% 86%",fd:F.quick,fb:F.quick,dw:"700",cr:"30px",br:"999px",
+     sh:"0 12px 24px hsl(250 60% 70%/.35), inset 0 -6px 12px hsl(250 40% 88%/.7), inset 0 6px 12px hsl(0 0% 100%)",cb:"none",
+     gr:"radial-gradient(600px 360px at 82% -6%,hsl(20 95% 70%/.4),transparent 60%),radial-gradient(520px 340px at 10% 12%,hsl(250 80% 78%/.4),transparent 58%)"}},
+material:{name:"Material",cat:"UI Trend",axes:["light","sans","purple + pink accent"],
+  copy:["Material","Elevation, ink, motion.","Bold color, clear elevation, ripple-ready. Google's system, and half the web's baseline."],
+  t:{p:"265 60% 48%",a:"340 82% 52%",bg:"0 0% 98%",fg:"0 0% 13%",card:"0 0% 100%",m:"0 0% 38%",b:"0 0% 88%",ink:"265 30% 18%",fd:F.inter,fb:F.inter,cr:"12px",br:"8px",sh:"0 2px 6px rgba(0,0,0,.16),0 6px 16px rgba(0,0,0,.10)",gr:"none"},
+  dark:{bg:"265 15% 12%",fg:"0 0% 96%",card:"265 14% 16%",m:"0 0% 66%",b:"265 12% 26%",ink:"265 20% 8%"}},
+flat:{name:"Flat 2.0",cat:"UI Trend",axes:["cloud gray","sans","flat blue + red"],
+  copy:["Flat Design","No shadows, no drama.","The flat-UI palette: clean fills, minimal depth, cheerful and legible. Peak 2015, still useful."],
+  t:{p:"204 70% 53%",a:"6 78% 57%",bg:"192 15% 95%",fg:"210 29% 24%",card:"0 0% 100%",m:"210 15% 45%",b:"200 16% 86%",ink:"210 29% 24%",fd:F.inter,fb:F.inter,cr:"8px",br:"6px",sh:"none",gr:"none"}},
+duotone:{name:"Duotone",cat:"UI Trend",axes:["dark indigo","grotesk","indigo + peach, two-tone"],
+  copy:["Two Colors","Everything, in two.","A strict two-color system, high contrast, no third hue allowed. Disciplined and instantly recognizable."],
+  t:{p:"245 60% 60%",a:"20 95% 64%",bg:"245 45% 12%",fg:"22 90% 90%",card:"245 40% 16%",m:"30 40% 76%",b:"245 40% 30%",ink:"245 50% 8%",fd:F.grotesk,fb:F.grotesk,cr:"12px",
+     gr:"radial-gradient(700px 420px at 84% -8%,hsl(245 60% 60%/.35),transparent 60%),radial-gradient(560px 380px at 8% 14%,hsl(20 95% 64%/.22),transparent 58%)"}},
+
+/* ---- Editorial & Lux ---- */
+editorial:{name:"Editorial",cat:"Editorial & Lux",axes:["dark warm","serif (Fraunces)","ember orange"],
+  copy:["The Daemon","A daily record, in ink.","Warm dark paper, real serifs, generous rhythm. The allemanit.com /daily voice, as a reusable theme."],
+  t:{p:"24 90% 55%",a:"24 90% 55%",bg:"30 12% 8%",fg:"36 30% 92%",card:"30 12% 12%",m:"34 12% 66%",b:"30 12% 20%",ink:"30 12% 6%",fd:F.fraunces,fb:F.spectral,dw:"600",dt:"-0.01em",br:"999px",cr:"14px",sh:"0 14px 40px rgba(0,0,0,.5)",
+     gr:"radial-gradient(900px 500px at 84% -12%,hsl(24 90% 55%/.10),transparent 60%)"}},
+luxury:{name:"Luxury",cat:"Editorial & Lux",axes:["black","thin serif","muted gold"],
+  copy:["Maison","Quiet, expensive.","Black, muted gold, thin letter-spaced serifs, acres of space. Say less, charge more."],
+  t:{p:"42 40% 56%",a:"42 40% 56%",bg:"0 0% 6%",fg:"40 20% 90%",card:"0 0% 9%",m:"40 10% 64%",b:"42 30% 30%",ink:"0 0% 3%",fd:F.playfair,fb:F.spectral,dw:"500",dt:"0.02em",cr:"2px",br:"0",sh:"none",cb:"1px solid hsl(42 40% 40%/.4)",gr:"none"}},
+newspaper:{name:"Newspaper",cat:"Editorial & Lux",axes:["newsprint","serif masthead","deep red"],
+  copy:["The Daily","All the news.","Newsprint cream, a serif masthead, hairline rules, dense columns. Broadsheet energy on the web."],
+  t:{p:"0 0% 10%",a:"0 70% 42%",bg:"40 22% 93%",fg:"0 0% 12%",card:"40 20% 97%",m:"0 0% 30%",b:"0 0% 22%",ink:"0 0% 12%",fd:F.playfair,fb:F.spectral,dw:"800",cr:"2px",br:"2px",sh:"none",cb:"1px solid hsl(0 0% 22%)",gr:"none"}},
+magazine:{name:"Magazine",cat:"Editorial & Lux",axes:["crisp white","big serif display","magenta-red"],
+  copy:["Issue 07","Read the room.","Huge serif display against clean white, thick rules, a hot editorial accent. Vogue-grid confidence."],
+  t:{p:"0 0% 8%",a:"345 80% 50%",bg:"0 0% 98%",fg:"0 0% 8%",card:"0 0% 100%",m:"0 0% 35%",b:"0 0% 14%",ink:"0 0% 8%",fd:F.playfair,fb:F.inter,dw:"900",dt:"-0.02em",cr:"4px",br:"0",sh:"none",cb:"1.5px solid hsl(0 0% 14%)",gr:"none"}},
+
+/* ---- Calm & Organic ---- */
+"minimal-zen":{name:"Minimal Zen",cat:"Calm & Organic",axes:["near-white","light sans","near-monochrome"],
+  copy:["Less","Room to breathe.","Whitespace as the feature, one restrained accent, hairline detail. Everything unnecessary removed."],
+  t:{p:"0 0% 15%",a:"0 0% 15%",bg:"0 0% 99%",fg:"0 0% 12%",card:"0 0% 100%",m:"0 0% 50%",b:"0 0% 92%",ink:"0 0% 12%",fd:F.inter,fb:F.inter,dw:"600",dt:"-0.01em",cr:"8px",br:"6px",sh:"none",gr:"none"},
+  dark:{bg:"0 0% 8%",fg:"0 0% 92%",card:"0 0% 11%",a:"0 0% 92%",p:"0 0% 92%",m:"0 0% 55%",b:"0 0% 18%",ink:"0 0% 92%"}},
+scandinavian:{name:"Scandinavian",cat:"Calm & Organic",axes:["warm off-white","clean sans","muted blue + terracotta"],
+  copy:["Hygge","Calm and cozy.","Muted naturals, warm neutrals, restrained warmth. Comfortable without being boring."],
+  t:{p:"200 25% 42%",a:"15 55% 60%",bg:"40 25% 95%",fg:"30 12% 20%",card:"0 0% 100%",m:"30 8% 45%",b:"35 18% 86%",ink:"30 12% 18%",fd:F.inter,fb:F.inter,cr:"14px",br:"10px",sh:"0 8px 22px hsl(30 20% 60%/.14)",gr:"none"}},
+cottagecore:{name:"Cottagecore",cat:"Calm & Organic",axes:["cream","serif (Fraunces)","sage + rust"],
+  copy:["Homestead","Grown, not made.","Earthy sage and rust, warm cream, real serifs. Organic, handmade, a little bit garden."],
+  t:{p:"100 25% 36%",a:"22 60% 50%",bg:"45 42% 93%",fg:"60 15% 18%",card:"45 45% 97%",m:"60 10% 40%",b:"50 25% 82%",ink:"90 20% 15%",fd:F.fraunces,fb:F.spectral,dw:"600",cr:"16px",br:"999px",sh:"0 8px 20px hsl(60 20% 55%/.16)",
+     gr:"radial-gradient(600px 340px at 84% -8%,hsl(100 30% 55%/.2),transparent 60%)"}},
+"pastel-kawaii":{name:"Pastel Kawaii",cat:"Calm & Organic",axes:["pink cream","rounded","pink + lavender"],
+  copy:["So Cute","Soft and sweet.","Candy pink, lavender, big soft radii, gentle everything. Unapologetically adorable."],
+  t:{p:"330 90% 70%",a:"265 85% 76%",bg:"340 100% 97%",fg:"320 30% 30%",card:"0 0% 100%",m:"320 15% 50%",b:"330 40% 90%",ink:"330 40% 86%",fd:F.quick,fb:F.quick,dw:"700",cr:"24px",br:"999px",sh:"0 10px 24px hsl(330 90% 78%/.35)",
+     gr:"radial-gradient(600px 340px at 82% -6%,hsl(265 85% 82%/.5),transparent 60%),radial-gradient(520px 340px at 10% 12%,hsl(330 90% 82%/.5),transparent 58%)"}},
+
+/* ---- Mono & Lo-fi ---- */
+monochrome:{name:"Monochrome",cat:"Mono & Lo-fi",axes:["white","sans","pure grayscale"],
+  copy:["Grayscale","No color needed.","Black, white, and every gray between. One value scale doing all the work. Timeless and cheap to maintain."],
+  t:{p:"0 0% 10%",a:"0 0% 10%",bg:"0 0% 100%",fg:"0 0% 8%",card:"0 0% 100%",m:"0 0% 45%",b:"0 0% 88%",ink:"0 0% 8%",fd:F.inter,fb:F.inter,cr:"10px",br:"8px",sh:"0 8px 24px rgba(0,0,0,.08)",gr:"none"},
+  dark:{bg:"0 0% 8%",fg:"0 0% 96%",card:"0 0% 12%",p:"0 0% 96%",a:"0 0% 96%",m:"0 0% 58%",b:"0 0% 20%",ink:"0 0% 96%"}},
+wireframe:{name:"Wireframe",cat:"Mono & Lo-fi",axes:["paper gray","mono","lo-fi dashed gray"],
+  copy:["Lo-Fi","Structure first.","Dashed boxes, mono type, placeholder energy. The sketch before the skin. Great for planning a layout."],
+  t:{p:"0 0% 40%",a:"0 0% 35%",bg:"0 0% 96%",fg:"0 0% 25%",card:"0 0% 100%",m:"0 0% 55%",b:"0 0% 62%",ink:"0 0% 30%",fd:F.mono,fb:F.mono,dw:"700",cr:"6px",br:"4px",sh:"none",cb:"2px dashed hsl(0 0% 60%)",gr:"none",
+     pat:"repeating-linear-gradient(45deg,hsl(0 0% 0%/.02) 0 6px,transparent 6px 12px)"}},
+};
+
+/* ---- build CSS from the registry ---------------------------------------- */
+const MAP={p:"--primary",a:"--accent",bg:"--bg",fg:"--fg",card:"--card",m:"--muted-fg",b:"--border",ink:"--ink",
+  fd:"--font-display",fb:"--font-body",dw:"--display-weight",dt:"--display-tracking",tr:"--display-transform",
+  br:"--btn-radius",cr:"--card-radius",sh:"--shadow",gr:"--grad",cbg:"--card-bg",cbl:"--card-blur",cb:"--card-border",pat:"--bg-pattern"};
+function blockFor(sel,t){ let s=sel+"{"; for(const [k,v] of Object.entries(t)){ if(MAP[k]) s+=MAP[k]+":"+v+";"; } return s+"}"; }
+(function injectCSS(){
+  let css="";
+  for(const [key,th] of Object.entries(THEMES)){
+    css += blockFor(`[data-theme="${key}"]`, th.t);
+    if(th.dark) css += blockFor(`[data-theme="${key}"].dark`, th.dark);
+  }
+  const el=document.createElement("style"); el.textContent=css; document.head.appendChild(el);
+})();
+
+/* ---- UI wiring ----------------------------------------------------------- */
+const KEYS=Object.keys(THEMES);
+document.getElementById("count").textContent=KEYS.length+" styles";
+const root=document.documentElement; let current="quickit", view="preview";
+
+/* grouped <select> */
+const sel=document.getElementById("sel"); const cats={};
+KEYS.forEach(k=>{ (cats[THEMES[k].cat]=cats[THEMES[k].cat]||[]).push(k); });
+for(const [cat,keys] of Object.entries(cats)){
+  const og=document.createElement("optgroup"); og.label=cat;
+  keys.forEach(k=>{ const o=document.createElement("option"); o.value=k; o.textContent=THEMES[k].name+(THEMES[k].real?" ★":""); og.appendChild(o); });
+  sel.appendChild(og);
+}
+sel.onchange=()=>setTheme(sel.value);
+
+function setTheme(k){
+  current=k; const t=THEMES[k];
+  root.setAttribute("data-theme",k); sel.value=k;
+  const [kick,hl,sub]=t.copy;
+  document.getElementById("kick").textContent=kick;
+  document.getElementById("headline").textContent=hl;
+  document.getElementById("sub").textContent=sub;
+  document.getElementById("now").innerHTML=`<span class="cat">${t.cat}</span>${t.real?' · <b>real brand</b>':''}`;
+  document.getElementById("axes").innerHTML=
+    `<span class="axis">paper: <b>${t.axes[0]}</b></span>
+     <span class="axis">display: <b>${t.axes[1]}</b></span>
+     <span class="axis">accent: <b>${t.axes[2]}</b></span>`;
+}
+
+/* prev / next / random */
+const idx=()=>KEYS.indexOf(current);
+document.getElementById("prev").onclick=()=>setTheme(KEYS[(idx()-1+KEYS.length)%KEYS.length]);
+document.getElementById("next").onclick=()=>setTheme(KEYS[(idx()+1)%KEYS.length]);
+document.getElementById("rand").onclick=()=>setTheme(KEYS[Math.floor(seed()*KEYS.length)]);
+let _s=0.137; function seed(){ _s=(_s*9301+49297)%233280/233280; return _s; } // deterministic-ish, avoids Math.random ban surprises
+window.addEventListener("keydown",e=>{ if(e.key==="ArrowLeft")document.getElementById("prev").click(); if(e.key==="ArrowRight")document.getElementById("next").click(); });
+
+/* dark toggle */
+document.getElementById("mode").onclick=()=>{
+  root.classList.toggle("dark");
+  document.getElementById("mode").innerHTML=root.classList.contains("dark")?"&#9788; Light":"&#9789; Dark";
+};
+
+/* Preview / All-styles tabs */
+document.getElementById("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return; view=b.dataset.v;
+  [...document.getElementById("tabs").children].forEach(x=>x.classList.toggle("on",x===b));
+  const grid=document.getElementById("grid"), demo=document.getElementById("demo"), subbar=document.getElementById("subbar");
+  if(view==="grid"){ grid.classList.add("on"); demo.style.display="none"; subbar.style.display="none"; buildGrid(); }
+  else{ grid.classList.remove("on"); demo.style.display=""; subbar.style.display=""; }
+});
+
+/* contact sheet */
+function buildGrid(){
+  const g=document.getElementById("grid"); if(g.dataset.built) return; g.dataset.built="1";
+  for(const [k,t] of Object.entries(THEMES)){
+    const card=document.createElement("div"); card.className="mini"; card.setAttribute("data-theme",k);
+    card.innerHTML=`
+      <div class="prev">
+        <div class="mk">${t.copy[0]}</div>
+        <div class="mh">${t.copy[1]}</div>
+        <div class="mrow"><span class="chipbtn">Button</span>
+          <span class="sw" style="background:hsl(var(--primary))"></span>
+          <span class="sw" style="background:hsl(var(--accent))"></span></div>
+      </div>
+      <div class="foot">
+        <div class="fname">${t.name}${t.real?' ★':''} <span class="fcat">${t.cat}</span></div>
+        <div class="fax">${t.axes[0]} · ${t.axes[1]} · ${t.axes[2]}</div>
+      </div>`;
+    card.onclick=()=>{ setTheme(k); document.querySelector('#tabs button[data-v="preview"]').click(); window.scrollTo(0,0); };
+    g.appendChild(card);
+  }
+}
+
+/* copy theme block / design.md (reads computed tokens = HSL-triple form) */
+const TK=["--primary","--accent","--bg","--fg","--card","--muted-fg","--border","--ink"];
+function tokens(){ const cs=getComputedStyle(root),o={}; TK.forEach(k=>{const v=cs.getPropertyValue(k).trim(); if(v)o[k]=v;}); return o; }
+function copy(txt,label){ navigator.clipboard?.writeText(txt).then(()=>toast(label+" copied")).catch(()=>toast("copy blocked")); }
+document.getElementById("copyTheme").onclick=()=>{
+  const tk=tokens(); let s=`/* [data-theme="${current}"] — paste into a tokens.css (shadcn HSL triples) */\n[data-theme="${current}"]{\n`;
+  for(const [k,v] of Object.entries(tk)) s+=`  ${k}: ${v};\n`;
+  s+=`  --font-display:${getComputedStyle(root).getPropertyValue('--font-display').trim()};\n}\n`;
+  copy(s,"Theme block");
+};
+document.getElementById("copyDesign").onclick=()=>{
+  const t=THEMES[current],tk=tokens();
+  const md=`# design.md — ${t.name}${t.real?" (real brand)":""}\ncategory: ${t.cat}\naxes: paper=${t.axes[0]} | display=${t.axes[1]} | accent=${t.axes[2]}\nfonts: display=${getComputedStyle(root).getPropertyValue('--font-display').trim()}\ntokens: primary ${tk['--primary']} | accent ${tk['--accent']} | bg ${tk['--bg']} | fg ${tk['--fg']}\nvoice: ${t.copy[1]}\nuse: "build X in the ${current} theme"\n`;
+  copy(md,"design.md");
+};
+
+function toast(m){ const el=document.getElementById("toast"); el.textContent=m; el.classList.add("show"); clearTimeout(toast._t); toast._t=setTimeout(()=>el.classList.remove("show"),1500); }
+
+setTheme("quickit");
+</script>
+</body>
+</html>

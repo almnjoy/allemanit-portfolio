@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import content from '../components/packet-labs.html?raw';
+---
+<Base title="Packet Labs | AllemanIT" description="Six guided packet analysis labs covering ARP, RADIUS, TCP, DNS, path MTU, and EAP-TLS." url="https://allemanit.com/packet-labs/">
+  <Fragment slot="head">
+    <link rel="canonical" href="https://allemanit.com/packet-labs/" />
+    <link rel="stylesheet" href="/packet-labs/lab.css" />
+  </Fragment>
+  <Fragment set:html={content} />
+  <script is:inline src="/packet-labs/lab.js"></script>
+</Base>

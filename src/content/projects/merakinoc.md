@@ -1,8 +1,9 @@
 ---
 title: "MerakiNOC"
 summary: "A network operations dashboard for Cisco Meraki: live device health, alerts, and client visibility in one view, with configuration and monitoring driven through the API."
-status: "Live"
+status: "Retired"
 order: 14
+listed: false
 tags: ["Networking", "Dashboard"]
 stack: ["Meraki API", "React", "Grafana", "Loki"]
 ---

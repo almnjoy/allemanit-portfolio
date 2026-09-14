@@ -1,14 +1,17 @@
 ---
-title: "netadmintoolbox.com"
-summary: "A toolbox of network-admin utilities for engineers and students: subnetting, lookups, quick references, and guided troubleshooting in one fast site."
-status: "Live"
+title: "Packet Labs"
+summary: "Guided packet analysis for ARP conflicts, RADIUS rejection, TCP connection failures, DNS, path MTU, and EAP-TLS. The useful learning material from NetAdminToolbox, rebuilt inside AllemanIT."
+status: "Rebuilt"
 order: 15
-tags: ["Networking", "Tools"]
-stack: ["Web", "JS"]
-liveUrl: "https://netadmintoolbox.com"
-image: "/sites/toolbox.png"
+tags: ["Networking", "Learning"]
+stack: ["Astro", "JavaScript"]
+liveUrl: "/packet-labs/"
 ---
 
-netadmintoolbox.com is the everyday network-engineer toolkit collected into one fast, no-nonsense site: subnetting, lookups, quick references, and guided troubleshooting. The utilities I reach for daily, in one place.
+NetAdminToolbox is offline. Its packet analysis material now has a focused home in [Packet Labs](/packet-labs/).
 
-I built it for the same reason I [teach](/projects/network-design): a lot of networking feels intimidating as raw command-line output. Turning it into clear, visual, click-through workflows makes it easier to learn and faster to use, whether you are a student or an engineer mid-troubleshoot.
+Choose a scenario, inspect a synthetic packet trace, apply a display-filter preset, and test your diagnosis. Each lab explains what the evidence supports and what you still need to verify.
+
+The page covers ARP conflicts, RADIUS rejection, missing TCP replies, path MTU, DNS responses, and EAP-TLS. Examples use fictional addresses and contain no customer traffic. They are teaching traces, not PCAP files or a replacement for Wireshark.
+
+This is the part of network engineering I enjoy teaching: getting from a vague symptom to a specific, defensible next step.

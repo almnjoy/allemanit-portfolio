@@ -2,15 +2,11 @@
 import Base from '../layouts/Base.astro';
 import Thumb from '../components/Thumb.astro';
 import { getCollection } from 'astro:content';
+import { counts } from '../data/design-lab';
 const all = (await getCollection('projects')).filter((p) => p.data.listed !== false).sort((a, b) => a.data.order - b.data.order);
 const featured = all.filter((p) => p.data.featured);
 const others = all.filter((p) => !p.data.featured);
 
-const sites = [
-  { name: 'almnjoy.dev', style: 'Retro Windows 98 desktop', url: 'https://almnjoy.dev', img: '/sites/almnjoy.png' },
-  { name: 'quickitprojects.com', style: 'Clean corporate / consulting', url: 'https://quickitprojects.com', img: '/sites/quickit.png' },
-  { name: 'madeformeai.com', style: 'Modern SaaS product', url: 'https://madeformeai.com', img: '/sites/madeformeai.png' },
-];
 const links = [
   { href: 'https://github.com/almnjoy', label: 'GitHub' },
   { href: 'https://www.linkedin.com/in/dustin-alleman/', label: 'LinkedIn' },
@@ -110,16 +106,21 @@ const credentials = [
   </section>
 
   <section class="container-x py-10">
-    <h2 class="mb-2 text-2xl font-bold text-white">Sites I have designed</h2>
-    <p class="mb-6 text-white/60">Different builds, different design languages. The versions, rejects and the style engine live in the <a href="/design-lab/" class="text-brand-orange underline underline-offset-2">Design Lab</a>.</p>
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {sites.map((s) => (
-        <a href={s.url} target="_blank" rel="noopener" class="card group block overflow-hidden">
-          <Thumb image={s.img} alt={s.name} />
-          <div class="p-4"><h3 class="font-bold text-white">{s.name}</h3><p class="text-sm text-white/60">{s.style}</p></div>
-        </a>
-      ))}
-    </div>
+    <a href="/design-lab/" data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project="design-lab" data-umami-event-placement="banner" class="card group block overflow-hidden">
+      <div class="grid lg:grid-cols-[1.2fr_1fr]">
+        <div class="grid grid-cols-2 gap-1 p-1">
+          {['opusdiecast','skate-map','quickit-v2','style-engine'].map((i) => (
+            <img src={`/design-lab/shots/${i}.jpg`} alt="" loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full rounded-xl object-cover object-top" />
+          ))}
+        </div>
+        <div class="flex flex-col justify-center p-7">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">The Design Lab</p>
+          <h2 class="mt-2 text-2xl font-bold text-white">Every project needed a front end. So I got good at making them.</h2>
+          <p class="mt-3 text-white/65">{counts.sites} sites shipped, {counts.versions} versions that lost, a style engine with {counts.skins} skins, and the process behind all of it.</p>
+          <span class="mt-5 inline-block font-semibold text-brand-orange group-hover:underline underline-offset-4">Open the lab →</span>
+        </div>
+      </div>
+    </a>
   </section>
 
   <section id="content" class="container-x py-10">

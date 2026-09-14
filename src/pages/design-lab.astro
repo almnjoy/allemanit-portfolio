@@ -1,45 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
+import { production, clients, counts } from '../data/design-lab';
 
-const journey = [
-  { when: 'WordPress years', what: 'Themes, plugins, a page builder on top of a page builder.', lesson: 'Every site was a maintenance job. Updates broke things, plugins fought each other, and the attack surface grew with every feature I bolted on.' },
-  { when: 'The vibe-coder phase', what: 'Hostinger Horizons and friends: describe the site, get a site.', lesson: 'Fast to zero-to-one, slow to own. No repo, no diff, no clean deploy path. Great for a mockup, wrong place to leave a business site.' },
-  { when: 'GitHub + Cloudflare Pages', what: 'Every site is a repo. A push is a deploy.', lesson: 'Framework picked per job: Astro for content sites, React where the page is an app, plain HTML when it should just be a file. Brand tokens shared across all of them.' },
-  { when: 'The lab', what: 'Explorations first, then ship one.', lesson: 'I build four versions and throw three away. Cheaper than arguing about one. The rejects stay in the repo so I remember why.' },
+const latest = [...clients, ...production].slice(0, 4);
+const doors = [
+  { href: '/design-lab/sites/', img: 'opusdiecast', eyebrow: `${counts.sites} sites`, title: 'What shipped', blurb: 'Production, client, family and personal builds, grouped and filterable by stack. Plus the versions that lost.' },
+  { href: '/design-lab/style-engine/', img: 'style-engine', eyebrow: `${counts.skins} skins`, title: 'The style engine', blurb: 'One markup tree, thirty-two named styles, a dark mode switch. Arrow keys cycle. Two themes are my real brands.' },
+  { href: '/design-lab/process/', img: 'quickit-c02', eyebrow: 'Process', title: 'How the sausage gets made', blurb: 'A repo per site, brand tokens in one file, and the parts I stopped rebuilding.' },
+  { href: '/design-lab/opus/', img: 'opusdiecast-vault', eyebrow: 'Featured project', title: 'Opus\'s Diecast Emporium', blurb: 'A public catalogue with a private vault behind it. Cars get in by filming the shelf.' },
 ];
-
-const quickit = [
-  { img: 'quickit-v1', title: 'V1, the one that shipped in July', note: 'Nine equal service cards, blue and orange fighting for the eye. Fine. Not great.' },
-  { img: 'quickit-c01', title: 'Concept 01, Project Desk', note: 'Three starting problems ahead of the catalog, the owner up front. The base for what shipped.' },
-  { img: 'quickit-c02', title: 'Concept 02, Control Room', note: 'Dark, technical, dense. Right for a tooling page, wrong for a small-business front door.' },
-  { img: 'quickit-c03', title: 'Concept 03, Field Notes', note: 'Editorial and personal. Reads like the Daily page. Too quiet for a sales site.' },
-  { img: 'quickit-c04', title: 'Concept 04, Orange Studio', note: 'The orange personality I liked, borrowed into the winner as the action labels.' },
-  { img: 'quickit-v2', title: 'V2, live now', note: 'Concept 01 plus 04\'s labels, the real speedometer mark, an interactive project desk, and an inquiry demo that is labeled as a demo.' },
-];
-
-const explorations = [
-  { img: 'allemanit-terminal', title: 'Terminal', note: 'This site as a shell prompt. whoami.sh and all.' },
-  { img: 'allemanit-profile', title: 'Editorial profile', note: 'Serif, numbered sections, magazine pacing. This voice became /daily.' },
-  { img: 'allemanit-swiss', title: 'Swiss', note: 'Grid, one accent, nothing decorative.' },
-  { img: 'allemanit-comic', title: 'Comic', note: 'Hard outlines and drop shadows. Fun for a week.' },
-];
-
-const sites = [
-  { img: 'almnjoy', title: 'almnjoy.dev', stack: 'Static', note: 'A Windows 98 desktop as a personal site. Windows open, the Start menu works.', url: 'https://almnjoy.dev' },
-  { img: 'quickit-v2', title: 'quickitprojects.com', stack: 'React + Vite', note: 'The consulting front door. Intake form posts to n8n, which files it in Twenty CRM.', url: 'https://quickitprojects.com' },
-  { img: 'madeformeai', title: 'madeformeai.com', stack: 'React + Vite', note: 'Product site for the hosted AI workspace. Signup flows through Authentik.', url: 'https://madeformeai.com' },
-  { img: 'packet-labs', title: 'allemanit.com/packet-labs', stack: 'Astro + vanilla JS', note: 'Six guided Wireshark labs with synthetic traces. No backend, no dependencies.', url: '/packet-labs/' },
-  { img: 'netadmintoolbox', title: 'netadmintoolbox.com', stack: 'React + Vite', note: 'Retired. The good parts became Packet Labs. The rest was a grid of cards nobody clicked.', url: '/packet-labs/' },
-  { img: 'family-zone', title: 'family.allemanit.com', stack: 'Private hub', note: 'Calendar, recipes, resources, a helper you can talk to. Family only, behind Authentik.', url: '/family' },
-  { img: '66unique', title: '66 Unique Antiques (concept)', stack: 'Plain HTML', note: 'An unofficial redesign for a shop in Nashville, Michigan. Built as a demo, clearly labeled as one.', url: '/66unique/' },
-  { img: 'old-blog', title: 'almnjoy.dev, the WordPress era', stack: 'WordPress', note: 'The Win98 theme on WordPress, fed by an n8n + GPT drafting pipeline. Killed in July for markdown and git. Writeup on the blog.', url: '/blog/killed-my-windows-98-blog' },
-];
-
-const patterns = ['Navigation with a single CTA', 'Intake and contact forms wired to n8n', 'Docs portals (Mintlify)', 'Auth behind Authentik', 'Dashboards and status pages', 'Scheduling (cal.com)', 'Chat widgets', 'Lead-capture landing pages', 'Brand tokens synced into every repo'];
 ---
 <Base
   title="Design Lab | AllemanIT"
-  description="Every project I build needs a front end. The Design Lab is where the versions live: explorations, rejects, the style engine, and the sites that shipped."
+  description="Every project I build needs a front end. The Design Lab is where the versions live: the sites that shipped, the rejects, the style engine, and how it all gets made."
   url="https://allemanit.com/design-lab/"
 >
   <Fragment slot="head"><link rel="canonical" href="https://allemanit.com/design-lab/" /></Fragment>
@@ -47,120 +20,50 @@ const patterns = ['Navigation with a single CTA', 'Intake and contact forms wire
   <section class="container-x pt-14 pb-8">
     <p class="mb-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">AllemanIT / Design Lab</p>
     <h1 class="text-4xl font-extrabold text-white sm:text-5xl">Every project needed a front end.<br class="hidden sm:block" /> So I got good at making them.</h1>
-    <p class="mt-5 max-w-3xl text-lg text-white/70">Homelab services, AI apps, a consulting business, family stuff. All of it eventually needed a page, a portal, a dashboard, or a docs site. This is where the versions live: the explorations, the rejects, the style engine that skins one page thirty ways, and the sites that actually shipped.</p>
-    <div class="mt-7 flex flex-wrap gap-3">
-      <a href="/design-lab/style-engine/" class="btn btn-primary text-sm">Open the style engine</a>
-      <a href="#sites" class="btn btn-ghost text-sm">See what shipped</a>
-      <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickit" data-umami-event-placement="design-lab-hero" class="btn btn-ghost text-sm">Want one built?</a>
+    <p class="mt-5 max-w-3xl text-lg text-white/70">Homelab services, AI apps, a consulting business, family stuff, a dad with a wall of Hot Wheels. All of it eventually needed a page, a portal, a dashboard, or a catalogue. This is where the versions live.</p>
+    <div class="mt-7 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+      <div><span class="text-2xl font-extrabold text-white">{counts.sites}</span> <span class="text-white/60">sites shipped</span></div>
+      <div><span class="text-2xl font-extrabold text-white">{counts.versions}</span> <span class="text-white/60">versions rejected</span></div>
+      <div><span class="text-2xl font-extrabold text-white">{counts.skins}</span> <span class="text-white/60">skins in the engine</span></div>
+      <div><span class="text-2xl font-extrabold text-white">1</span> <span class="text-white/60">token file per brand</span></div>
     </div>
   </section>
 
-  <!-- STYLE ENGINE -->
-  <section class="container-x py-10">
-    <div class="card overflow-hidden">
-      <div class="grid gap-0 lg:grid-cols-[1.1fr_1fr]">
-        <a href="/design-lab/style-engine/" class="block">
-          <img src="/design-lab/shots/style-engine.jpg" alt="The style engine: one page, 32 named styles" loading="lazy" width="1100" height="687" class="h-full w-full object-cover object-top" />
-        </a>
-        <div class="p-7">
-          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The style engine</p>
-          <h2 class="mt-2 text-2xl font-bold text-white">One page. Thirty-two skins.</h2>
-          <p class="mt-3 text-white/70 leading-relaxed">One markup tree, a registry of named styles, and a <code class="rounded bg-white/10 px-1.5 py-0.5 text-sm">[data-theme]</code> switch. Pick a style, flip dark mode, watch the same page become a terminal, a newspaper, a Bauhaus poster. Two of the themes are my real brands, pulled from the same token files the live sites use.</p>
-          <p class="mt-3 text-white/60 text-sm leading-relaxed">Why it matters: a theme is data, not code. That is the same trick I use to give every MindMap tenant its own look without forking the app. Describe a brand, emit a token block, done.</p>
-          <a href="/design-lab/style-engine/" class="mt-5 inline-flex items-center gap-2 text-brand-orange font-semibold hover:underline underline-offset-4">Try it, arrow keys cycle styles →</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- QUICK IT: ONE SITE, SIX WAYS -->
-  <section class="container-x py-10">
-    <h2 class="text-2xl font-bold text-white">One site, six ways</h2>
-    <p class="mt-1 mb-6 max-w-3xl text-white/60">The Quick IT homepage, September 2026. I asked for four full alternatives, picked one, borrowed from another, and shipped. The three rejects stay here because the reasons matter more than the winner.</p>
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {quickit.map((q) => (
-        <figure class="card overflow-hidden">
-          <img src={`/design-lab/shots/${q.img}.jpg`} alt={q.title} loading="lazy" width="1100" height="687" class="aspect-[16/10] w-full object-cover object-top" />
-          <figcaption class="p-4"><div class="font-bold text-white">{q.title}</div><p class="mt-1 text-sm text-white/65">{q.note}</p></figcaption>
-        </figure>
-      ))}
-    </div>
-  </section>
-
-  <!-- THIS SITE, FOUR WAYS -->
-  <section class="container-x py-10">
-    <h2 class="text-2xl font-bold text-white">This site, four ways</h2>
-    <p class="mt-1 mb-6 max-w-3xl text-white/60">Before allemanit.com looked like this, it looked like these. Each one is still a real page you can open.</p>
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {explorations.map((e, i) => (
-        <a href={`/design${i + 1}/`} target="_blank" rel="noopener" class="card group block overflow-hidden">
-          <img src={`/design-lab/shots/${e.img}.jpg`} alt={e.title} loading="lazy" width="1100" height="687" class="aspect-[16/10] w-full object-cover object-top" />
-          <div class="p-4"><div class="flex items-center justify-between"><span class="font-bold text-white">{e.title}</span><span class="tag">open ↗</span></div><p class="mt-1 text-sm text-white/65">{e.note}</p></div>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <!-- THE STACK JOURNEY -->
-  <section class="container-x py-10">
-    <h2 class="text-2xl font-bold text-white">How I got here</h2>
-    <p class="mt-1 mb-8 text-white/60">Four stops. Each one taught me what the next one needed to fix.</p>
-    <ol class="relative ml-3 border-l border-white/15">
-      {journey.map((j) => (
-        <li class="relative mb-8 pl-7 last:mb-0">
-          <span class="absolute -left-1.5 top-1 h-3 w-3 rounded-full bg-brand-orange"></span>
-          <div class="text-xs font-semibold uppercase tracking-wider text-brand-orange">{j.when}</div>
-          <div class="mt-0.5 font-bold text-white">{j.what}</div>
-          <p class="mt-1 max-w-2xl text-sm text-white/60">{j.lesson}</p>
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  <!-- BRAND SYSTEM + PATTERNS -->
-  <section class="container-x py-10">
-    <div class="grid gap-6 lg:grid-cols-2">
-      <div class="card min-w-0 p-7">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The brand system</p>
-        <h2 class="mt-2 text-2xl font-bold text-white">Colors live in one file.</h2>
-        <p class="mt-3 text-white/70 leading-relaxed">Each brand is a token file of HSL triples. A sync script vendors it into every site. Components only ever say <code class="rounded bg-white/10 px-1.5 py-0.5 text-sm">bg-primary</code> or <code class="rounded bg-white/10 px-1.5 py-0.5 text-sm">text-accent</code>, never a hex value. Change the orange once, every site follows on the next push.</p>
-        <pre class="mt-4 overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-xs text-white/80"><code>:root &#123;
-  --primary: 24 100% 50%;   /* the orange */
-  --accent:  210 100% 50%;
-  --background: 0 0% 100%;
-&#125;
-/* components */
-.btn &#123; background: hsl(var(--primary)); &#125;
-.card &#123; background: hsl(var(--primary) / 0.08); &#125;</code></pre>
-        <p class="mt-3 text-sm text-white/50">HSL, not OKLCH, on purpose: the <code class="rounded bg-white/10 px-1 text-xs">hsl(var(--x) / 0.1)</code> opacity form is load-bearing in Tailwind and OKLCH breaks it for zero gain.</p>
-      </div>
-      <div class="card min-w-0 p-7">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Patterns I stopped rebuilding</p>
-        <h2 class="mt-2 text-2xl font-bold text-white">The same pieces, every time.</h2>
-        <p class="mt-3 text-white/70 leading-relaxed">After enough sites the parts repeat. These are templates now, and a new site is mostly wiring them to a brand.</p>
-        <ul class="mt-4 grid gap-2 sm:grid-cols-2">
-          {patterns.map((p) => (<li class="flex items-start gap-2 text-sm text-white/75"><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-orange"></span>{p}</li>))}
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- SITES THAT SHIPPED -->
-  <section id="sites" class="container-x py-10">
-    <h2 class="text-2xl font-bold text-white">What shipped</h2>
-    <p class="mt-1 mb-6 max-w-3xl text-white/60">Different jobs, different stacks, same rule: pick the lightest thing that does the work.</p>
-    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      {sites.map((s) => (
-        <a href={s.url} {...(s.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})} class="card group block overflow-hidden">
-          <img src={`/design-lab/shots/${s.img}.jpg`} alt={s.title} loading="lazy" decoding="async" width="1100" height="687" class="aspect-[16/10] w-full object-cover object-top" />
-          <div class="p-4">
-            <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1"><span class="font-bold text-white">{s.title}</span><span class="tag">{s.stack}</span></div>
-            <p class="mt-1 text-sm text-white/65">{s.note}</p>
+  <!-- DOORS -->
+  <section class="container-x py-8">
+    <div class="grid gap-5 sm:grid-cols-2">
+      {doors.map((d) => (
+        <a href={d.href} class="card group block overflow-hidden">
+          <img src={`/design-lab/shots/${d.img}.jpg`} alt={d.title} loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/9] w-full object-cover object-top transition group-hover:scale-[1.01]" />
+          <div class="p-6">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">{d.eyebrow}</p>
+            <h2 class="mt-1.5 text-2xl font-bold text-white">{d.title}</h2>
+            <p class="mt-2 text-white/65">{d.blurb}</p>
+            <span class="mt-4 inline-block font-semibold text-brand-orange group-hover:underline underline-offset-4">Open →</span>
           </div>
         </a>
       ))}
     </div>
-    <p class="mt-6 text-sm text-white/50">Also in the lab: a generator that produced over a hundred preview sites for Chicago small businesses, printed on cards and walked door to door. Those stay private until a shop says yes.</p>
+  </section>
+
+  <!-- LATEST STRIP -->
+  <section class="container-x py-10">
+    <div class="flex items-end justify-between gap-3">
+      <div>
+        <h2 class="text-2xl font-bold text-white">Recently shipped</h2>
+        <p class="mt-1 text-white/60">The newest four. The whole list is one click over.</p>
+      </div>
+      <a href="/design-lab/sites/" class="hidden text-sm font-semibold text-brand-orange hover:underline underline-offset-4 sm:inline">All {counts.sites} sites →</a>
+    </div>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {latest.map((s) => (
+        <a href={s.story ?? s.url} {...(!s.story && s.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})} class="card group block overflow-hidden">
+          <img src={`/design-lab/shots/${s.img}.jpg`} alt={s.title} loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full object-cover object-top" />
+          <div class="p-4"><div class="flex items-center justify-between gap-2"><span class="truncate font-bold text-white">{s.title}</span><span class="tag shrink-0">{s.stack}</span></div></div>
+        </a>
+      ))}
+    </div>
+    <a href="/design-lab/sites/" class="mt-4 inline-block text-sm font-semibold text-brand-orange hover:underline underline-offset-4 sm:hidden">All {counts.sites} sites →</a>
   </section>
 
   <section class="container-x py-10">

@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base
+  title="Opus's Diecast Emporium | Design Lab | AllemanIT"
+  description="A public catalogue with a private vault behind it, for a few thousand carded Hot Wheels. Cars get in by filming the shelf. Here is how it is wired."
+  image="https://allemanit.com/design-lab/shots/opusdiecast.jpg"
+  url="https://allemanit.com/design-lab/opus/"
+>
+  <Fragment slot="head"><link rel="canonical" href="https://allemanit.com/design-lab/opus/" /></Fragment>
+
+  <section class="container-x pt-10 pb-6">
+    <a href="/design-lab/sites/" class="text-sm text-white/60 hover:text-white">← All sites</a>
+    <p class="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Design Lab / project</p>
+    <h1 class="mt-2 text-4xl font-extrabold text-white sm:text-5xl">Opus's Diecast Emporium</h1>
+    <p class="mt-4 max-w-3xl text-lg text-white/70">My dad has a wall. Pegboard, floor to ceiling, carded Hot Wheels and Matchbox, boxes underneath, a few thousand pieces and no list of any of it. He wanted a real record, a place to show the good ones, and a way to sell the doubles. So the site is the small part. The interesting part is what feeds it.</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="https://opusdiecastmi.com" target="_blank" rel="noopener" class="btn btn-primary text-sm">opusdiecastmi.com ↗</a>
+      <a href="https://opusdiecastmi.com/vault/" target="_blank" rel="noopener" class="btn btn-ghost text-sm">The public vault ↗</a>
+    </div>
+  </section>
+
+  <section class="container-x py-6">
+    <div class="grid gap-5 lg:grid-cols-2">
+      <figure class="card overflow-hidden">
+        <img src="/design-lab/shots/opusdiecast.jpg" alt="Opus's Diecast Emporium home page, the collector ambulance" loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full object-cover object-top" />
+        <figcaption class="p-4 text-sm text-white/65"><b class="text-white">The front.</b> A '59 ambulance named Opus, a red ticker, a cream card on dark pegboard. Direction B of two. The other one was a blister card.</figcaption>
+      </figure>
+      <figure class="card overflow-hidden">
+        <img src="/design-lab/shots/opusdiecast-vault.jpg" alt="The public vault: a searchable grid of catalogued cars" loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full object-cover object-top" />
+        <figcaption class="p-4 text-sm text-white/65"><b class="text-white">The vault.</b> Search, filter, sort, detail view with a photo gallery and a spec table. Every card here was cut out of a video.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ONE DATABASE TWO DOORS -->
+  <section class="container-x py-10">
+    <div class="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The shape of it</p>
+        <h2 class="mt-2 text-2xl font-bold text-white">One database, two doors.</h2>
+        <p class="mt-3 text-white/70 leading-relaxed">The public site holds no data of its own. It asks the API for cars at load, and the API only ever answers with rows he has flagged public, and only the safe fields. What he paid, where a car lives, what he wrote in the notes, none of that has a route out. The filtering happens inside the app, not in the UI, so poking the API directly gets you the same answer the page gets.</p>
+        <p class="mt-3 text-white/70 leading-relaxed">The private door is the same API behind Authentik. Caddy authenticates, then the app checks the group itself instead of trusting the proxy. If the vhost is ever misconfigured, the app still says no. That door has the full catalogue, the edit form, a deliberately loud publish toggle, CSV in and out.</p>
+      </div>
+      <pre class="card min-w-0 overflow-x-auto p-5 text-xs leading-relaxed text-white/80"><code>opusdiecastmi.com          Cloudflare Pages
+api.opusdiecastmi.com      worker2, Caddy, systemd
+
+visitor --> index.html
+            /vault/ --------> GET /api/public/cars
+                              no auth
+                              only is_public = 1
+                              safe fields only
+
+Opus ------> login.opusdiecastmi.com
+            (Authentik) ----> /api/vault/*
+                              group re-checked in app
+                              every field, every row
+                              PATCH is_public = publish
+
+photos      /api/public/photo/&lt;id&gt;
+              404 unless that car is public
+            /api/vault/photo/&lt;id&gt;
+              anything, gated</code></pre>
+    </div>
+  </section>
+
+  <!-- THE PIPELINE -->
+  <section class="container-x py-10">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">How cars get in</p>
+    <h2 class="mt-2 text-2xl font-bold text-white">Film the shelf. That's the data entry.</h2>
+    <p class="mt-3 max-w-3xl text-white/70 leading-relaxed">Typing a few thousand cards into a form was never going to happen. So the input is a phone video: a slow pan across a shelf, two lights from the sides so the blister doesn't glare, one column every couple of seconds. He emails the clips. The rest is a pipeline.</p>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {[
+        { n: '01', t: 'Frames', d: 'Each clip gets sampled to stills. The clearest frame per card wins, which is often not the first one it appears in.' },
+        { n: '02', t: 'Read the card', d: 'Brand, series, casting, colour, collector number, card condition. Every row carries a confidence. Unreadable means "unknown," never a guess.' },
+        { n: '03', t: 'Crop the photo', d: 'The product photo is cut straight out of the best frame, trimmed, and attached to the row. No separate photo shoot.' },
+        { n: '04', t: 'Import, then he decides', d: 'A CSV lands in the vault as drafts. Low-confidence rows are flagged Needs ID. Nothing goes public until he flips it.' },
+      ].map((s) => (
+        <div class="card p-5">
+          <div class="text-xs font-semibold text-brand-orange">{s.n}</div>
+          <div class="mt-1 font-bold text-white">{s.t}</div>
+          <p class="mt-1.5 text-sm text-white/65">{s.d}</p>
+        </div>
+      ))}
+    </div>
+    <p class="mt-5 max-w-3xl text-sm text-white/55">First real run: three clips, about 75 seconds of footage, 134 draft rows with photos. The same shoot also produces a month of vertical video for his page, which is the point. Catalogue it once or catalogue it twice.</p>
+  </section>
+
+  <!-- THINGS THAT WENT WRONG -->
+  <section class="container-x py-10">
+    <h2 class="text-2xl font-bold text-white">What the build taught me</h2>
+    <div class="mt-5 grid gap-4 lg:grid-cols-3">
+      <div class="card p-5">
+        <div class="font-bold text-white">"Listed" is not "public"</div>
+        <p class="mt-1.5 text-sm text-white/65">The first ask was "mark them all listed." That flag drives a For Sale badge and exposes asking prices. It would have put the whole collection up for sale. Visibility got its own switch.</p>
+      </div>
+      <div class="card p-5">
+        <div class="font-bold text-white">A casting is not a car</div>
+        <p class="mt-1.5 text-sm text-white/65">"Custom Otto" is a casting. He might own eight: six beaters worth two dollars and one Super Treasure Hunt worth ninety. The schema has both, and the money fields never merge: MSRP, asking, sold comp, researched estimate are four columns, not one.</p>
+      </div>
+      <div class="card p-5">
+        <div class="font-bold text-white">Verify the person before the data</div>
+        <p class="mt-1.5 text-sm text-white/65">An early scrape loaded someone else's TikTok as his collection. The eBay listings and the scraped items had zero overlap and nobody checked. Purged, written down, and now every source gets matched to him first.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section class="container-x py-10">
+    <div class="card p-6">
+      <div class="grid gap-6 sm:grid-cols-3">
+        <div><div class="text-xs uppercase tracking-wider text-white/40">Front</div><p class="mt-1 text-sm text-white/75">Plain HTML on Cloudflare Pages. No build step. Fetches the public API at load and self-hosts his one Facebook video, no embed script.</p></div>
+        <div><div class="text-xs uppercase tracking-wider text-white/40">Back</div><p class="mt-1 text-sm text-white/75">Python, stdlib only, no pip on prod. SQLite in WAL mode with a verified backup script, audit table, custom key/value fields so the schema never blocks him.</p></div>
+        <div><div class="text-xs uppercase tracking-wider text-white/40">Gate</div><p class="mt-1 text-sm text-white/75">Authentik with its own brand and login flow, his collection wall as the login background. Caddy forward_auth, group re-checked in the app. 17 auth tests, all green.</p></div>
+      </div>
+    </div>
+    <p class="mt-4 text-xs text-white/40">Hot Wheels and Matchbox are trademarks of Mattel, Inc. This is a private collector's catalogue and is not affiliated with either.</p>
+  </section>
+
+  <section class="container-x py-10">
+    <div class="card flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-xl font-bold text-white">Got a collection, a shop, a thing that needs a real record?</h2>
+        <p class="mt-1 text-sm text-white/60">This is the kind of build Quick IT does. Free 30-minute consult.</p>
+      </div>
+      <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickit" data-umami-event-placement="design-lab-opus-cta" class="btn btn-primary text-sm">Start a project</a>
+    </div>
+  </section>
+</Base>

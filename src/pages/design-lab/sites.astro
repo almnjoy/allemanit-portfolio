@@ -1,0 +1,117 @@
+---
+import Base from '../../layouts/Base.astro';
+import { production, clients, personal, quickitVersions, allemanitVersions, counts } from '../../data/design-lab';
+
+const groups = [
+  { id: 'production', title: 'Production', blurb: 'The ones that carry a business or a household. Each is a repo, each deploys on push.', sites: production },
+  { id: 'clients', title: 'Clients, family and friends', blurb: 'Built for someone else. Some are a marketing page, some have a whole backend behind them.', sites: clients },
+  { id: 'personal', title: 'Personal and experiments', blurb: 'Where the weird ideas go. A few retired, a few still up.', sites: personal },
+];
+const stacks = Array.from(new Set([...production, ...clients, ...personal].map((s) => s.stack)));
+---
+<Base
+  title="Sites | Design Lab | AllemanIT"
+  description={`Every site I have designed and shipped, ${counts.sites} of them, plus the ${counts.versions} versions that lost.`}
+  url="https://allemanit.com/design-lab/sites/"
+>
+  <Fragment slot="head"><link rel="canonical" href="https://allemanit.com/design-lab/sites/" /></Fragment>
+
+  <section class="container-x pt-10 pb-6">
+    <a href="/design-lab/" class="text-sm text-white/60 hover:text-white">← Design Lab</a>
+    <h1 class="mt-3 text-4xl font-extrabold text-white sm:text-5xl">What shipped</h1>
+    <p class="mt-4 max-w-3xl text-lg text-white/70">{counts.sites} sites, different jobs, same rule: pick the lightest thing that does the work. The versions that lost are at the bottom, because the reasons matter more than the winner.</p>
+    <div class="mt-6 flex flex-wrap items-center gap-2" id="stackFilter">
+      <span class="mr-1 text-xs uppercase tracking-wider text-white/40">Stack</span>
+      <button data-stack="all" class="chip is-on" type="button">All</button>
+      {stacks.map((s) => (<button data-stack={s} class="chip" type="button">{s}</button>))}
+    </div>
+  </section>
+
+  {groups.map((g) => (
+    <section id={g.id} class="container-x py-8" data-group>
+      <h2 class="text-2xl font-bold text-white">{g.title}</h2>
+      <p class="mt-1 mb-6 max-w-3xl text-white/60">{g.blurb}</p>
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {g.sites.map((s) => (
+          <article class="card group flex flex-col overflow-hidden" data-stack={s.stack}>
+            <a href={s.url} {...(s.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})} class="block">
+              <img src={`/design-lab/shots/${s.img}.jpg`} alt={s.title} loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full object-cover object-top" />
+            </a>
+            <div class="flex flex-1 flex-col p-4">
+              <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+                <a href={s.url} {...(s.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})} class="font-bold text-white hover:text-brand-orange">{s.title}</a>
+                <span class="flex items-center gap-1.5"><span class="tag">{s.stack}</span>{s.year && <span class="tag">{s.year}</span>}</span>
+              </div>
+              <p class="mt-1 text-sm text-white/65">{s.note}</p>
+              <div class="mt-auto flex gap-4 pt-3 text-sm">
+                <a href={s.url} {...(s.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})} class="text-white/60 hover:text-white">Open ↗</a>
+                {s.story && <a href={s.story} class="font-semibold text-brand-orange hover:underline underline-offset-4">The story →</a>}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
+
+  <section class="container-x py-8">
+    <p class="text-sm text-white/50">Also in the lab: a generator that produced over a hundred preview sites for Chicago small businesses, printed on cards and walked door to door. Those stay private until a shop says yes.</p>
+  </section>
+
+  <!-- VERSIONS -->
+  <section id="versions" class="container-x py-10">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The ones that lost</p>
+    <h2 class="mt-2 text-2xl font-bold text-white">One site, six ways</h2>
+    <p class="mt-1 mb-6 max-w-3xl text-white/60">The Quick IT homepage, September 2026. I asked for four full alternatives, picked one, borrowed from another, and shipped.</p>
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {quickitVersions.map((q) => (
+        <figure class="card overflow-hidden">
+          <img src={`/design-lab/shots/${q.img}.jpg`} alt={q.title} loading="lazy" decoding="async" width="1100" height="687" class="aspect-[16/10] w-full object-cover object-top" />
+          <figcaption class="p-4"><div class="font-bold text-white">{q.title}</div><p class="mt-1 text-sm text-white/65">{q.note}</p></figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-x py-10">
+    <h2 class="text-2xl font-bold text-white">This site, four ways</h2>
+    <p class="mt-1 mb-6 max-w-3xl text-white/60">Before allemanit.com looked like this, it looked like these. Each one is still a real page you can open.</p>
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {allemanitVersions.map((e) => (
+        <a href={e.url} target="_blank" rel="noopener" class="card group block overflow-hidden">
+          <img src={`/design-lab/shots/${e.img}.jpg`} alt={e.title} loading="lazy" decoding="async" width="1100" height="687" class="aspect-[16/10] w-full object-cover object-top" />
+          <div class="p-4"><div class="flex items-center justify-between"><span class="font-bold text-white">{e.title}</span><span class="tag">open ↗</span></div><p class="mt-1 text-sm text-white/65">{e.note}</p></div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-x py-10">
+    <div class="card flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-xl font-bold text-white">Need one of these for your business?</h2>
+        <p class="mt-1 text-sm text-white/60">That is the Quick IT side of the house. Free 30-minute consult, you talk to the person who builds it.</p>
+      </div>
+      <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickit" data-umami-event-placement="design-lab-sites-cta" class="btn btn-primary text-sm">Start a project</a>
+    </div>
+  </section>
+
+  <style>
+    .chip { border: 1px solid rgba(255,255,255,0.15); border-radius: 999px; padding: 4px 12px; font-size: 13px; color: rgba(255,255,255,0.7); transition: all .15s; }
+    .chip:hover { color: #fff; border-color: rgba(255,255,255,0.35); }
+    .chip.is-on { background: #ff6a00; border-color: #ff6a00; color: #fff; }
+    [data-stack].is-hidden { display: none; }
+    [data-group].is-empty { display: none; }
+  </style>
+  <script>
+    const chips = document.querySelectorAll('#stackFilter .chip');
+    const cards = document.querySelectorAll('article[data-stack]');
+    const groups = document.querySelectorAll('[data-group]');
+    chips.forEach((c) => c.addEventListener('click', () => {
+      const want = c.getAttribute('data-stack');
+      chips.forEach((x) => x.classList.toggle('is-on', x === c));
+      cards.forEach((k) => k.classList.toggle('is-hidden', want !== 'all' && k.getAttribute('data-stack') !== want));
+      groups.forEach((g) => g.classList.toggle('is-empty', !g.querySelector('article[data-stack]:not(.is-hidden)')));
+    }));
+  </script>
+</Base>

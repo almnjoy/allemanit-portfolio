@@ -1,0 +1,106 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base
+  title="Allemanac | Design Lab | AllemanIT"
+  description="A private wardrobe almanac. Catalogue the closet, build an outfit, see it on a real body reference with an AI try-on. Here is the idea, the backend, and why a closet is a fun thing to build software for."
+  image="https://allemanit.com/design-lab/shots/allemanac.jpg"
+  url="https://allemanit.com/design-lab/allemanac/"
+>
+  <Fragment slot="head"><link rel="canonical" href="https://allemanit.com/design-lab/allemanac/" /></Fragment>
+
+  <section class="container-x pt-10 pb-6">
+    <a href="/design-lab/sites/" class="text-sm text-white/60 hover:text-white">← All sites</a>
+    <p class="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Design Lab / project</p>
+    <h1 class="mt-2 text-4xl font-extrabold text-white sm:text-5xl">Allemanac</h1>
+    <p class="mt-4 max-w-3xl text-lg text-white/70">I own more graphic tees than I can remember owning. Half of them live in a drawer I never open. The idea was dumb and simple: photograph everything once, put it in a database, and let software do the "what goes with what" part. Then it got out of hand, in a good way.</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="https://allemanac.allemanit.com" target="_blank" rel="noopener" class="btn btn-primary text-sm">allemanac.allemanit.com ↗</a>
+      <span class="btn btn-ghost pointer-events-none text-sm text-white/50">Private. Mine only.</span>
+    </div>
+  </section>
+
+  <section class="container-x py-6">
+    <figure class="card overflow-hidden">
+      <img src="/design-lab/shots/allemanac.jpg" alt="Allemanac Today page: the daily edit with a generated try-on" loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full object-cover object-top" />
+      <figcaption class="p-4 text-sm text-white/65"><b class="text-white">The Today page.</b> One outfit suggested from what is actually in the closet, and the latest try-on render next to it. That is me, and that is a real shirt I own, and I never put it on for the photo.</figcaption>
+    </figure>
+  </section>
+
+  <!-- THE IDEA -->
+  <section class="container-x py-10">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The idea</p>
+    <h2 class="mt-2 text-2xl font-bold text-white">A closet is just an inventory with feelings.</h2>
+    <div class="mt-5 grid gap-4 sm:grid-cols-3">
+      {[
+        { t: 'Catalogue it', d: 'Every piece gets a photo, a type, a colour and a tag. Fifty-two items so far. Shoes count. Belts count.' },
+        { t: 'Build an outfit', d: 'Pick pieces onto a rail, name the look, save it. A stylist note tells you what is missing. "Dress for: everyday" is a real dropdown.' },
+        { t: 'Try it on', d: 'Stage the outfit against one of five fitted body references and let an image model put the clothes on me. Face, tattoos, pose all preserved.' },
+      ].map((s) => (
+        <div class="card p-5">
+          <div class="font-bold text-white">{s.t}</div>
+          <p class="mt-1.5 text-sm text-white/65">{s.d}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- THE BACKEND -->
+  <section class="container-x py-10">
+    <div class="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The backend</p>
+        <h2 class="mt-2 text-2xl font-bold text-white">Two processes, one private volume.</h2>
+        <p class="mt-3 text-white/70 leading-relaxed">Python, standard library only, SQLite in WAL mode. The web process serves the UI and the API. A worker process watches for staged try-on jobs, claims one atomically, writes a provider-neutral work package to disk, calls the renderer, and marks the job ready or failed. Any job can be replayed by hand from that package.</p>
+        <p class="mt-3 text-white/70 leading-relaxed">The renderer is a swappable adapter. It shipped with an honest placeholder that just laid the body reference next to the garment photos. Now it calls an image model with the reference plus the garments and a prompt that is mostly rules: keep the face, keep the tattoos where the garment does not cover them, never crop a sleeve. If the model fails, the placeholder still renders and the job records why.</p>
+        <p class="mt-3 text-white/70 leading-relaxed">Auth is doubled on purpose. Authentik in front, and the app checks the identity header itself, so a request straight to the container port gets a 401 instead of my body references.</p>
+      </div>
+      <pre class="card min-w-0 overflow-x-auto p-5 text-xs leading-relaxed text-white/80"><code>allemanac.allemanit.com     devzone, Caddy
+  forward_auth -> Authentik
+  -> allemanac-web  :8792   UI + API, identity re-checked
+  -> allemanac-worker       try-on jobs
+
+/data  (private volume, never in git)
+  closet.db                 items, outfits, jobs
+  catalog-media/            my photos of the clothes
+  stock-media/              product refs, keyed by item id
+  models/                   five fitted body references
+  worker-queue/job-N.json   replayable work package
+  tryon-results/job-N.png   the render
+
+provider = gemini  (was: composite)
+  body ref + garments + rules --> one image
+  nightly: media mirrored to the NAS, models/ stays home</code></pre>
+    </div>
+  </section>
+
+  <!-- THE FUN -->
+  <section class="container-x py-10">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The fun part</p>
+    <h2 class="mt-2 text-2xl font-bold text-white">Software for a drawer of t-shirts.</h2>
+    <div class="mt-5 grid gap-4 lg:grid-cols-3">
+      <div class="card p-5">
+        <div class="font-bold text-white">It has a magazine voice</div>
+        <p class="mt-1.5 text-sm text-white/65">"Dress with intent." "Own it. Style it. Wear it." The Today page reads like an editorial because a closet app that reads like a spreadsheet gets opened once. The tabs are sticky notes. There is a little cartoon of me.</p>
+      </div>
+      <div class="card p-5">
+        <div class="font-bold text-white">The try-on started as a joke</div>
+        <p class="mt-1.5 text-sm text-white/65">Five body references, shot against a wall in my underwear, labelled front relaxed, front open, left profile. The first "renders" were a contact sheet. The first real one, with the model actually dressing me, was the moment it stopped being a joke.</p>
+      </div>
+      <div class="card p-5">
+        <div class="font-bold text-white">Rotation is at zero percent</div>
+        <p class="mt-1.5 text-sm text-white/65">The dashboard tracks what I have actually worn. It says 0%. That number is the real reason the app exists, and it is going to be embarrassing for a while.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-10">
+    <div class="card flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-xl font-bold text-white">Got a collection, a shop, a thing that needs a real record?</h2>
+        <p class="mt-1 text-sm text-white/60">Same shape as the diecast vault. This is the kind of build Quick IT does. Free 30-minute consult.</p>
+      </div>
+      <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickit" data-umami-event-placement="design-lab-allemanac-cta" class="btn btn-primary text-sm">Start a project</a>
+    </div>
+  </section>
+</Base>

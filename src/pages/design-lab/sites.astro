@@ -43,9 +43,9 @@ const stacks = Array.from(new Set([...production, ...clients, ...personal].map((
                 <span class="flex items-center gap-1.5"><span class="tag">{s.stack}</span>{s.year && <span class="tag">{s.year}</span>}</span>
               </div>
               <p class="mt-1 text-sm text-white/65">{s.note}</p>
-              <div class="mt-auto flex gap-4 pt-3 text-sm">
+              <div class="mt-auto flex items-center gap-3 pt-4 text-sm">
                 <a href={s.url} {...(s.url.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})} class="text-white/60 hover:text-white">Open ↗</a>
-                {s.story && <a href={s.story} class="font-semibold text-brand-orange hover:underline underline-offset-4">The story →</a>}
+                {s.story && <a href={s.story} class="ml-auto inline-flex items-center gap-1.5 rounded-lg bg-brand-orange px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-brand-orange/85">The story →</a>}
               </div>
             </div>
           </article>

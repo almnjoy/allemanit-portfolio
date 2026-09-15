@@ -1,0 +1,113 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base
+  title="The free site campaign | Design Lab | AllemanIT"
+  description="Find Chicago businesses that do good work and have no website, build each one a site before ever meeting them, hand it over on a card. 2,112 harvested, 109 sites built, 20 doors on the route."
+  image="https://allemanit.com/design-lab/shots/freesite.jpg"
+  url="https://allemanit.com/design-lab/freesite/"
+>
+  <Fragment slot="head"><link rel="canonical" href="https://allemanit.com/design-lab/freesite/" /></Fragment>
+
+  <section class="container-x pt-10 pb-6">
+    <a href="/design-lab/sites/" class="text-sm text-white/60 hover:text-white">← All sites</a>
+    <p class="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Design Lab / project</p>
+    <h1 class="mt-2 text-4xl font-extrabold text-white sm:text-5xl">The free site campaign</h1>
+    <p class="mt-4 max-w-3xl text-lg text-white/70">Same play as my dad's diecast shop, industrialized. Find Chicago businesses that do good work and have a bad or missing website. Build each one a site before I ever meet them. Print a card with the link and a QR code, and walk in. The site is the pitch. The lead is the byproduct.</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="https://free.quickitprojects.com" target="_blank" rel="noopener" class="btn btn-primary text-sm">free.quickitprojects.com ↗</a>
+    </div>
+  </section>
+
+  <section class="container-x py-6">
+    <figure class="card overflow-hidden">
+      <img src="/design-lab/shots/freesite.jpg" alt="One of the generated free sites" loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full object-cover object-top" />
+      <figcaption class="p-4 text-sm text-white/65"><b class="text-white">One of the 109.</b> Every site is built from the business's own public data: name, hours, phone, rating, photos, the reviews people already wrote. Nothing invented, no lorem ipsum.</figcaption>
+    </figure>
+  </section>
+
+  <!-- FINDING THEM -->
+  <section class="container-x py-10">
+    <div class="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
+      <div>
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Finding them</p>
+        <h2 class="mt-2 text-2xl font-bold text-white">Google already knows who has no website.</h2>
+        <p class="mt-3 text-white/70 leading-relaxed">The Places API returns, for every business, whether it has a website URL, its rating, and how many people rated it. So the search is one line: high rating, real review count, no website. Twenty-two niches (hardware, upholstery, small engine repair, furniture, lawn care, the trades) across rings of Chicago neighborhoods, starting with my own.</p>
+        <p class="mt-3 text-white/70 leading-relaxed">Then a scorer checks the ones that do list a site. A domain that resolves to a parked page, a dead Wix, or a Facebook link counts as no website. That is where most of the opportunity is: not the businesses with nothing, the ones with something embarrassing.</p>
+        <p class="mt-3 text-white/70 leading-relaxed">The whole harvest cost about the price of a nice lunch. The API bills per request, one request returns twenty businesses, and going deeper on a narrow query is cheaper than going wider.</p>
+      </div>
+      <pre class="card min-w-0 overflow-x-auto p-5 text-xs leading-relaxed text-white/80"><code>harvest.py   Places API (New), text search
+             22 niches x neighborhood rings
+             fields: website, rating, ratings count
+             --> 2,112 rows in SQLite
+
+clean.py     flag, never delete
+             wrong industry (car shops as "small engine")
+             wrong place (Humboldt Park -> Humboldt County CA)
+             not a business (Home Depot, a monument)
+             --> 1,539 real leads
+
+score.py     opportunity = rating x reviews x no-site
+             dead / parked / facebook-only = no site
+             --> 119 A-List
+
+make_sites.py  one static site per lead
+             --> 109 built, live on Cloudflare Pages
+
+cards        5x7, front + back, QR to their site
+             --> 20 doors, two days, mapped by drive</code></pre>
+    </div>
+  </section>
+
+  <!-- THE LIST -->
+  <section class="container-x py-10">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The list</p>
+    <h2 class="mt-2 text-2xl font-bold text-white">The first spreadsheet was beautiful and a third wrong.</h2>
+    <div class="mt-5 grid gap-4 lg:grid-cols-3">
+      <div class="card p-5">
+        <div class="font-bold text-white">Wrong industry</div>
+        <p class="mt-1.5 text-sm text-white/65">"Small engine repair" is a phrase to Google, not a category. A quarter of those rows were car mechanics, sitting at the top with five stars and no website. Filtered by the type Google assigns, not the phrase I searched.</p>
+      </div>
+      <div class="card p-5">
+        <div class="font-bold text-white">Wrong place</div>
+        <p class="mt-1.5 text-sm text-white/65">Searching "Humboldt Park, Chicago" returned Humboldt County, California. A funeral home in Eureka was a lead, 1,939 miles out. 257 rows sat more than 45 miles from the Loop. Distance filter, not a state filter.</p>
+      </div>
+      <div class="card p-5">
+        <div class="font-bold text-white">Not a small business</div>
+        <p class="mt-1.5 text-sm text-white/65">"Monument" as a Google type means a landmark. Millennium Monument was a lead. So were three Home Depots and a Macy's. Chains and landmarks get flagged, and every flag is kept so the exclusion is auditable.</p>
+      </div>
+    </div>
+    <p class="mt-5 max-w-3xl text-sm text-white/55">The lesson, same as always: a plausible-looking answer is not a verified one. Eyeball the top fifteen by name before you print anything.</p>
+  </section>
+
+  <!-- THE ROUTE -->
+  <section class="container-x py-10">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">The route</p>
+    <h2 class="mt-2 text-2xl font-bold text-white">Twenty doors, two days, in the car.</h2>
+    <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {[
+        { n: '01', t: 'Pick twenty', d: 'From the A-List: rating 4.3 or better, a real review count, open, a built site. Two city-run senior centers cut. They are not sales targets.' },
+        { n: '02', t: 'Cluster by drive', d: 'Day one is the north and northwest side, about 31 miles, two of them under a mile from home. Day two is the south corridor.' },
+        { n: '03', t: 'Print the cards', d: '5x7, colour, front and back. The front is their site. The back is the pitch, in my voice, and a QR. Say less, point at the QR.' },
+        { n: '04', t: 'Walk in', d: 'Hardware stores open early, upholstery shops open whenever. Check their site on your phone in the parking lot. You are about to stand next to the owner while it loads.' },
+      ].map((s) => (
+        <div class="card p-5">
+          <div class="text-xs font-semibold text-brand-orange">{s.n}</div>
+          <div class="mt-1 font-bold text-white">{s.t}</div>
+          <p class="mt-1.5 text-sm text-white/65">{s.d}</p>
+        </div>
+      ))}
+    </div>
+    <p class="mt-5 max-w-3xl text-sm text-white/55">If they bite: the site moves to their own domain for free, they buy the ten-dollar domain. Then a care plan. Then "who does your IT?" The 109 stay private until a shop says yes.</p>
+  </section>
+
+  <section class="container-x py-10">
+    <div class="card flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-xl font-bold text-white">Run a shop with no website, or a bad one?</h2>
+        <p class="mt-1 text-sm text-white/60">You might already have a site waiting. Quick IT, free 30-minute consult.</p>
+      </div>
+      <a href="https://quickitprojects.com/start" target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickit" data-umami-event-placement="design-lab-freesite-cta" class="btn btn-primary text-sm">Start a project</a>
+    </div>
+  </section>
+</Base>

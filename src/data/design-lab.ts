@@ -17,7 +17,7 @@ export const production: Site[] = [
   { img: 'allemanit', title: 'allemanit.com', stack: 'Astro', note: 'This site. Content collections for projects and the blog, a daily page that feeds itself, and this lab.', url: '/', year: '2026' },
   { img: 'packet-labs', title: 'allemanit.com/packet-labs', stack: 'Static', note: 'Six guided Wireshark labs with synthetic traces. No backend, no dependencies.', url: '/packet-labs/', year: '2026' },
   { img: 'family-zone', title: 'family.allemanit.com', stack: 'Flask', note: 'Calendar, recipes, resources, a helper you can talk to. Family only, behind Authentik.', url: '/family', story: '/family', year: '2026' },
-  { img: 'allemanac', title: 'allemanac.allemanit.com', stack: 'Python', note: 'A private wardrobe almanac. Catalogue the closet, build an outfit, and see it on a real body reference with an AI try-on. Mine only, behind Authentik.', url: 'https://allemanac.allemanit.com', year: '2026' },
+  { img: 'allemanac', title: 'allemanac.allemanit.com', stack: 'Python', note: 'A private wardrobe almanac. Catalogue the closet, build an outfit, and see it on a real body reference with an AI try-on. Mine only, behind Authentik.', url: 'https://allemanac.allemanit.com', story: '/design-lab/allemanac/', year: '2026' },
 ];
 
 export const clients: Site[] = [
@@ -30,8 +30,8 @@ export const clients: Site[] = [
 
 export const personal: Site[] = [
   { img: 'almnjoy', title: 'almnjoy.dev', stack: 'Static', note: 'A Windows 98 desktop as a personal site. Windows open, the Start menu works.', url: 'https://almnjoy.dev', year: '2025' },
+  { img: 'freesite', title: 'free.quickitprojects.com', stack: 'Static', note: 'The free site campaign. Google Places finds Chicago shops with no real website, a generator builds each one a site, a card with a QR goes through the door. 109 built, 20 doors walked.', url: 'https://free.quickitprojects.com', story: '/design-lab/freesite/', year: '2026' },
   { img: '66unique', title: '66 Unique Antiques (concept)', stack: 'Static', note: 'An unofficial redesign for an antique mall in Nashville, Michigan. Built as a demo, clearly labeled as one.', url: '/66unique/', year: '2026' },
-  { img: 'old-blog', title: 'almnjoy.dev, the WordPress era', stack: 'WordPress', note: 'The Win98 theme on WordPress, fed by an n8n + GPT drafting pipeline. Killed in July for markdown and git.', url: '/blog/killed-my-windows-98-blog', year: '2025' },
 ];
 
 export const quickitVersions = [

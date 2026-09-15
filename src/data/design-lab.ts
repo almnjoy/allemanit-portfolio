@@ -13,7 +13,7 @@ export type Site = {
 
 export const production: Site[] = [
   { img: 'quickit-v2', title: 'quickitprojects.com', stack: 'React', note: 'The consulting front door. Intake form posts to n8n, which files it in Twenty CRM. Redesigned September 2026.', url: 'https://quickitprojects.com', year: '2026' },
-  { img: 'madeformeai', title: 'madeformeai.com', stack: 'React', note: 'Product site for the hosted AI workspace. Signup flows through Authentik.', url: 'https://madeformeai.com', year: '2026' },
+  { img: 'madeformeai', title: 'madeformeai.com', stack: 'React', note: 'Product site for the hosted AI workspace. Rebuilt September 2026 from a Codex playground: cream paper, illustrated Dustin at his desk, the North Star coach behind sign-in. Signup flows through Authentik.', url: 'https://madeformeai.com', year: '2026' },
   { img: 'allemanit', title: 'allemanit.com', stack: 'Astro', note: 'This site. Content collections for projects and the blog, a daily page that feeds itself, and this lab.', url: '/', year: '2026' },
   { img: 'packet-labs', title: 'allemanit.com/packet-labs', stack: 'Static', note: 'Six guided Wireshark labs with synthetic traces. No backend, no dependencies.', url: '/packet-labs/', year: '2026' },
   { img: 'family-zone', title: 'family.allemanit.com', stack: 'Flask', note: 'Calendar, recipes, resources, a helper you can talk to. Family only, behind Authentik.', url: '/family', story: '/family', year: '2026' },

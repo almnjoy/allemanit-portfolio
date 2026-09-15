@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SkateDemo - Feel Prototype (M1 pre-tune)</title>
+<style>
+  :root{
+    --bg:#14161a; --panel:#1c1f25; --line:#2c313a; --ink:#e7e9ee;
+    --dim:#8b93a1; --acc:#4fc3f7; --warn:#ffb74d; --good:#81c784;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.45 ui-sans-serif,system-ui,"Segoe UI",sans-serif;display:flex;height:100vh;overflow:hidden}
+  #stage{flex:1;position:relative;min-width:0}
+  canvas{display:block;width:100%;height:100%}
+  #hud{position:absolute;left:14px;top:14px;pointer-events:none;text-shadow:0 1px 3px #000}
+  #hud .big{font-size:34px;font-weight:700;letter-spacing:-1px}
+  #hud .unit{font-size:14px;color:var(--dim);font-weight:400}
+  #hud .row{color:var(--dim);font-size:12px;margin-top:2px}
+  #keys{position:absolute;left:14px;bottom:12px;font-size:12px;color:var(--dim);
+        background:#0009;padding:8px 10px;border-radius:6px;pointer-events:none}
+  #keys b{color:var(--ink)}
+  #state{position:absolute;right:14px;top:14px;font-size:13px;text-align:right;pointer-events:none}
+  .tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600;margin-left:4px}
+  .t-roll{background:#2a3b46;color:var(--acc)}
+  .t-tuck{background:#3d3220;color:var(--warn)}
+  .t-stop{background:#3a2a2a;color:#ef9a9a}
+  .t-down{background:#402020;color:#ff8a80}
+  #side{width:330px;background:var(--panel);border-left:1px solid var(--line);
+        overflow-y:auto;padding:14px;flex:none}
+  h1{font-size:15px;margin:0 0 2px}
+  .sub{color:var(--dim);font-size:12px;margin-bottom:14px}
+  h2{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--dim);
+     margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+  .ctl{margin-bottom:11px}
+  .ctl label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
+  .ctl label span:last-child{color:var(--acc);font-variant-numeric:tabular-nums;font-weight:600}
+  .ctl input[type=range]{width:100%;accent-color:var(--acc);height:16px}
+  .note{font-size:11px;color:var(--dim);margin-top:-4px;margin-bottom:9px;font-style:italic}
+  .presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  button{background:#252a32;color:var(--ink);border:1px solid var(--line);border-radius:5px;
+         padding:6px 9px;font-size:12px;cursor:pointer;font-family:inherit}
+  button:hover{border-color:var(--acc);color:var(--acc)}
+  button.pri{background:var(--acc);color:#06222d;border-color:var(--acc);font-weight:700;width:100%;padding:9px}
+  button.pri:hover{background:#7fd4fa;color:#06222d}
+  pre{background:#0f1114;border:1px solid var(--line);border-radius:6px;padding:10px;
+      font-size:11px;line-height:1.55;overflow-x:auto;color:#c8ccd4;
+      font-family:ui-monospace,Consolas,monospace;white-space:pre;margin:0}
+  pre b{color:var(--good);font-weight:600}
+  .verdict{background:#0f1114;border:1px solid var(--line);border-left:3px solid var(--warn);
+           padding:9px 10px;border-radius:0 6px 6px 0;font-size:12px;color:var(--dim);margin-bottom:12px}
+  .verdict b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <canvas id="c"></canvas>
+  <div id="hud">
+    <div><span class="big" id="spd">0</span> <span class="unit">km/h</span></div>
+    <div class="row"><span id="cms">0</span> cm/s &nbsp;|&nbsp; arc <span id="arc">-</span></div>
+    <div class="row">wipeouts <span id="wo">0</span> &nbsp;|&nbsp; top <span id="top">0</span> km/h</div>
+  </div>
+  <div id="state"><span class="tag t-roll" id="tag">ROLLING</span></div>
+  <div id="keys">
+    <b>W</b> stride &nbsp; <b>A/D</b> steer &nbsp; <b>Shift</b> tuck &nbsp;
+    <b>Space</b> T-stop &nbsp; <b>E</b> eat it &nbsp; <b>R</b> reset
+  </div>
+</div>
+
+<div id="side">
+  <h1>Skate feel, pre-tune</h1>
+  <div class="sub">Tune it here, then type the numbers into the Blueprint. 1 unit = 1 cm = 1 UE unit, so everything transfers directly.</div>
+
+  <div class="verdict" id="verdict"></div>
+
+  <h2>Presets</h2>
+  <div class="presets">
+    <button data-p="rec">Rec / group roll</button>
+    <button data-p="speed">Speed skate</button>
+    <button data-p="ice">Too slippery</button>
+    <button data-p="ue">UE defaults (bad)</button>
+  </div>
+  <div class="note">Try "UE defaults" once to feel why CharacterMovementComponent out of the box is not skating.</div>
+
+  <h2>Push and top speed</h2>
+  <div class="ctl"><label>Stride accel <span id="v_acc"></span></label>
+    <input type="range" id="s_acc" min="200" max="2500" step="50"></div>
+  <div class="note">UE: Max Acceleration</div>
+  <div class="ctl"><label>Cruise top speed <span id="v_max"></span></label>
+    <input type="range" id="s_max" min="300" max="1400" step="20"></div>
+  <div class="note">UE: Max Walk Speed. Casual roll is ~420, group pace ~700, sprint ~970.</div>
+  <div class="ctl"><label>Tuck top speed <span id="v_tuck"></span></label>
+    <input type="range" id="s_tuck" min="300" max="1800" step="20"></div>
+
+  <h2>Roll and grip</h2>
+  <div class="ctl"><label>Rolling resistance <span id="v_fric"></span></label>
+    <input type="range" id="s_fric" min="0" max="4" step="0.05"></div>
+  <div class="note">UE: Ground Friction. The single most important number. Engine default is 8.0, which is glue. Skating lives near 0.2.</div>
+  <div class="ctl"><label>Edge grip (lateral) <span id="v_grip"></span></label>
+    <input type="range" id="s_grip" min="0.2" max="14" step="0.1"></div>
+  <div class="note">Custom, not a stock CMC setting. How hard sideways velocity gets killed. Low = washing out, high = on rails.</div>
+
+  <h2>Steering</h2>
+  <div class="ctl"><label>Turn rate, standstill <span id="v_turn"></span></label>
+    <input type="range" id="s_turn" min="60" max="400" step="5"></div>
+  <div class="ctl"><label>Speed that halves your turn <span id="v_fall"></span></label>
+    <input type="range" id="s_fall" min="150" max="1600" step="25"></div>
+  <div class="note">Lower = arcs open up fast as you gain speed. This is what makes speed scary.</div>
+  <div class="ctl"><label>Tuck turn penalty <span id="v_tpen"></span></label>
+    <input type="range" id="s_tpen" min="0.1" max="1" step="0.05"></div>
+
+  <h2>T-stop / powerslide</h2>
+  <div class="ctl"><label>Brake decel <span id="v_brk"></span></label>
+    <input type="range" id="s_brk" min="100" max="2500" step="50"></div>
+  <div class="ctl"><label>Brake yaw swing <span id="v_yaw"></span></label>
+    <input type="range" id="s_yaw" min="0" max="90" step="5"></div>
+  <div class="note">How far the body swings sideways while braking. This is the bit that reads as a real T-stop.</div>
+
+  <h2>Crash</h2>
+  <div class="ctl"><label>Wipeout speed threshold <span id="v_crash"></span></label>
+    <input type="range" id="s_crash" min="150" max="1200" step="25"></div>
+  <div class="ctl"><label>Recovery time <span id="v_rec"></span></label>
+    <input type="range" id="s_rec" min="0.5" max="4" step="0.1"></div>
+
+  <h2>Export to Unreal</h2>
+  <pre id="out"></pre>
+  <div style="height:8px"></div>
+  <button class="pri" id="copy">Copy values for the Blueprint</button>
+  <div style="height:6px"></div>
+  <button id="csv" style="width:100%">Download turn-rate curve as CSV</button>
+  <div class="note">Import the CSV in UE as a Float Curve to get CV_TurnRateBySpeed.</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+// ---------------------------------------------------------------- params
+var P = {
+  acc:900, max:700, tuck:1020, fric:0.22, grip:5.0,
+  turn:200, fall:420, tpen:0.35, brk:850, yaw:55, crash:450, rec:1.6
+};
+
+var PRESETS = {
+  rec:   {acc:900, max:700, tuck:1020, fric:0.22, grip:5.0, turn:200, fall:420, tpen:0.35, brk:850, yaw:55, crash:450, rec:1.6},
+  speed: {acc:700, max:950, tuck:1350, fric:0.12, grip:7.5, turn:150, fall:300, tpen:0.25, brk:600, yaw:70, crash:600, rec:2.0},
+  ice:   {acc:600, max:800, tuck:1100, fric:0.03, grip:0.6, turn:240, fall:900, tpen:0.6,  brk:250, yaw:85, crash:350, rec:2.2},
+  ue:    {acc:2048,max:600, tuck:900,  fric:8.0,  grip:14,  turn:400, fall:1600,tpen:1.0,  brk:2000,yaw:0,  crash:1200,rec:0.5}
+};
+
+var SLIDERS = [
+  ["acc","s_acc","v_acc",function(v){return Math.round(v)+" cm/s2"}],
+  ["max","s_max","v_max",function(v){return Math.round(v)+" cm/s ("+kmh(v)+" km/h)"}],
+  ["tuck","s_tuck","v_tuck",function(v){return Math.round(v)+" cm/s ("+kmh(v)+" km/h)"}],
+  ["fric","s_fric","v_fric",function(v){return v.toFixed(2)}],
+  ["grip","s_grip","v_grip",function(v){return v.toFixed(1)}],
+  ["turn","s_turn","v_turn",function(v){return Math.round(v)+" deg/s"}],
+  ["fall","s_fall","v_fall",function(v){return Math.round(v)+" cm/s"}],
+  ["tpen","s_tpen","v_tpen",function(v){return Math.round(v*100)+"%"}],
+  ["brk","s_brk","v_brk",function(v){return Math.round(v)+" cm/s2"}],
+  ["yaw","s_yaw","v_yaw",function(v){return Math.round(v)+" deg"}],
+  ["crash","s_crash","v_crash",function(v){return Math.round(v)+" cm/s ("+kmh(v)+" km/h)"}],
+  ["rec","s_rec","v_rec",function(v){return v.toFixed(1)+" s"}]
+];
+
+function kmh(cms){ return (cms*0.036).toFixed(0); }
+
+// ---------------------------------------------------------------- world
+// Units are centimetres. The yard is 8000 x 6000 cm (80m x 60m).
+var W = 9000, H = 6500;
+
+var SLICK = {x:2600, y:1700, r:1050};          // the Bean: near-zero grip
+var GRAVEL= {x:6300, y:4600, r:750};           // gravel patch: eats speed
+var CRACKS = [                                  // expansion joints, trip you at speed
+  {x:4600, y:600,  w:60,  h:2100},
+  {x:1200, y:4200, w:2400,h:60},
+  {x:7100, y:1400, w:60,  h:1900}
+];
+var CONES = [];
+(function(){ for(var i=0;i<9;i++) CONES.push({x:1300+i*760, y:3200 + (i%2?420:-420)}); })();
+var WALLS = [
+  {x:0,y:0,w:W,h:80},{x:0,y:H-80,w:W,h:80},
+  {x:0,y:0,w:80,h:H},{x:W-80,y:0,w:80,h:H},
+  {x:5200,y:2300,w:1500,h:90}
+];
+
+// ---------------------------------------------------------------- state
+var S = {
+  x:900, y:900, vx:0, vy:0, yaw:0,   // yaw in radians, 0 = +x
+  brakeYaw:0, down:0, wipeouts:0, top:0, tuck:false, brake:false
+};
+
+var keys = {};
+window.addEventListener("keydown",function(e){
+  var k=e.key.toLowerCase();
+  keys[k]=true;
+  if(k===" "||k==="arrowup"||k==="arrowdown"||k==="arrowleft"||k==="arrowright") e.preventDefault();
+  if(k==="r") reset();
+  if(k==="e"&&S.down<=0) wipeout(true);
+});
+window.addEventListener("keyup",function(e){ keys[e.key.toLowerCase()]=false; });
+
+function reset(){ S.x=900;S.y=900;S.vx=0;S.vy=0;S.yaw=0;S.down=0;S.brakeYaw=0; }
+function wipeout(voluntary){
+  S.down = P.rec;
+  if(!voluntary) S.wipeouts++;
+  // keep some slide so the body carries: that carry is the funny part
+  S.vx*=0.55; S.vy*=0.55;
+}
+
+// ---------------------------------------------------------------- helpers
+function len(x,y){ return Math.sqrt(x*x+y*y); }
+function inCircle(x,y,c){ return len(x-c.x,y-c.y) < c.r; }
+function inRect(x,y,r){ return x>r.x && x<r.x+r.w && y>r.y && y<r.y+r.h; }
+function turnRateAt(speed){ return P.turn / (1 + speed / Math.max(1,P.fall)); }
+
+// ---------------------------------------------------------------- sim
+function step(dt){
+  var speed = len(S.vx,S.vy);
+  if(speed > S.top) S.top = speed;
+
+  if(S.down > 0){
+    S.down -= dt;
+    if(keys["e"] && S.down < 0.25) S.down = 0.25;   // hold to stay down
+    // sliding body, high drag
+    var d = Math.max(0, 1 - 3.2*dt);
+    S.vx*=d; S.vy*=d;
+    S.x += S.vx*dt; S.y += S.vy*dt;
+    collide();
+    return;
+  }
+
+  S.tuck  = !!(keys["shift"]);
+  S.brake = !!(keys[" "]);
+
+  // surface modifiers
+  var gripMul = 1, fricMul = 1;
+  if(inCircle(S.x,S.y,SLICK)){ gripMul = 0.12; fricMul = 0.15; }
+  if(inCircle(S.x,S.y,GRAVEL)){ gripMul = 1.6; fricMul = 7.0; }
+
+  // ---- steering: rotate the body, never strafe
+  var steer = (keys["d"]||keys["arrowright"]?1:0) - (keys["a"]||keys["arrowleft"]?1:0);
+  var rate = turnRateAt(speed) * (S.tuck ? P.tpen : 1) * (S.brake ? 0.35 : 1);
+  S.yaw += steer * rate * Math.PI/180 * dt;
+
+  // T-stop swings the body out of line with travel
+  var wantSwing = S.brake ? (-steer || 1) * P.yaw * Math.PI/180 : 0;
+  S.brakeYaw += (wantSwing - S.brakeYaw) * Math.min(1, 7*dt);
+
+  var fx = Math.cos(S.yaw), fy = Math.sin(S.yaw);
+
+  // ---- thrust along facing only
+  var topSpeed = S.tuck ? P.tuck : P.max;
+  if((keys["w"]||keys["arrowup"]) && !S.brake){
+    var head = S.vx*fx + S.vy*fy;              // forward component
+    if(head < topSpeed){
+      var room = Math.min(1, (topSpeed-head)/Math.max(1,topSpeed*0.35));
+      S.vx += fx * P.acc * room * dt;
+      S.vy += fy * P.acc * room * dt;
+    }
+  }
+
+  // ---- rolling resistance: decel proportional to velocity (same model as CMC friction)
+  var f = Math.max(0, 1 - (P.fric*fricMul)*dt);
+  S.vx*=f; S.vy*=f;
+
+  // ---- edge grip: kill lateral velocity relative to the body
+  var bodyYaw = S.yaw + S.brakeYaw;
+  var bfx=Math.cos(bodyYaw), bfy=Math.sin(bodyYaw);
+  var rx=-bfy, ry=bfx;
+  var fwd = S.vx*bfx + S.vy*bfy;
+  var lat = S.vx*rx  + S.vy*ry;
+  lat *= Math.max(0, 1 - (P.grip*gripMul)*dt);
+  S.vx = bfx*fwd + rx*lat;
+  S.vy = bfy*fwd + ry*lat;
+
+  // ---- brake
+  if(S.brake){
+    var sp = len(S.vx,S.vy);
+    if(sp > 1){
+      var cut = Math.min(sp, P.brk*dt);
+      S.vx -= (S.vx/sp)*cut; S.vy -= (S.vy/sp)*cut;
+    }
+  }
+
+  S.x += S.vx*dt; S.y += S.vy*dt;
+  collide();
+}
+
+function collide(){
+  var speed = len(S.vx,S.vy);
+
+  // cracks: trip you only above threshold, and only crossing the narrow axis
+  for(var i=0;i<CRACKS.length;i++){
+    if(inRect(S.x,S.y,CRACKS[i]) && speed > P.crash*0.55 && S.down<=0){ wipeout(false); return; }
+  }
+  // cones: soft, knock you around
+  for(var j=0;j<CONES.length;j++){
+    var c=CONES[j];
+    if(len(S.x-c.x,S.y-c.y) < 55){
+      var nx=(S.x-c.x)/55, ny=(S.y-c.y)/55;
+      S.vx += nx*120; S.vy += ny*120;
+      if(speed > P.crash && S.down<=0){ wipeout(false); return; }
+    }
+  }
+  // walls: hard
+  for(var k=0;k<WALLS.length;k++){
+    var w=WALLS[k];
+    if(inRect(S.x,S.y,w)){
+      // push out along the shallowest axis
+      var dl=Math.abs(S.x-w.x), dr=Math.abs(w.x+w.w-S.x);
+      var dt_=Math.abs(S.y-w.y), db=Math.abs(w.y+w.h-S.y);
+      var m=Math.min(dl,dr,dt_,db);
+      if(m===dl){S.x=w.x-1;S.vx=-Math.abs(S.vx)*0.25;}
+      else if(m===dr){S.x=w.x+w.w+1;S.vx=Math.abs(S.vx)*0.25;}
+      else if(m===dt_){S.y=w.y-1;S.vy=-Math.abs(S.vy)*0.25;}
+      else {S.y=w.y+w.h+1;S.vy=Math.abs(S.vy)*0.25;}
+      if(speed > P.crash && S.down<=0){ wipeout(false); return; }
+    }
+  }
+}
+
+// ---------------------------------------------------------------- render
+var cv=document.getElementById("c"), ctx=cv.getContext("2d");
+var cam={x:S.x,y:S.y,z:0.42};
+
+function fit(){
+  var r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1;
+  cv.width=r.width*d; cv.height=r.height*d;
+  ctx.setTransform(d,0,0,d,0,0);
+}
+window.addEventListener("resize",fit);
+
+function draw(){
+  var r=cv.getBoundingClientRect(), w=r.width, h=r.height;
+  ctx.fillStyle="#14161a"; ctx.fillRect(0,0,w,h);
+
+  // camera lags a touch, and pulls back with speed so fast reads as fast
+  var speed=len(S.vx,S.vy);
+  cam.x += (S.x-cam.x)*0.10; cam.y += (S.y-cam.y)*0.10;
+  var wantZ = 0.42 - Math.min(0.13, speed/12000);
+  cam.z += (wantZ-cam.z)*0.05;
+
+  ctx.save();
+  ctx.translate(w/2,h/2); ctx.scale(cam.z,cam.z); ctx.translate(-cam.x,-cam.y);
+
+  // pavement grid, 1m
+  ctx.strokeStyle="#1b1f26"; ctx.lineWidth=2;
+  ctx.beginPath();
+  for(var gx=0;gx<=W;gx+=200){ ctx.moveTo(gx,0); ctx.lineTo(gx,H); }
+  for(var gy=0;gy<=H;gy+=200){ ctx.moveTo(0,gy); ctx.lineTo(W,gy); }
+  ctx.stroke();
+
+  // slick
+  ctx.fillStyle="#243b45"; ctx.beginPath();
+  ctx.arc(SLICK.x,SLICK.y,SLICK.r,0,6.2832); ctx.fill();
+  ctx.strokeStyle="#4fc3f7"; ctx.lineWidth=6; ctx.stroke();
+  label("THE BEAN  (no grip)",SLICK.x,SLICK.y,"#4fc3f7");
+
+  // gravel
+  ctx.fillStyle="#3a3428"; ctx.beginPath();
+  ctx.arc(GRAVEL.x,GRAVEL.y,GRAVEL.r,0,6.2832); ctx.fill();
+  ctx.strokeStyle="#ffb74d"; ctx.lineWidth=6; ctx.stroke();
+  label("GRAVEL  (eats speed)",GRAVEL.x,GRAVEL.y,"#ffb74d");
+
+  // cracks
+  ctx.fillStyle="#40252a";
+  for(var i=0;i<CRACKS.length;i++){var c=CRACKS[i];ctx.fillRect(c.x,c.y,c.w,c.h);}
+  label("CRACKS",CRACKS[0].x+300,CRACKS[0].y+200,"#ef9a9a");
+
+  // walls
+  ctx.fillStyle="#2c313a";
+  for(var k=0;k<WALLS.length;k++){var wl=WALLS[k];ctx.fillRect(wl.x,wl.y,wl.w,wl.h);}
+
+  // cones
+  for(var j=0;j<CONES.length;j++){
+    var cn=CONES[j];
+    ctx.fillStyle="#ff8a65"; ctx.beginPath(); ctx.arc(cn.x,cn.y,48,0,6.2832); ctx.fill();
+  }
+  label("SLALOM",CONES[0].x-200,CONES[0].y+300,"#ff8a65");
+
+  // skater
+  var bodyYaw=S.yaw+S.brakeYaw;
+  ctx.save(); ctx.translate(S.x,S.y);
+
+  // travel direction hairline: shows the difference between facing and momentum
+  if(speed>40){
+    ctx.save(); ctx.rotate(Math.atan2(S.vy,S.vx));
+    ctx.strokeStyle="#ffffff22"; ctx.lineWidth=5;
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(speed*0.55,0); ctx.stroke();
+    ctx.restore();
+  }
+
+  ctx.rotate(S.down>0 ? bodyYaw + (P.rec-S.down)*7 : bodyYaw);
+  var fallen = S.down>0;
+  // skates
+  ctx.fillStyle= fallen ? "#5a4a4a" : "#37474f";
+  ctx.fillRect(-30,-46,150,26); ctx.fillRect(-30,20,150,26);
+  // body
+  ctx.fillStyle = fallen ? "#ff8a80" : (S.brake ? "#ef9a9a" : (S.tuck ? "#ffcc80" : "#81d4fa"));
+  ctx.beginPath();
+  if(fallen){ ctx.ellipse(0,0,105,58,0,0,6.2832); } else { ctx.arc(0,0,64,0,6.2832); }
+  ctx.fill();
+  // nose so facing is unambiguous
+  ctx.fillStyle="#0e1114"; ctx.beginPath(); ctx.arc(40,0,17,0,6.2832); ctx.fill();
+  ctx.restore();
+
+  ctx.restore();
+
+  // hud
+  document.getElementById("spd").textContent = kmh(speed);
+  document.getElementById("cms").textContent = Math.round(speed);
+  document.getElementById("wo").textContent  = S.wipeouts;
+  document.getElementById("top").textContent = kmh(S.top);
+  var rate = turnRateAt(speed);
+  document.getElementById("arc").textContent =
+    speed<30 ? "-" : (Math.round(speed/(rate*Math.PI/180))/100).toFixed(1)+" m radius";
+
+  var tag=document.getElementById("tag");
+  if(S.down>0){ tag.className="tag t-down"; tag.textContent="DOWN"; }
+  else if(S.brake){ tag.className="tag t-stop"; tag.textContent="T-STOP"; }
+  else if(S.tuck){ tag.className="tag t-tuck"; tag.textContent="TUCK"; }
+  else { tag.className="tag t-roll"; tag.textContent="ROLLING"; }
+}
+
+function label(t,x,y,col){
+  ctx.fillStyle=col; ctx.font="600 46px ui-sans-serif,sans-serif";
+  ctx.textAlign="center"; ctx.fillText(t,x,y);
+  ctx.textAlign="left";
+}
+
+// ---------------------------------------------------------------- loop
+var last=performance.now();
+function frame(now){
+  var dt=Math.min(0.033,(now-last)/1000); last=now;
+  // fixed-ish substeps, same reason UE substepping is on
+  var n=2, sd=dt/n;
+  for(var i=0;i<n;i++) step(sd);
+  draw();
+  requestAnimationFrame(frame);
+}
+
+// ---------------------------------------------------------------- ui
+function syncUI(){
+  SLIDERS.forEach(function(s){
+    var el=document.getElementById(s[1]);
+    el.value=P[s[0]];
+    document.getElementById(s[2]).textContent=s[3](P[s[0]]);
+  });
+  writeOut();
+}
+
+SLIDERS.forEach(function(s){
+  var el=document.getElementById(s[1]);
+  el.addEventListener("input",function(){
+    P[s[0]]=parseFloat(el.value);
+    document.getElementById(s[2]).textContent=s[3](P[s[0]]);
+    writeOut();
+  });
+});
+
+Array.prototype.forEach.call(document.querySelectorAll("[data-p]"),function(b){
+  b.addEventListener("click",function(){
+    var src=PRESETS[b.getAttribute("data-p")];
+    for(var k in src) P[k]=src[k];
+    syncUI();
+  });
+});
+
+function ueText(){
+  return ""+
+"BP_SkaterCharacter > CharacterMovementComponent\n"+
+"  Max Acceleration ............ "+Math.round(P.acc)+"\n"+
+"  Max Walk Speed .............. "+Math.round(P.max)+"     (tuck raises to "+Math.round(P.tuck)+")\n"+
+"  Ground Friction ............. "+P.fric.toFixed(2)+"\n"+
+"  Braking Friction Factor ..... 0.0\n"+
+"  Braking Deceleration Walking. 0.0\n"+
+"  Use Separate Braking Friction TRUE\n"+
+"  Orient Rotation To Movement . FALSE   <- non negotiable\n"+
+"  Use Controller Desired Rot .. FALSE\n"+
+"  Max Step Height ............. 20\n"+
+"  Walkable Floor Angle ........ 50\n"+
+"\n"+
+"BP_SkaterCharacter > variables\n"+
+"  TurnRateStandstill (float) .. "+Math.round(P.turn)+"    deg/s\n"+
+"  TurnHalfSpeed (float) ....... "+Math.round(P.fall)+"    cm/s\n"+
+"  TuckTurnPenalty (float) ..... "+P.tpen.toFixed(2)+"\n"+
+"  TuckMaxSpeed (float) ........ "+Math.round(P.tuck)+"\n"+
+"  CruiseMaxSpeed (float) ...... "+Math.round(P.max)+"\n"+
+"  EdgeGrip (float) ............ "+P.grip.toFixed(1)+"\n"+
+"  BrakeDecel (float) .......... "+Math.round(P.brk)+"    cm/s2\n"+
+"  BrakeYawSwing (float) ....... "+Math.round(P.yaw)+"     deg\n"+
+"  CrashSpeedThreshold (float) . "+Math.round(P.crash)+"    cm/s\n"+
+"  RagdollRecoverTime (float) .. "+P.rec.toFixed(1)+"   s\n"+
+"\n"+
+"Turn rate formula (Tick)\n"+
+"  rate = TurnRateStandstill / (1 + Speed / TurnHalfSpeed)\n"+
+"  if tucking: rate = rate * TuckTurnPenalty\n"+
+"  if braking: rate = rate * 0.35\n"+
+"\n"+
+"Edge grip (Tick, after Add Movement Input)\n"+
+"  v    = Velocity\n"+
+"  fwd  = ActorForward dot v ;  lat = ActorRight dot v\n"+
+"  lat  = lat * (1 - EdgeGrip * DeltaSeconds)     clamp >= 0\n"+
+"  Set Velocity = ActorForward*fwd + ActorRight*lat\n";
+}
+
+function writeOut(){
+  var o=document.getElementById("out");
+  o.textContent=ueText();
+  var v=document.getElementById("verdict"), msg;
+  if(P.fric>2)        msg="<b>Rolling resistance is too high.</b> You are walking, not rolling. Skating wants this under about 0.5.";
+  else if(P.grip<1.2) msg="<b>Almost no edge grip.</b> Funny for ten seconds, unplayable after that. Real skates hold an edge.";
+  else if(P.grip>10)  msg="<b>Grip is on rails.</b> No slide means no comedy and no skate feel. Come down toward 5.";
+  else if(P.fall>1200)msg="<b>Turning barely degrades with speed.</b> Going fast should feel committal. Lower the halving speed.";
+  else if(P.brk>1800) msg="<b>Brake is basically instant.</b> That kills every hazard decision. A T-stop should take about a second.";
+  else                msg="<b>This is in the pocket.</b> Skate the slalom, then take the Bean at full speed and try to T-stop out of it.";
+  v.innerHTML=msg;
+}
+
+document.getElementById("copy").addEventListener("click",function(){
+  var t=ueText();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){
+      var b=document.getElementById("copy"); var o=b.textContent;
+      b.textContent="Copied"; setTimeout(function(){b.textContent=o;},1200);
+    });
+  } else {
+    var ta=document.createElement("textarea");
+    ta.value=t; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
+  }
+});
+
+document.getElementById("csv").addEventListener("click",function(){
+  var rows=["Speed,TurnRate"];
+  for(var s=0;s<=1400;s+=50) rows.push(s+","+turnRateAt(s).toFixed(3));
+  var blob=new Blob([rows.join("\n")],{type:"text/csv"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="CV_TurnRateBySpeed.csv";
+  a.click();
+});
+
+fit(); syncUI(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

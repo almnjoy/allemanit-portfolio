@@ -1,0 +1,1 @@
+{"name": "CrackTown: Cops & Drugs", "short_name": "CrackTown", "start_url": "./", "display": "standalone", "background_color": "#101e30", "theme_color": "#101e30", "icons": [{"src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}], "scope": "./"}

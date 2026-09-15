@@ -1,0 +1,79 @@
+---
+import Base from '../../layouts/Base.astro';
+// Public play page. The games are static folders under public/play/<slug>/ and open in
+// a new tab; nothing runs on this page. Same copies that live in the MadeForMeAI
+// workspace Games tab (2026-09-15 Codex releases, path-adapted for subfolders).
+const games = [
+  {
+    id: 'life-as-dustin', title: 'Life as Dustin', href: '/play/life-as-dustin/', shot: '/games/life-as-dustin.jpg',
+    eyebrow: '01 / A small day at the desk',
+    blurb: 'Grab a coffee. Poke around my pretend computer. Give the AI crew a job, then call it a day.',
+    meta: '3D desk · Solo · Mouse or touch · Resets on reload',
+    notes: 'Click the computer to get started. Coffee, calls, and agent work are all pretend. Has its own sound and reduced-motion buttons. Needs WebGL.',
+    cta: 'Pull up a chair',
+  },
+  {
+    id: 'cracktown', title: 'CrackTown: Cops & Drugs', href: '/play/cracktown/', shot: '/games/cracktown-board.jpg',
+    eyebrow: '02 / A very different kind of workday',
+    blurb: 'A cheeky crime-themed board game. Roll, trade, build your corner of town, and try to outplay the table.',
+    meta: 'Strategy · Solo vs a bot, or pass-and-play up to four · Saves in this browser',
+    notes: 'Quick table starts you against one bot to 8 Respect. Custom table keeps the full 12-Respect rules and lets you pick opponents and a map. Online rooms are off in this copy. Satire with abstract tokens; no real anything.',
+    cta: 'Take a seat',
+  },
+  {
+    id: 'skate-feel', title: 'SkateDemo feel prototype', href: '/play/skate-feel/', shot: '/games/skate-feel.jpg',
+    eyebrow: '03 / Not a game yet, a feel',
+    blurb: 'The tuning rig for the inline-skating party game. Coast, carve, T-stop, eat it. Every number is a slider.',
+    meta: 'Keyboard only · Desktop · W stride, A/D steer, Shift tuck, Space T-stop, E eat it, R reset',
+    notes: 'This is the M1 pre-tune prototype: an empty plane, a slalom, and the momentum model that the Unreal build copies. If it is fun here with nothing to do, the game has a chance. If it is not, it gets fixed here first.',
+    cta: 'Push off',
+  },
+];
+---
+<Base
+  title="Play | Games | AllemanIT"
+  description="Two browser games and one feel prototype. No signup, no install: a first-person day at Dustin's desk, a hex board game about a very crooked town, and the skating tuning rig."
+  image="https://allemanit.com/games/cracktown-board.jpg"
+  url="https://allemanit.com/games/play/"
+>
+  <Fragment slot="head"><link rel="canonical" href="https://allemanit.com/games/play/" /></Fragment>
+
+  <section class="container-x pt-10 pb-6">
+    <a href="/games/" class="text-sm text-white/60 hover:text-white">← The games write-up</a>
+    <p class="mt-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Games / play</p>
+    <h1 class="mt-2 text-4xl font-extrabold text-white sm:text-5xl">Not everything has to be work.</h1>
+    <p class="mt-4 max-w-3xl text-lg text-white/70">Two browser games and one tuning rig. No signup, nothing to install, nothing phones home. Each opens in its own tab and has its own sound and motion controls.</p>
+  </section>
+
+  <section class="container-x py-6">
+    <div class="grid gap-6 lg:grid-cols-3">
+      {games.map((g) => (
+        <article id={g.id} class="card flex flex-col overflow-hidden">
+          <a href={g.href} target="_blank" rel="noopener" aria-label={`Play ${g.title}`} class="block">
+            <img src={g.shot} alt={g.title} loading="lazy" decoding="async" class="aspect-[16/10] w-full object-cover object-top" />
+          </a>
+          <div class="flex flex-1 flex-col p-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">{g.eyebrow}</p>
+            <h2 class="mt-2 text-xl font-bold text-white">{g.title}</h2>
+            <p class="mt-2 text-white/75">{g.blurb}</p>
+            <p class="mt-2 text-xs text-white/45">{g.meta}</p>
+            <p class="mt-3 flex-1 text-sm text-white/60">{g.notes}</p>
+            <a href={g.href} target="_blank" rel="noopener" data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project={`play-${g.id}`} data-umami-event-placement="games-play"
+              class="mt-5 inline-flex w-fit items-center gap-1.5 rounded-lg bg-brand-orange px-3.5 py-2 text-sm font-semibold text-white hover:opacity-90">{g.cta} ↗</a>
+          </div>
+        </article>
+      ))}
+    </div>
+    <p class="mt-6 max-w-3xl text-sm text-white/55">Life as Dustin resets when you reload. CrackTown saves on this browser under its own key. The skate rig saves nothing. Desktop is the better seat for all three; the board game is the one that also works on a phone.</p>
+  </section>
+
+  <section class="container-x py-10">
+    <div class="card flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-xl font-bold text-white">Want the story behind them?</h2>
+        <p class="mt-1 text-sm text-white/60">The other three projects, the design docs, and how a Blender script makes the art.</p>
+      </div>
+      <a href="/games/" class="btn btn-primary text-sm">Read the write-up</a>
+    </div>
+  </section>
+</Base>

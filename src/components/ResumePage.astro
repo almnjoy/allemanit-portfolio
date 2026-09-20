@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import { links, credentials, skills } from '../data/resume';
+const { angle } = Astro.props;
+const canonical = `https://allemanit.com${angle.slug}`;
+---
+<Base title={angle.title} description={angle.description} url={canonical}>
+  <Fragment slot="head">
+    <link rel="canonical" href={canonical} />
+    {!angle.indexable && <meta name="robots" content="noindex, follow" />}
+  </Fragment>
+
+  <section class="relative overflow-hidden">
+    <div class="container-x grid items-center gap-6 pt-12 pb-8 lg:grid-cols-2 lg:gap-4">
+      <div class="order-2 lg:order-1">
+        <p class="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">{angle.eyebrow}</p>
+        <h1 class="text-6xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl">DUSTIN<br />ALLEMAN</h1>
+        <p class="mt-6 max-w-md text-lg text-white/70">{angle.blurb}</p>
+        <div class="mt-7 flex flex-wrap items-center gap-3">
+          <a href={angle.pdf} target="_blank" rel="noopener" data-umami-event={angle.umami} class="btn btn-primary text-sm">Download resume (PDF)</a>
+          <a href="/contact" class="btn btn-ghost text-sm">Get in touch</a>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {links.map((l) => (<a href={l.href} target="_blank" rel="noopener" class="text-white/55 underline-offset-4 hover:text-white hover:underline transition">{l.label}</a>))}
+        </div>
+      </div>
+      <div class="order-1 lg:order-2">
+        <img src="/me.jpg" alt="Dustin Alleman" class="mx-auto w-full max-w-md object-cover lg:max-w-none" style="aspect-ratio:4/5; -webkit-mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%);" />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-10">
+    <div class="card p-8">
+      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">{angle.why.eyebrow}</p>
+      <h2 class="mt-3 text-2xl font-bold text-white sm:text-3xl">{angle.why.heading}</h2>
+      <p class="mt-4 max-w-3xl text-white/70 leading-relaxed">{angle.why.body}</p>
+      <p class="mt-3 max-w-3xl text-sm text-white/50" set:html={angle.why.note}></p>
+    </div>
+  </section>
+
+  <section class="container-x py-6">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {angle.stats.map((s) => (
+        <div class="card p-6 text-center">
+          <div class="text-4xl font-extrabold text-white">{s.n}</div>
+          <div class="mt-1 text-sm text-white/55">{s.l}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-x py-10">
+    <h2 class="text-2xl font-bold text-white">What I work in</h2>
+    <p class="mt-1 text-white/60">The short version. The long version is the rest of this site.</p>
+    <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {skills.map((s) => (
+        <div class="card p-5">
+          <p class="text-xs uppercase tracking-wider text-brand-orange">{s.k}</p>
+          <p class="mt-2 text-sm text-white/70 leading-relaxed">{s.v}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-x py-10">
+    <h2 class="text-2xl font-bold text-white">{angle.timelineHeading}</h2>
+    <p class="mt-1 text-white/60">{angle.timelineSub}</p>
+    <ol class="relative mt-8 ml-3 border-l border-white/15">
+      {angle.timeline.map((t) => (
+        <li class="relative mb-8 pl-7 last:mb-0">
+          <span class="absolute -left-1.5 top-1 h-3 w-3 rounded-full bg-brand-orange"></span>
+          <div class="text-xs font-semibold uppercase tracking-wider text-brand-orange">{t.year}</div>
+          <div class="mt-0.5 font-bold text-white">{t.title}</div>
+          <p class="mt-1 max-w-2xl text-sm text-white/60">{t.body}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  {angle.ciscoLive && (
+    <section class="container-x py-6">
+      <div class="card p-6">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">{angle.ciscoLive.eyebrow}</p>
+        <h2 class="mt-2 text-2xl font-bold text-white">{angle.ciscoLive.heading}</h2>
+        <p class="mt-3 max-w-3xl text-white/70 leading-relaxed">{angle.ciscoLive.body}</p>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+          <img src="/cisco-live-2.jpg" alt="Cisco Live 2025 keynote" loading="lazy" class="aspect-video w-full rounded-xl border border-white/10 object-cover" />
+          <img src="/cisco-live-1.jpg" alt="Cisco Crisis Response vehicle at Cisco Live" loading="lazy" class="aspect-video w-full rounded-xl border border-white/10 object-cover" />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="container-x py-10">
+    <div class="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
+      <div>
+        <h2 class="text-2xl font-bold text-white">About</h2>
+        {angle.about.map((p) => (<p class="mt-4 text-white/70 leading-relaxed">{p}</p>))}
+        <p class="mt-4 text-white/50 leading-relaxed text-sm">
+          Off the clock: Chicago lakefront skates, biking, anything outdoors, a Jeep with a permanent project list, and whatever the lab breaks that week.
+        </p>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {credentials.map((c) => (
+          <div class="card p-4">
+            <p class="text-xs uppercase tracking-wider text-white/40">{c.k}</p>
+            <p class="mt-1 text-white/85">{c.v}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x py-10">
+    <div class="card flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center">
+      <div>
+        <h2 class="text-xl font-bold text-white">The work behind the resume</h2>
+        <p class="mt-1 text-sm text-white/60">Every project, lab, and product on this site is mine, end to end.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="/#projects" class="btn btn-primary text-sm">See the projects</a>
+        <a href="/packet-labs/" class="btn btn-ghost text-sm">Try the packet labs</a>
+      </div>
+    </div>
+  </section>
+</Base>

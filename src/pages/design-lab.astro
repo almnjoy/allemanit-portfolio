@@ -1,13 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
 import { production, clients, counts } from '../data/design-lab';
+import { counts as marketplaceCounts } from '../data/marketplace';
 
 const latest = [...clients, ...production].slice(0, 4);
 const doors = [
-  { href: '/design-lab/sites/', img: 'quickit-v2', eyebrow: `${counts.sites} sites`, title: 'What shipped', blurb: 'Production, client, family and personal builds, grouped and filterable by stack.' },
-  { href: '/design-lab/style-engine/', img: 'style-engine', eyebrow: `${counts.skins} skins`, title: 'The style engine', blurb: 'One markup tree, thirty-two named styles, a dark mode switch. Arrow keys cycle. Two themes are my real brands.' },
-  { href: '/design-lab/process/', img: 'quickit-c02', eyebrow: 'Process', title: 'The design process', blurb: 'How I got here, how I build a brand guide, and the parts I stopped rebuilding. Plus the versions that lost.' },
-  { href: '/design-lab/opus/', img: 'opusdiecast-vault', eyebrow: 'Featured project', title: 'Opus\'s Diecast Emporium', blurb: 'A public catalogue with a private vault behind it. Cars get in by filming the shelf.' },
+  { href: '/design-lab/sites/', img: '/design-lab/shots/quickit-v2.jpg', eyebrow: `${counts.sites} sites`, title: 'What shipped', blurb: 'Production, client, family and personal builds, grouped and filterable by stack.' },
+  { href: '/design-lab/marketplace/', img: '/design-lab/marketplace/door.png', eyebrow: `${marketplaceCounts.live} live listings`, title: 'Elgato Marketplace', blurb: 'Stream Deck icon sets I draw under ALMNJOY and sell on the Elgato Marketplace. Editing, networking, smart home, trucking, RPG.' },
+  { href: '/design-lab/style-engine/', img: '/design-lab/shots/style-engine.jpg', eyebrow: `${counts.skins} skins`, title: 'The style engine', blurb: 'One markup tree, thirty-two named styles, a dark mode switch. Arrow keys cycle. Two themes are my real brands.' },
+  { href: '/design-lab/process/', img: '/design-lab/shots/quickit-c02.jpg', eyebrow: 'Process', title: 'The design process', blurb: 'How I got here, how I build a brand guide, and the parts I stopped rebuilding. Plus the versions that lost.' },
+  { href: '/design-lab/opus/', img: '/design-lab/shots/opusdiecast-vault.jpg', eyebrow: 'Featured project', title: 'Opus\'s Diecast Emporium', blurb: 'A public catalogue with a private vault behind it. Cars get in by filming the shelf.' },
 ];
 ---
 <Base
@@ -34,7 +36,7 @@ const doors = [
     <div class="grid gap-5 sm:grid-cols-2">
       {doors.map((d) => (
         <a href={d.href} class="card group block overflow-hidden">
-          <img src={`/design-lab/shots/${d.img}.jpg`} alt={d.title} loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/9] w-full object-cover object-top transition group-hover:scale-[1.01]" />
+          <img src={d.img} alt={d.title} loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/9] w-full object-cover object-top transition group-hover:scale-[1.01]" />
           <div class="p-6">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">{d.eyebrow}</p>
             <h2 class="mt-1.5 text-2xl font-bold text-white">{d.title}</h2>

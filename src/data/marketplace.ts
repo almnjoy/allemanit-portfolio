@@ -124,7 +124,9 @@ export const products: Product[] = [
   {
     slug: 'wardogs-tactical-circuit',
     title: 'WARDOGS - Tactical Circuit',
-    category: 'Profiles',
+    // The listing sits under Profiles on Elgato's shelf, but it delivers the icon
+    // library. Dustin confirmed 2026-09-25; the chip describes what the buyer gets.
+    category: 'Icons',
     tagline: 'Tactical Circuit artwork for WARDOGS on a 15-key Stream Deck: infantry, vehicle, helicopter and building sets, ivory symbols on orange and blue circuits.',
     alt: 'WARDOGS Tactical Circuit cover: fifteen badge icons in ivory with orange and blue circuit bursts, labelled infantry, vehicles, heli, building, map, inventory, squad, local, tip and bribe, reject tip, fire mode, sights, bipod, map minus and map plus.',
     note: 'Independent ALMNJOY work, not an official WARDOGS, BULKHEAD or Elgato product. Button images are static and do not report live game state.',

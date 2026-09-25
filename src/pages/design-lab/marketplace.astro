@@ -1,0 +1,70 @@
+---
+import Base from '../../layouts/Base.astro';
+import { products, counts, observed, storefront } from '../../data/marketplace';
+---
+<Base
+  title="Elgato Marketplace | Design Lab | AllemanIT"
+  description={`The Stream Deck artwork I design under ALMNJOY. ${counts.live} sets live on the Elgato Marketplace, ${counts.comingSoon} not listed yet.`}
+  url="https://allemanit.com/design-lab/marketplace/"
+>
+  <Fragment slot="head"><link rel="canonical" href="https://allemanit.com/design-lab/marketplace/" /></Fragment>
+
+  <section class="container-x pt-10 pb-6">
+    <a href="/design-lab/" class="text-sm text-white/60 hover:text-white">← Design Lab</a>
+    <h1 class="mt-3 text-4xl font-extrabold text-white sm:text-5xl">{counts.total} Stream Deck sets.<br class="hidden sm:block" /> {counts.live} of them are on the Elgato Marketplace.</h1>
+    <p class="mt-4 max-w-3xl text-lg text-white/70">I draw Stream Deck artwork under ALMNJOY and sell it on the Elgato Marketplace. Every set ships as 144 x 144 PNGs with names and tags the Stream Deck search can find, so you apply the art to actions you already configured.</p>
+    <p class="mt-3 max-w-3xl text-white/60">Prices below are what each listing showed on {observed}. They are the Marketplace price, not a quote from me.</p>
+    <div class="mt-7 flex flex-wrap gap-x-8 gap-y-3 text-sm">
+      <div><span class="text-2xl font-extrabold text-white">{counts.live}</span> <span class="text-white/60">live listings</span></div>
+      <div><span class="text-2xl font-extrabold text-white">{counts.comingSoon}</span> <span class="text-white/60">not listed yet</span></div>
+      <div><span class="text-2xl font-extrabold text-white">144</span> <span class="text-white/60">px square, every key</span></div>
+    </div>
+  </section>
+
+  <section class="container-x py-8">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {products.map((p) => (
+        <article class="card group flex flex-col overflow-hidden">
+          <div class="relative">
+            {p.url
+              ? <a href={p.url} target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="elgato-marketplace" data-umami-event-placement="marketplace-cover" class="block">
+                  <img src={`/design-lab/marketplace/${p.slug}.png`} alt={p.alt} loading="lazy" decoding="async" width="960" height="480" class="aspect-[2/1] w-full object-cover" />
+                </a>
+              : <img src={`/design-lab/marketplace/${p.slug}.png`} alt={p.alt} loading="lazy" decoding="async" width="960" height="480" class="aspect-[2/1] w-full object-cover" />}
+            {p.status === 'coming-soon' && <span class="tag absolute right-3 top-3 bg-ink-950/80">Coming soon</span>}
+          </div>
+          <div class="flex flex-1 flex-col p-4">
+            <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+              {p.url
+                ? <a href={p.url} target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="elgato-marketplace" data-umami-event-placement="marketplace-title" class="font-bold text-white hover:text-brand-orange">{p.title}</a>
+                : <span class="font-bold text-white">{p.title}</span>}
+              <span class="flex items-center gap-1.5">
+                {p.category && <span class="tag">{p.category}</span>}
+                {p.version && <span class="tag">v{p.version}</span>}
+              </span>
+            </div>
+            <p class="mt-1.5 text-sm text-white/65">{p.tagline}</p>
+            {p.note && <p class="mt-2 text-xs text-white/40">{p.note}</p>}
+            <div class="mt-auto flex items-end justify-between gap-3 pt-4">
+              {p.price
+                ? <div>
+                    <span class="block text-lg font-bold text-white">{p.price}</span>
+                    <span class="block text-[11px] uppercase tracking-wider text-white/40">current price on Marketplace</span>
+                  </div>
+                : <span class="text-sm text-white/50">Not on the Marketplace yet.</span>}
+              {p.url && <a href={p.url} target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="elgato-marketplace" data-umami-event-placement="marketplace-card" class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-brand-orange px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-brand-orange/85">View on Marketplace ↗</a>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-x py-8">
+    <div class="card p-6">
+      <h2 class="text-xl font-bold text-white">What you get, and what you do not</h2>
+      <p class="mt-2 max-w-3xl text-sm text-white/60">These are artwork products. Unless a listing says otherwise, they include no profiles, plugins, keybindings or integrations, and you apply the images to actions you configure yourself. Nothing here detects or displays live status. All of it needs Stream Deck software and a compatible device. The game sets are original ALMNJOY artwork and are not affiliated with any game publisher.</p>
+      <a href={storefront} target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="elgato-marketplace" data-umami-event-placement="marketplace-storefront" class="mt-4 inline-block text-sm font-semibold text-brand-orange hover:underline underline-offset-4">The ALMNJOY storefront on Elgato Marketplace ↗</a>
+    </div>
+  </section>
+</Base>

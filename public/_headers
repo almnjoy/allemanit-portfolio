@@ -1,3 +1,4 @@
-# Keep the *.pages.dev twin out of the index; the custom domain is canonical.
-https://:project.pages.dev/*
+# allemanit.com deploys as a Cloudflare Worker with static assets (wrangler deploy), not Pages.
+# The workers.dev twin is a full duplicate of the site; keep it out of the index.
+https://allemanit-portfolio.duallema.workers.dev/*
   X-Robots-Tag: noindex

@@ -12,8 +12,26 @@ const { Content } = await post.render();
 const d = post.data;
 const fmt = (x) => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 const titleHtml = d.title.replace(/\*(.+?)\*/g, '<em>$1</em>');
+const pageUrl = new URL(`/blog/${post.slug}/`, Astro.site).href;
+const coverAbs = d.cover ? new URL(d.cover, Astro.site).href : 'https://allemanit.com/og.png';
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'BlogPosting', '@id': `${pageUrl}#post`, headline: d.title, description: d.description, image: coverAbs,
+      datePublished: d.date.toISOString(), dateModified: (d.updated || d.date).toISOString(), keywords: d.tags.join(', '),
+      author: { '@id': 'https://allemanit.com/#dustin' }, publisher: { '@id': 'https://allemanit.com/#org' },
+      mainEntityOfPage: pageUrl, url: pageUrl },
+    { '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://allemanit.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://allemanit.com/blog/' },
+      { '@type': 'ListItem', position: 3, name: d.title, item: pageUrl } ] },
+    ...(d.youtube ? [{ '@type': 'VideoObject', name: d.title, description: d.description,
+      thumbnailUrl: `https://i.ytimg.com/vi/${d.youtube}/maxresdefault.jpg`, uploadDate: d.date.toISOString(),
+      embedUrl: `https://www.youtube-nocookie.com/embed/${d.youtube}`, contentUrl: `https://www.youtube.com/watch?v=${d.youtube}` }] : []),
+  ],
+};
 ---
-<Editorial title={`${d.title} — The Dispatch`} description={d.description}>
+<Editorial title={`${d.title} — The Dispatch`} description={d.description} image={coverAbs} type="article" jsonld={ld}>
   <div class="ed-mast">
     <a class="ed-name" href="/blog">ALMNJOY <b>DISPATCH</b></a>
     <div class="ed-meta">Networking · AI · Homelab</div>
@@ -32,4 +50,17 @@ const titleHtml = d.title.replace(/\*(.+?)\*/g, '<em>$1</em>');
   </article>
 
   <span class="ed-footnote">Got a take or a correction? <a href="/contact">Hit me →</a> · <a href="/daily">The daily log →</a></span>
+  <script is:inline define:vars={{ slug: post.slug }}>
+    // Tag every external link in a post as an outbound-click so Umami shows where readers go next.
+    document.querySelectorAll('.ed-prose a[href^="http"]').forEach((a) => {
+      try {
+        const u = new URL(a.href);
+        if (u.hostname === location.hostname || a.hasAttribute('data-umami-event')) return;
+        a.setAttribute('data-umami-event', 'outbound-click');
+        a.setAttribute('data-umami-event-site', 'allemanit');
+        a.setAttribute('data-umami-event-destination', u.hostname.replace(/^www\./, ''));
+        a.setAttribute('data-umami-event-placement', 'blog-' + slug);
+      } catch (e) {}
+    });
+  </script>
 </Editorial>

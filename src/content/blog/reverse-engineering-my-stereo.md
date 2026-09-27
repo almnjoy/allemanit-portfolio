@@ -8,6 +8,7 @@ featured: true
 draft: false
 cover: /blog/stereo/horizon-on-dash.jpg
 coverAlt: My Horizon design running on the Stinger HORIZON12 in my Jeep
+youtube: cAuzYySCzKg
 ---
 
 Like all good Jeep owners, I want to tinker, break things, and find new cool things to put in my Jeep to make it mine.

@@ -2,10 +2,10 @@
 // Dark editorial shell: loads Fraunces + Spectral, provides the .ed design system.
 // Used by /blog, /blog/[slug], and /daily. Styles are is:global (scoped under .ed) so
 // they also attach to JS-injected content on /daily.
-const { title, description } = Astro.props;
+const { title, description, image, type, jsonld } = Astro.props;
 import Base from './Base.astro';
 ---
-<Base title={title} description={description}>
+<Base title={title} description={description} image={image} type={type} jsonld={jsonld}>
   <Fragment slot="head">
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
   </Fragment>

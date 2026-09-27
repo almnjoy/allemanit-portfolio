@@ -1,0 +1,13 @@
+# allemanit.com
+User-agent: *
+Allow: /
+
+# Training-only crawlers (search and answer bots stay allowed)
+User-agent: GPTBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /
+User-agent: Applebot-Extended
+Disallow: /
+
+Sitemap: https://allemanit.com/sitemap-index.xml

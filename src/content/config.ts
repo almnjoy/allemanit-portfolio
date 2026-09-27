@@ -34,6 +34,8 @@ const blog = defineCollection({
     draft: z.boolean().default(false),
     cover: z.string().optional(),
     coverAlt: z.string().optional(),
+    youtube: z.string().optional(), // YouTube video id, emits VideoObject schema
+    updated: z.coerce.date().optional(),
   }),
 });
 

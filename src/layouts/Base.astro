@@ -8,7 +8,22 @@ const {
   image = 'https://allemanit.com/og.png',
   url = 'https://allemanit.com/',
   favicon = '/favicon.png',
+  type = 'website',
+  noindex = false,
+  jsonld = null,
 } = Astro.props;
+// Self-referencing canonical from the real page URL (site is set in astro.config); an explicit url prop wins.
+const canonical = url !== 'https://allemanit.com/' ? url : new URL(Astro.url.pathname, Astro.site).href;
+const imageAbs = image.startsWith('http') ? image : new URL(image, Astro.site).href;
+const siteLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Person', '@id': 'https://allemanit.com/#dustin', name: 'Dustin Alleman', url: 'https://allemanit.com/', jobTitle: 'Network Engineer', image: 'https://allemanit.com/me.jpg',
+      sameAs: ['https://github.com/almnjoy','https://www.linkedin.com/in/dustin-alleman/','https://www.youtube.com/@Almnjoy','https://www.instagram.com/alleman_joyy/'] },
+    { '@type': 'Organization', '@id': 'https://allemanit.com/#org', name: 'AllemanIT', url: 'https://allemanit.com/', logo: 'https://allemanit.com/logo-mark.png', founder: { '@id': 'https://allemanit.com/#dustin' } },
+    { '@type': 'WebSite', '@id': 'https://allemanit.com/#site', url: 'https://allemanit.com/', name: 'AllemanIT', publisher: { '@id': 'https://allemanit.com/#org' } },
+  ],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -19,15 +34,20 @@ const {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:site_name" content="AllemanIT" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content={image} />
-    <meta property="og:url" content={url} />
+    <meta property="og:type" content={type} />
+    <meta property="og:image" content={imageAbs} />
+    <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={imageAbs} />
+    <script type="application/ld+json" set:html={JSON.stringify(siteLd)} />
+    {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <slot name="head" />

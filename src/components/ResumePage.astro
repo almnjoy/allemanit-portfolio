@@ -4,11 +4,7 @@ import { links, credentials, skills } from '../data/resume';
 const { angle } = Astro.props;
 const canonical = `https://allemanit.com${angle.slug}`;
 ---
-<Base title={angle.title} description={angle.description} url={canonical}>
-  <Fragment slot="head">
-    <link rel="canonical" href={canonical} />
-    {!angle.indexable && <meta name="robots" content="noindex, follow" />}
-  </Fragment>
+<Base title={angle.title} description={angle.description} url={canonical} noindex={!angle.indexable}>
 
   <section class="relative overflow-hidden">
     <div class="container-x grid items-center gap-6 pt-12 pb-8 lg:grid-cols-2 lg:gap-4">

@@ -1,105 +1,116 @@
 ---
 title: Reverse engineering my stereo
 date: 2026-09-14
-description: I bought a Stinger HORIZON12 for my Jeep and wanted it to actually be mine. Here is how I used AI to reverse engineer a locked Android head unit, what fought me, and what turned out to be the fun part.
+description: I wanted to tinker with my Jeep and make it mine. One question about my Stinger stereo turned into two months of Android, firmware, Ethernet dongles, and figuring out what I had broken.
 kicker: Build log, the Jeep
 tags: [android, jeep, hardware, reverse-engineering, ai]
 featured: true
 draft: false
 cover: /blog/stereo/horizon-on-dash.jpg
-coverAlt: My Horizon launcher running on the Stinger HORIZON12 in the Jeep
+coverAlt: My Horizon design running on the Stinger HORIZON12 in my Jeep
 ---
 
-<!-- video slot: YouTube embed goes here when the walkthrough is cut. Swap the cover for it. -->
+Like all good Jeep owners, I want to tinker, break things, and find new cool things to put in my Jeep to make it mine.
 
-I purchased the Stinger HORIZON12 for my Jeep. It's neat. Twelve-inch screen, runs Android, looks like a tablet glued to the dash. Anyways, I wanted it to really be mine, with my own look and feel. Here's how AI helped me reverse engineer it.
+A few years ago, I picked up a Stinger HORIZON12. Outside of the ridiculous price point, I was excited about having what was essentially a tablet in the middle of my car. I wanted to see what it could do. Use all the fun features, buy more things, plug them all in.
 
-The catch: it's a locked box. No developer options, no ADB, no way to install anything the manufacturer didn't put there. I wanted my own home screen on it. That turned into a month of the stereo saying no.
+But after a year and a half of using it, what was a killer was that it felt no different than any other radio. It changed my volume up and down, and it played CarPlay for me.
 
-## What I actually wanted
+![The stock Stinger quick launch menu](/blog/stereo/stock-quick-launch.jpg)
+*All those features, and I was mostly using volume and CarPlay.*
 
-Not much, on paper. A launcher I designed, showing what the truck is doing, that still hands off to the real apps when I tap them. Media plays the SD card, the 4x4 tile opens the vehicle app, the camera tile opens the reverse cam. A clock, a Jeep cutout, a dock. The stock UI is fine. I just wanted mine.
+## What operating system does this stereo run on?
 
-![The stock Stinger quick launch menu, a white grid of colored squares](/blog/stereo/stock-quick-launch.jpg)
-*The stock quick launch. Works fine. Not mine.*
+That was the question. I opened ChatGPT on my phone, pointed it at the radio, took a picture, and asked.
 
-## The attack
+Android underneath, with Stinger's own interface on top. Basically a giant Android tablet bolted to the dash.
 
-It started with one question to ChatGPT: "What OS do we think the Stinger radio runs on?"
+That sent me down a two-month rabbit hole. Android, the CAN bus system in my car, the PAC module, almost diving into the hardware itself and the UART port.
 
-It knew me.
+But that's a whole different rabbit hole.
 
-> Assuming we're talking about one of the current Stinger infotainment radios, HEIGH10+/HORIZON10/etc., I'd put money on embedded Android underneath, with Stinger's custom launcher/UI locked over it.
->
-> But you, Dustin, aren't really asking me "what OS does my radio run?"
-> You're asking me: "How do we break this fucking thing open and make it ours?" 😂
+<iframe src="https://www.youtube-nocookie.com/embed/cAuzYySCzKg" title="I Made My Jeep's Stereo My Own | Stinger HORIZON12" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;margin:24px 0;"></iframe>
 
-Yes. Yes I was.
+[Watch the walkthrough on YouTube](https://youtu.be/cAuzYySCzKg).
 
-## The plan
+## Pick this apart
 
-Download a firmware update, reverse engineer it with Claude, tweak it, add my own backdoor, and get inside. It's Android. Once you understand it, it's just making an app, right?
+I went to the Stinger website, downloaded their firmware update, put it in a folder, and pointed Claude at it.
 
-Mostly right. Stinger ships real updates as a zip on a USB stick, and the unit trusts them because they're signed. Turns out the signing key they check against is a public one, so I could sign my own. I took their actual update, left their flash script alone byte for byte, and added one step at the end: install my launcher and open a network ADB port. Same menu, same USB stick, same progress bar the dealer would see.
+Pick this apart. Help me figure out how I can put this design here into that folder there.
 
-The one detail that mattered: this unit is system-as-root, so the system partition mounts somewhere different than every forum post assumes. Every generic "copy the APK into /system" script writes to a path that doesn't exist on this box. Once that clicked, it just worked.
+We started picking through it and found the certificate the radio used to check its updates. Its public key matched one of Android's test keys. A public key being visible isn't the weird part. The problem was that the matching private key was public too.
 
-![Android recovery log on the stereo showing the Horizon inject step failing to mount /system](/blog/stereo/recovery-mount-fail.jpg)
-*The moment it clicked. Stinger's whole update runs clean, then my one added step dies on "mount /system: No such volume." There is no /system on this thing.*
+These are AOSP, Android Open Source Project, test keys. They're literally there for anyone to use.
 
-## Issues
+So that was a big miss by the manufacturer. They should have replaced those test keys with their own signing keys, keeping the private key private, before this thing ever shipped.
 
-Running Claude on my desktop and my laptop at the same time gave me two conflicting plans and two sets of thoughts, and at one point I was breaking a firmware version my radio wasn't even running yet. Half the headaches cleared once I just did the update first, then the break.
+![The test-key explanation from my finished video](/blog/stereo/key-explanation-final.jpg)
+*The matching private key was public too. That was the problem.*
 
-Keeping the backdoor open. It drops on every little tweak and reboot.
+## It looked terrible
 
-Making my app take over the entire screen, not just a reskin of the existing menus.
+I sat there with Claude, bundled it up, put my little design on there, and threw it onto the radio.
 
-Sitting in my car for hours on a mobile hotspot with a USB-to-Ethernet dongle plugged into the dash.
+It looked terrible.
 
-![The back of the head unit pulled out of the dash, harness and USB ports exposed](/blog/stereo/behind-the-dash.jpg)
-*Dash apart, again. The USB ports back there are where the Ethernet dongle lives now.*
+Half of it didn't show up right. Some of it was copied over. It was ugly. Not as easy as I thought for this one-day project.
 
-## The fun part
+But we kept iterating.
 
-Finding out how much networking was involved. Opening port 5555, plugging Ethernet into a car stereo, nmap scans, running DHCP for a radio. All fun shit.
+## I now have a network connection to my stereo
 
-Designing the way I wanted it to look and reiterating a dozen times until it felt right.
+I enabled ADB, Android Debug Bridge, so my laptop could connect directly to the radio.
 
-Just knowing I can do it.
+We got these little USB-to-Ethernet dongles. I ran a DHCP server on my laptop, plugged the laptop into the stereo, and gave the stereo an IP address.
 
-## Side quest
+And there we have it. I now have a network connection to my stereo.
 
-I thought I was going to have to go in through the UART port, so I bought the gear for it. Then I decided not to destroy a two thousand dollar radio. I'm still going to play with that idea on other hardware. I'm excited to open my mind to that level of engineering and physical programming.
+Port 5555 was open from the little script we'd added. I could sit there and read what was on this thing.
 
-![The main board inside the head unit with the serial header exposed](/blog/stereo/board-serial-header.jpg)
-*Cracked it open far enough to find the header. Then put it back together.*
+![The head unit out of the dash with its wiring and ports exposed](/blog/stereo/behind-the-dash.jpg)
+*A USB-to-Ethernet dongle, my laptop, and an IP address for the stereo.*
 
-## Where it stands
+## Hey, Claude, have some fun
 
-Horizon is a selectable home app on the dash now. Clock is live, dock launches the real apps, the Jeep cutout is mine. Next is live vehicle data on the screen and the rest of the design screens.
+That was where I let it loose. Start figuring this out and get my thing in place.
 
-Man, what else can I reverse engineer.
+Like every good AI project, I have learned that if you make assumptions, or think it knows what you know and wants to do what you want, you're not going to have the same goal.
 
----
+That's exactly what started happening. It made changes, tried to fix its own issues, and broke things. It disabled the USB ports. It deleted part of the filesystem trying to get my music to play. It tried to factory reset some things and screwed up some other parts.
 
-## Appendix: the Android stuff I had to learn
+All I could do at that point was laugh.
 
-I'm a network guy. Before this I had never opened an Android firmware image or built an APK. Here's the short version of what I picked up, in case you're standing where I was a month ago.
+So I factory reset it. Then I planned everything I could.
 
-![The System Information screen on the stereo showing Android 9, Telechips build strings and PAC integration](/blog/stereo/system-information.jpg)
-*Android 9 on a Telechips chip, with the PAC integration for the Jeep's steering wheel and climate stuff. This screen told me more than Stinger's website did.*
+## Let's start documenting what's actually on this thing
 
-**A firmware update is just a zip.** That's it. Stinger's wrapper has a bootloader image, a system image, and an inner `update.zip`. The file that actually does the work is `META-INF/com/google/android/updater-script`. It's a plain text script. Read it before you touch anything, because it tells you exactly what the manufacturer's update does and in what order. I spent a while being scared of that zip. I didn't need to be.
+I started researching AOSP, Android, and the vehicle modules. I put Claude in research mode and had it use read-only commands to start documenting and mapping what was already on the stereo.
 
-**Signing is the whole gate.** Recovery checks the zip against a certificate baked into the recovery image. On this unit that cert is the AOSP test key, which is public, so anyone can sign with `signapk` and the radio will happily eat it. My advice: figure out the cert first. If it's a real private key you're done before you start. If it's the test key, everything else is just work.
+Let's see what they use. How do they do things? Where do they put things?
 
-**System-as-root got me.** Newer Android builds don't have a separate `/system` partition anymore. The whole system image mounts at `/system_root` and `/system` lives inside it. So every script on every forum that says "mount /system and copy the APK" fails here with "No such volume," which is the photo up above. The real path is `/system_root/system/...`. That one line cost me the most time in this whole project.
+This honestly answered a lot of questions. It helped me understand that it wasn't one little app displaying everything. There were multiple apps running. Some proprietary, some open source, some random things.
 
-**Where apps live.** `/system/app/` for normal preinstalled apps, `/system/priv-app/` for ones that need privileged permissions. I dropped my signed APK in `/system/app/Horizon.apk` and on the next boot it was a system app like everything else Stinger shipped.
+![The stereo's System Information screen](/blog/stereo/system-information.jpg)
+*Figuring out what was already there before making more changes.*
 
-**A launcher is just an app.** The only thing that makes it a home screen is the main activity declaring `android.intent.category.HOME` and `DEFAULT`. Android then lists it when you pick a home app. The difference between "taking over the entire screen" and "reskinning the stock menus" is the difference between being the HOME activity and being an overlay on top of theirs. I wanted HOME.
+The picture in my head was a tablet running apps. Those apps talk to a module, and that module talks to the car's network, the CAN bus. Controllers and sensors sending data around, like little network cables connecting the things in the car so they can talk to each other.
 
-**The backdoor is one line.** `service.adb.tcp.port=5555` in `build.prop` and ADB listens on the network at boot. No USB device mode needed, which is good because this unit doesn't have one. Get the radio an IP (USB-to-Ethernet dongle, my laptop running DHCP), then `adb connect <ip>:5555` and `adb install -r Horizon.apk`. That took app updates from an eight minute reflash to a few seconds. Worth every hour it took to get it open.
+That's how the aftermarket stereo gets information like vehicle speed, oil temperature, and what gear I'm in.
 
-**What can and can't brick it.** Installing an app into the system image can't. Reflashing the bootloader can. I keep the original firmware archived and I never re-run the bootloader step. Out of warranty, own risk, all that. Don't do this on a radio you can't afford to replace.
+## One step closer to making it mine
+
+Here's what I have: my own design. It still follows some of the original Stinger menus. Part of that was finding ways to wire in my own apps as I started making more things and trying my own designs and styles.
+
+![A design screen shown at the end of my finished walkthrough](/blog/stereo/design-screen-final.jpg)
+*One of the design screens from the walkthrough. Still making it mine.*
+
+It's one step closer to making all of it feel like mine. The radio, the head unit, the car, everything.
+
+Thanks for following along.
+
+## Build notes and guide
+
+I'm putting the project files and build notes together as a guide for anyone who wants to follow the process in more detail.
+
+[Horizon build guide on GitHub](https://github.com/almnjoy/HorizonsPublicGuide).

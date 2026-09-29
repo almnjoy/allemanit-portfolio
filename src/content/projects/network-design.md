@@ -18,7 +18,7 @@ I eventually repurposed an old server into a dedicated Cisco Modeling Labs (CML)
 
 ## Two things that came out of it
 
-The same curiosity turned into a couple of projects worth their own pages. [MerakiNOC](/projects/merakinoc) was my take on automating configuration and monitoring through the Meraki API and a custom dashboard. [netadmintoolbox.com](/projects/netadmintoolbox) packages the everyday utilities and troubleshooting I teach into one fast site.
+The same curiosity turned into a couple of projects worth their own pages. MerakiNOC was my take on automating configuration and monitoring through the Meraki API and a custom dashboard. [Packet Labs](/packet-labs/) (the old netadmintoolbox.com) packages the everyday utilities and troubleshooting I teach into one fast site.
 
 ## Teaching it
 

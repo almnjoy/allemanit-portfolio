@@ -2,19 +2,47 @@
 import Base from '../../layouts/Base.astro';
 import Thumb from '../../components/Thumb.astro';
 import { getCollection } from 'astro:content';
+import { reposFor, repoName, repoId } from '../../data/repos';
+
+// Projects with a directUrl (Games, Design Lab, Packet Labs) have a real home elsewhere;
+// no duplicate page here. _redirects sends the old URLs to that home.
 export async function getStaticPaths() {
-  const projects = (await getCollection('projects')).filter((p) => p.data.listed !== false);
-  return projects.map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+  const listed = (await getCollection('projects')).filter((p) => p.data.listed !== false).sort((a, b) => a.data.order - b.data.order);
+  const pages = listed.filter((p) => !p.data.directUrl);
+  return pages.map((p) => ({ params: { slug: p.slug }, props: { project: p, listed } }));
 }
-const { project } = Astro.props;
+const { project, listed } = Astro.props;
 const { Content } = await project.render();
 const d = project.data;
+const href = (p) => p.data.directUrl ?? `/projects/${p.slug}/`;
+
+// Related = most shared tags, then nearest in order. Next = the one after this in order.
+const others = listed.filter((p) => p.slug !== project.slug);
+const related = others
+  .map((p) => ({ p, score: p.data.tags.filter((t) => d.tags.includes(t)).length * 10 - Math.abs(p.data.order - d.order) }))
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3)
+  .map((x) => x.p);
+const idx = listed.findIndex((p) => p.slug === project.slug);
+const next = listed[(idx + 1) % listed.length];
+const oss = reposFor(project.slug);
+const pageUrl = `https://allemanit.com/projects/${project.slug}/`;
+const ogImage = d.cardImage ?? d.image;
+const ld = { '@context': 'https://schema.org', '@graph': [
+  { '@type': 'CreativeWork', '@id': `${pageUrl}#project`, name: d.title, description: d.summary, url: pageUrl,
+    author: { '@id': 'https://allemanit.com/#dustin' }, keywords: [...d.tags, ...d.stack].join(', '),
+    ...(ogImage ? { image: `https://allemanit.com${ogImage}` } : {}) },
+  { '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://allemanit.com/' },
+    { '@type': 'ListItem', position: 2, name: 'Projects', item: 'https://allemanit.com/projects/' },
+    { '@type': 'ListItem', position: 3, name: d.title, item: pageUrl } ] },
+] };
 ---
-<Base title={`${d.title} — AllemanIT`} description={d.summary}>
-  <article class="container-x py-16">
-    <a href="/projects" class="text-sm text-white/50 hover:text-white">← All projects</a>
-    <div class="mt-4 flex flex-wrap items-center gap-3">
-      <h1 class="text-4xl font-extrabold text-white">{d.title}</h1>
+<Base title={(`${d.title} | Projects | Dustin Alleman`).length <= 60 ? `${d.title} | Projects | Dustin Alleman` : `${d.title} | Dustin Alleman`} description={d.summary} image={ogImage ?? '/og.png'} jsonld={ld}>
+  <article class="container-x py-12 sm:py-16">
+    <a href="/projects/" class="inline-flex min-h-[44px] items-center text-sm text-white/50 hover:text-white">← All projects</a>
+    <div class="mt-2 flex flex-wrap items-center gap-3">
+      <h1 class="text-3xl font-extrabold text-white sm:text-4xl">{d.title}</h1>
       <span class="tag">{d.status}</span>
     </div>
     <p class="mt-4 max-w-2xl text-lg text-white/70">{d.summary}</p>
@@ -30,7 +58,7 @@ const d = project.data;
           <iframe class="h-full w-full" src={`https://www.youtube.com/embed/${d.video}`} title={d.title} loading="lazy" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
       ) : (
-        <Thumb image={d.image} alt={d.title} />
+        <Thumb image={d.image} alt={d.title} eager />
       )}
     </div>
 
@@ -43,12 +71,40 @@ const d = project.data;
         <div class="grid gap-8">
           {d.gallery.map((g) => (
             <figure>
-              <img src={g.src} alt={g.caption || d.title} loading="lazy" class="w-full rounded-xl border border-white/10" />
+              <img src={g.src} alt={g.caption || d.title} loading="lazy" decoding="async" class="w-full rounded-xl border border-white/10" />
               {g.caption && (<figcaption class="mt-2.5 text-sm text-white/50">{g.caption}</figcaption>)}
             </figure>
           ))}
         </div>
       </div>
     )}
+
+    {oss.length > 0 && (
+      <div class="mt-14 max-w-3xl">
+        <h2 class="text-xl font-bold text-white/90">Open source under it</h2>
+        <p class="mt-1 text-sm text-white/55">What this project actually runs on. More on the <a href="/repos/" class="text-brand-orange underline-offset-4 hover:underline">repos page</a>.</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {oss.map((r) => (<a href={`/repos/#${repoId(r)}`} class="inline-flex min-h-[40px] items-center rounded-full border border-white/15 px-3.5 text-sm text-white/80 hover:border-white/30 hover:text-white">{repoName(r)}</a>))}
+        </div>
+      </div>
+    )}
   </article>
+
+  <!-- keep going: no dead ends -->
+  <section class="container-x pb-12">
+    <div class="border-t border-white/10 pt-10">
+      <h2 class="text-xl font-bold text-white">Related projects</h2>
+      <div class="mt-5 grid gap-3 sm:grid-cols-3">
+        {related.map((p) => (
+          <a href={href(p)} class="card group block p-4 sm:p-5">
+            <div class="flex items-center justify-between gap-2"><h3 class="font-bold text-white group-hover:text-brand-orange">{p.data.title}</h3><span class="tag shrink-0">{p.data.status}</span></div>
+            <p class="mt-1.5 line-clamp-3 text-sm text-white/60">{p.data.summary}</p>
+          </a>
+        ))}
+      </div>
+      <a href={href(next)} class="mt-6 flex min-h-[48px] items-center justify-between rounded-xl border border-white/10 px-4 text-sm hover:border-white/25">
+        <span class="text-white/50">Next project</span><span class="font-semibold text-white">{next.data.title} →</span>
+      </a>
+    </div>
+  </section>
 </Base>

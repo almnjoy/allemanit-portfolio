@@ -3,8 +3,8 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 const {
-  title = 'Dustin Alleman — AllemanIT',
-  description = 'I build AI tools, automation, and infrastructure. Network engineer turned builder.',
+  title = 'Dustin Alleman | Network Engineer and Builder, Chicago',
+  description = 'Dustin Alleman, Chicago network engineer with 10+ years in Cisco and Meraki. AI agents, automation, a production homelab and the projects built on top.',
   image = 'https://allemanit.com/og.png',
   url = 'https://allemanit.com/',
   favicon = '/favicon.png',
@@ -12,6 +12,8 @@ const {
   noindex = false,
   jsonld = null,
 } = Astro.props;
+// Google cuts descriptions around 155-160 chars; trim long ones at a word boundary.
+const desc = description.length > 158 ? description.slice(0, 155).replace(/\s+\S*$/, '').replace(/[,;:.\s]+$/, '') + '...' : description;
 // Self-referencing canonical from the real page URL (site is set in astro.config); an explicit url prop wins.
 const canonical = url !== 'https://allemanit.com/' ? url : new URL(Astro.url.pathname, Astro.site).href;
 const imageAbs = image.startsWith('http') ? image : new URL(image, Astro.site).href;
@@ -33,18 +35,18 @@ const siteLd = {
     <link rel="icon" href={favicon} />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={desc} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:site_name" content="AllemanIT" />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={desc} />
     <meta property="og:type" content={type} />
     <meta property="og:image" content={imageAbs} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={imageAbs} />
     <script type="application/ld+json" set:html={JSON.stringify(siteLd)} />
     {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}

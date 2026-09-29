@@ -72,7 +72,7 @@ export const angles = {
     pdf: '/Dustin-Alleman-Resume.pdf',
     umami: 'resume-download',
     indexable: true,
-    title: 'Resume | Dustin Alleman',
+    title: 'Resume | Dustin Alleman, Network Engineer',
     description:
       'Network engineer in Chicago. 10+ years across routing, switching, wireless, and cloud-managed infrastructure, plus the automation and labs built on top of it.',
     eyebrow: 'Network engineer, Chicago',

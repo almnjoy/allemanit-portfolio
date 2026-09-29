@@ -31,7 +31,7 @@ const ld = {
   ],
 };
 ---
-<Editorial title={`${d.title} — The Dispatch`} description={d.description} image={coverAbs} type="article" jsonld={ld}>
+<Editorial title={d.seoTitle ?? ((d.title + ' | The Dispatch').length <= 60 ? `${d.title} | The Dispatch` : d.title)} description={d.description} image={coverAbs} type="article" jsonld={ld}>
   <div class="ed-mast">
     <a class="ed-name" href="/blog">ALMNJOY <b>DISPATCH</b></a>
     <div class="ed-meta">Networking · AI · Homelab</div>

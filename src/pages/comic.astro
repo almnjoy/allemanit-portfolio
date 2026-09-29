@@ -89,12 +89,20 @@ chapters.forEach((c) => {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>The Daily Log — a comic about my life · Dustin Alleman</title>
-    <meta name="description" content="A comic about my life, one page a day. By Dustin Alleman." />
-    <meta property="og:title" content="The Daily Log — a comic about my life" />
-    <meta property="og:description" content="One page a day. By Dustin Alleman." />
+    <title>The Daily Log: a comic about my life | Dustin Alleman</title>
+    <meta name="description" content="The Daily Log is a comic about my life, drawn one page at a time: the days, the flashbacks, and whatever the lab broke that week. By Dustin Alleman." />
+    <link rel="canonical" href="https://allemanit.com/comic/" />
+    <meta property="og:site_name" content="AllemanIT" />
+    <meta property="og:title" content="The Daily Log: a comic about my life" />
+    <meta property="og:description" content="A comic about my life, drawn one page at a time. By Dustin Alleman." />
     <meta property="og:type" content="website" />
-    {chapters[0]?.pages[0] && (<meta property="og:image" content={`https://allemanit.com${chapters[0].pages[0].src}`} />)}
+    <meta property="og:url" content="https://allemanit.com/comic/" />
+    <meta property="og:image" content={chapters[0]?.pages[0] ? `https://allemanit.com${chapters[0].pages[0].src}` : 'https://allemanit.com/og.png'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Daily Log: a comic about my life" />
+    <meta name="twitter:description" content="A comic about my life, drawn one page at a time. By Dustin Alleman." />
+    <meta name="twitter:image" content={chapters[0]?.pages[0] ? `https://allemanit.com${chapters[0].pages[0].src}` : 'https://allemanit.com/og.png'} />
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'ComicSeries', name: 'The Daily Log', url: 'https://allemanit.com/comic/', author: { '@type': 'Person', name: 'Dustin Alleman', url: 'https://allemanit.com/' } })} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />

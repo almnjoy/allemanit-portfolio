@@ -5,6 +5,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://allemanit.com',
-  integrations: [tailwind(), mdx(), sitemap({ filter: (p) => !p.includes('/resume/cisco') && !p.includes('/games/play') && !p.includes('/projects/netadmintoolbox') })],
+  integrations: [tailwind(), mdx(), sitemap({ filter: (p) => !['/resume/cisco', '/projects/netadmintoolbox', '/status', '/request-access', '/family', '/design1', '/design2', '/design3', '/design4'].some((x) => p.includes(x)) })],
   trailingSlash: 'ignore',
 });

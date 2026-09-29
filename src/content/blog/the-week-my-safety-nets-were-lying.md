@@ -1,9 +1,12 @@
 ---
 title: The week I found out my safety nets were lying to me
+seoTitle: "The week my safety nets were lying to me"
 date: 2026-08-07
 description: Three systems failed silently this week, a monitoring dashboard, two AI watchers, and a trading stop order, and fixing the things that watch everything else turned out to be the most valuable code I wrote.
 kicker: Build log - the week
 tags: [monitoring, trading, homelab, ai]
+cover: /blog/safety-nets-cover.jpg
+coverAlt: Title card for the build log about monitoring that failed silently
 featured: false
 ---
 

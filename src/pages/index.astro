@@ -3,9 +3,15 @@ import Base from '../layouts/Base.astro';
 import Thumb from '../components/Thumb.astro';
 import { getCollection } from 'astro:content';
 import { counts } from '../data/design-lab';
-const all = (await getCollection('projects')).filter((p) => p.data.listed !== false).sort((a, b) => a.data.order - b.data.order);
-const featured = all.filter((p) => p.data.featured);
-const others = all.filter((p) => !p.data.featured);
+import { counts as repoCounts } from '../data/repos';
+
+// Home = hero, short about, 4 featured projects, then a map of the rest of the site.
+// Everything else lives one click away on its own hub page.
+const HOME_PICKS = ['pocketops', 'brain-map', 'homelab', 'ai-agents'];
+const all = (await getCollection('projects')).filter((p) => p.data.listed !== false);
+const picks = HOME_PICKS.map((s) => all.find((p) => p.slug === s)).filter(Boolean);
+const posts = (await getCollection('blog')).filter((p) => !p.data.draft).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
+const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 const links = [
   { href: 'https://github.com/almnjoy', label: 'GitHub' },
@@ -21,91 +27,100 @@ const credentials = [
   { k: 'Teaching', v: 'Instructor, Cisco Networking Academy' },
   { k: 'Service', v: 'U.S. Marine Corps veteran' },
 ];
+// The site map, as tiles. Lane = which hub it belongs to.
+const explore = [
+  { href: '/games/', lane: 'Play', title: 'Games', note: 'Five game projects. Two you can play in the browser right now.' },
+  { href: '/repos/', lane: 'Work', title: 'Repos I run on', note: `${repoCounts.total} open source projects under everything here, and why each one stays.` },
+  { href: '/blog/', lane: 'Writing', title: 'The Dispatch', note: 'Long-form build logs. What broke, what I learned.' },
+  { href: '/daily', lane: 'Writing', title: 'Daily', note: 'The live notebook. Some of it written by my agents.' },
+  { href: '/music', lane: 'Play', title: 'Music', note: 'Funk-bass, nine lanes, and a box to send me a rec.' },
+  { href: '/design-lab/marketplace/', lane: 'Work', title: 'Stream Deck art', note: 'Icon sets I draw and sell on the Elgato Marketplace.' },
+  { href: '/resume/', lane: 'Work', title: 'Resume', note: 'The one-page version, plus the PDF.' },
+  { href: '/packet-labs/', lane: 'Work', title: 'Packet Labs', note: 'Guided packet captures for the stuff I used to teach.' },
+];
 ---
 <Base>
+  <!-- HERO -->
   <section class="relative overflow-hidden">
     <div class="container-x grid items-center gap-6 pt-12 pb-8 lg:grid-cols-2 lg:gap-4">
-      <div class="order-2 lg:order-1">
+      <div class="order-1">
         <p class="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-orange">Network engineer · builder · Chicago</p>
-        <h1 class="text-6xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl">DUSTIN<br />ALLEMAN</h1>
+        <h1 class="text-5xl font-extrabold leading-[0.95] tracking-tight text-white sm:text-7xl">DUSTIN<br />ALLEMAN</h1>
         <p class="mt-6 max-w-md text-lg text-white/70">
           Over a decade in networking and IT. Off the clock I build AI tools, automation, and a homelab that runs like production.
         </p>
         <div class="mt-7 flex flex-wrap items-center gap-3">
-          <a href="https://quickitprojects.com" target="_blank" rel="noopener" class="btn btn-primary text-sm">Work with me →</a>
-          <a href="/contact" class="btn btn-ghost text-sm">Get in touch</a>
+          <a href="/projects/" data-umami-event="cta-click" data-umami-event-site="allemanit" data-umami-event-placement="hero-work" class="btn btn-primary text-sm">See the work →</a>
+          <a href="/resume/" data-umami-event="cta-click" data-umami-event-site="allemanit" data-umami-event-placement="hero-resume" class="btn btn-ghost text-sm">Resume</a>
+          <a href="/contact" class="px-1 text-sm text-white/60 underline-offset-4 hover:text-white hover:underline">or get in touch</a>
         </div>
-        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-          {links.map((l) => (<a href={l.href} target="_blank" rel="noopener" class="text-white/55 underline-offset-4 hover:text-white hover:underline transition">{l.label}</a>))}
+        <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {links.map((l) => (<a href={l.href} target="_blank" rel="noopener" class="py-1 text-white/55 underline-offset-4 transition hover:text-white hover:underline">{l.label}</a>))}
         </div>
       </div>
-      <div class="order-1 lg:order-2">
-        <img src="/me.jpg" alt="Dustin Alleman" class="mx-auto w-full max-w-md object-cover lg:max-w-none" style="aspect-ratio:4/5; -webkit-mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%);" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
-        <div class="mx-auto hidden aspect-[4/5] w-full max-w-md flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-white/15" style="display:none">
-          <img src="/logo-mark.png" class="h-12 w-12 opacity-40" alt="" />
-          <span class="text-sm text-white/40">Your photo → public/me.jpg</span>
-        </div>
+      <div class="order-2">
+        <img src="/me.jpg" srcset="/me-640.webp 640w, /me-1024.webp 1024w, /me.jpg 1536w" sizes="(min-width: 1024px) 560px, (min-width: 640px) 448px, 280px" alt="Dustin Alleman" width="1536" height="2048" fetchpriority="high" class="mx-auto w-full max-w-[280px] object-cover sm:max-w-md lg:max-w-none" style="aspect-ratio:4/5; -webkit-mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%); mask-image: radial-gradient(ellipse 78% 80% at 55% 42%, #000 50%, transparent 100%);" />
       </div>
     </div>
   </section>
 
+  <!-- ABOUT: short by default, long version one tap away -->
   <section id="about" class="container-x py-10">
     <div class="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
       <div>
         <h2 class="text-2xl font-bold text-white">About</h2>
-        <p class="mt-4 text-white/70 leading-relaxed">
-          I'm Dustin. I've spent over a decade in IT: support, help desk, networking, engineering, infrastructure. It started long before the paycheck. I was the kid taking computers apart, downloading games and music, breaking things and figuring out how to fix them. Too many years of World of Warcraft, still a PC gamer. That curiosity turned into the career.
+        <p class="mt-4 leading-relaxed text-white/70">
+          I'm Dustin. Marine Corps IT, a few companies after that, and these days Cisco networking in a FedRAMP environment. I came up on the hands-on side: packet captures, escalations, enterprise gear. I also teach CCNA-level networking at colleges around Chicago. Everything below is what I build when the shift ends.
         </p>
-        <p class="mt-4 text-white/70 leading-relaxed">
-          I did IT in the Marine Corps, carried it through a few companies after that, and these days I work on Cisco networking in a FedRAMP environment. I came up on the hands-on side: packet captures, escalations, enterprise gear. The goal was always to architect networks, not just support them, and to build the tools I wished I had along the way.
-        </p>
-        <p class="mt-4 text-white/70 leading-relaxed">
-          So I build. Dashboards, AI agents, automation, a homelab that grew from scavenged gear into something that runs like production. A lot of it points at one goal: moving into a sales engineer role, which is why so many of these projects are about proving a thing out and explaining it clearly. I also teach CCNA-level networking at colleges around Chicago, which is some of the most rewarding work I do.
-        </p>
-        <p class="mt-4 text-white/50 leading-relaxed text-sm">
-          Off the clock: Chicago lakefront skates, biking, anything outdoors, a Jeep with a permanent project list, and whatever the lab breaks that week.
-        </p>
+        <details class="group mt-4">
+          <summary class="flex min-h-[44px] cursor-pointer list-none items-center gap-2 text-sm font-semibold text-brand-orange">
+            <span class="group-open:hidden">The long version</span><span class="hidden group-open:inline">Less</span>
+            <svg class="transition group-open:rotate-180" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <p class="mt-2 leading-relaxed text-white/70">
+            It started long before the paycheck. I was the kid taking computers apart, downloading games and music, breaking things and figuring out how to fix them. Too many years of World of Warcraft, still a PC gamer. That curiosity turned into the career.
+          </p>
+          <p class="mt-4 leading-relaxed text-white/70">
+            The goal was always to architect networks, not just support them, and to build the tools I wished I had along the way. So I build. Dashboards, AI agents, automation, a homelab that grew from scavenged gear into something that runs like production. A lot of it points at one goal: moving into a sales engineer role, which is why so many of these projects are about proving a thing out and explaining it clearly.
+          </p>
+          <p class="mt-4 text-sm leading-relaxed text-white/50">
+            Off the clock: Chicago lakefront skates, biking, anything outdoors, a Jeep with a permanent project list, and whatever the lab breaks that week.
+          </p>
+        </details>
       </div>
-      <div class="grid gap-3 sm:grid-cols-2">
+      <div class="grid grid-cols-2 gap-3 self-start">
         {credentials.map((c) => (
-          <div class="card p-4">
+          <div class="card p-3 sm:p-4">
             <p class="text-xs uppercase tracking-wider text-white/40">{c.k}</p>
-            <p class="mt-1 text-white/85">{c.v}</p>
+            <p class="mt-1 text-sm text-white/85 sm:text-base">{c.v}</p>
           </div>
         ))}
       </div>
     </div>
   </section>
 
+  <!-- FEATURED: four, then the hub -->
   <section id="projects" class="container-x py-10">
-    <h2 class="mb-6 text-2xl font-bold text-white">Featured projects</h2>
+    <div class="mb-6 flex items-end justify-between gap-4">
+      <h2 class="text-2xl font-bold text-white">Featured projects</h2>
+      <a href="/projects/" class="hidden text-sm font-semibold text-brand-orange underline-offset-4 hover:underline sm:inline">All {all.length} projects →</a>
+    </div>
     <div class="grid gap-5 sm:grid-cols-2">
-      {featured.map((p) => (
-        <a href={p.data.directUrl ?? `/projects/${p.slug}`} data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project={p.slug} data-umami-event-placement="featured" class="card group block overflow-hidden">
+      {picks.map((p) => (
+        <a href={p.data.directUrl ?? `/projects/${p.slug}/`} data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project={p.slug} data-umami-event-placement="featured" class="card group block overflow-hidden">
           <Thumb image={p.data.cardImage ?? p.data.image} alt={p.data.title} />
           <div class="p-5">
-            <div class="mb-2 flex items-center justify-between"><h3 class="text-lg font-bold text-white">{p.data.title}</h3><span class="tag">{p.data.status}</span></div>
+            <div class="mb-2 flex items-center justify-between gap-2"><h3 class="text-lg font-bold text-white group-hover:text-brand-orange">{p.data.title}</h3><span class="tag shrink-0">{p.data.status}</span></div>
             <p class="text-sm text-white/70">{p.data.summary}</p>
-            <div class="mt-3 flex flex-wrap gap-1.5">{p.data.tags.map((t) => (<span class="tag">{t}</span>))}</div>
           </div>
         </a>
       ))}
     </div>
+    <a href="/projects/" class="btn btn-ghost mt-6 w-full text-sm sm:w-auto">See all {all.length} projects →</a>
   </section>
 
-  <section class="container-x py-10">
-    <h2 class="mb-6 text-2xl font-bold text-white">Other projects</h2>
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {others.map((p) => (
-        <a href={p.data.directUrl ?? `/projects/${p.slug}`} data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project={p.slug} data-umami-event-placement="all-projects" class="card group block p-5">
-          <div class="mb-1.5 flex items-center justify-between gap-2"><h3 class="font-bold text-white">{p.data.title}</h3><span class="tag shrink-0">{p.data.status}</span></div>
-          <p class="text-sm text-white/65">{p.data.summary}</p>
-        </a>
-      ))}
-    </div>
-  </section>
-
-  <section class="container-x py-10">
+  <!-- DESIGN LAB banner -->
+  <section class="container-x py-6">
     <a href="/design-lab/" data-umami-event="project-open" data-umami-event-site="allemanit" data-umami-event-project="design-lab" data-umami-event-placement="banner" class="card group block overflow-hidden">
       <div class="grid lg:grid-cols-[1.2fr_1fr]">
         <div class="grid grid-cols-2 gap-1 p-1">
@@ -113,32 +128,58 @@ const credentials = [
             <img src={`/design-lab/shots/${i}.jpg`} alt="" loading="lazy" decoding="async" width="1440" height="900" class="aspect-[16/10] w-full rounded-xl object-cover object-top" />
           ))}
         </div>
-        <div class="flex flex-col justify-center p-7">
+        <div class="flex flex-col justify-center p-6 sm:p-7">
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">The Design Lab</p>
           <h2 class="mt-2 text-2xl font-bold text-white">Every project needed a front end. So I got good at making them.</h2>
           <p class="mt-3 text-white/65">{counts.sites} sites shipped, {counts.versions} versions that lost, a style engine with {counts.skins} skins, and the process behind all of it.</p>
-          <span class="mt-5 inline-block font-semibold text-brand-orange group-hover:underline underline-offset-4">Open the lab →</span>
+          <span class="mt-5 inline-block font-semibold text-brand-orange underline-offset-4 group-hover:underline">Open the lab →</span>
         </div>
       </div>
     </a>
   </section>
 
-  <section id="content" class="container-x py-10">
-    <div class="card flex flex-col items-start justify-between gap-5 p-7 sm:flex-row sm:items-center">
-      <div><h2 class="text-xl font-bold text-white">Follow the build</h2><p class="mt-1 text-white/60">Homelab, AI agents, networking, and automation.</p></div>
-      <div class="flex flex-wrap gap-3">{links.map((l) => (<a href={l.href} target="_blank" rel="noopener" class="btn btn-ghost text-sm">{l.label}</a>))}</div>
+  <!-- EXPLORE: the site map -->
+  <section id="explore" class="container-x py-10">
+    <h2 class="text-2xl font-bold text-white">Everything else</h2>
+    <p class="mt-2 text-white/60">The rest of the site, in one place.</p>
+    <div class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {explore.map((e) => (
+        <a href={e.href} data-umami-event="explore-open" data-umami-event-site="allemanit" data-umami-event-target={e.href} class="card group flex flex-col p-4 sm:p-5">
+          <span class="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/40">{e.lane}</span>
+          <span class="mt-1 font-bold text-white group-hover:text-brand-orange">{e.title} <span aria-hidden="true" class="text-white/40">→</span></span>
+          <span class="mt-1.5 text-[13px] leading-snug text-white/60 sm:text-sm">{e.note}</span>
+        </a>
+      ))}
     </div>
   </section>
 
-  <section class="container-x py-10">
-    <div class="card flex flex-col items-start justify-between gap-4 p-7 sm:flex-row sm:items-center">
-      <div>
-        <h2 class="text-xl font-bold text-white">Want to talk shop or hire me?</h2>
-        <p class="mt-1 text-white/60">Call my AI line for a fun AI game to sign up. Just say "sign up" if you don't want to play. :)</p>
+  <!-- LATEST WRITING -->
+  {posts.length > 0 && (
+    <section class="container-x py-10">
+      <div class="mb-5 flex items-end justify-between gap-4">
+        <h2 class="text-2xl font-bold text-white">Latest writing</h2>
+        <a href="/blog/" class="text-sm font-semibold text-brand-orange underline-offset-4 hover:underline">All posts →</a>
       </div>
-      <div class="flex flex-wrap items-center gap-3">
-        <a href="tel:+15178834473" data-umami-event="contact-click" data-umami-event-site="allemanit" data-umami-event-method="phone" data-umami-event-placement="homepage" class="btn btn-primary text-sm">(517) 883-4473</a>
-        <a href="/contact" class="btn btn-ghost text-sm">Request lab access</a>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {posts.map((p) => (
+          <a href={`/blog/${p.slug}/`} class="card group block p-5">
+            <p class="text-xs uppercase tracking-wider text-white/40">{p.data.kicker} · {fmt(p.data.date)}</p>
+            <h3 class="mt-1.5 font-bold text-white group-hover:text-brand-orange">{p.data.title}</h3>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- ONE contact block -->
+  <section class="container-x py-10">
+    <div class="card p-6 sm:p-7">
+      <h2 class="text-xl font-bold text-white">Talk shop, hire me, or just say hi</h2>
+      <p class="mt-1 text-white/60">Email lands in my inbox. The phone line is my AI receptionist: play the setup game, or just say "sign up." :)</p>
+      <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a href="/contact" class="btn btn-primary text-sm">Get in touch</a>
+        <a href="tel:+15178834473" data-umami-event="contact-click" data-umami-event-site="allemanit" data-umami-event-method="phone" data-umami-event-placement="homepage" class="btn btn-ghost text-sm">Call the AI line</a>
+        <a href="https://quickitprojects.com" target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickit" data-umami-event-placement="homepage" class="btn btn-ghost text-sm">Hire QuickIT ↗</a>
       </div>
     </div>
   </section>

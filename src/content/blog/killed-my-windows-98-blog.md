@@ -1,5 +1,6 @@
 ---
 title: I built an AI pipeline to feed my old blog. Then I killed the blog.
+seoTitle: "I built an AI pipeline to feed my blog, then killed it"
 date: 2026-07-24
 description: almnjoy.dev ran raw notes through n8n and a GPT step into a Windows 98 WordPress theme. Here is what that pipeline taught me, and the markdown-and-git setup that quietly replaced it.
 kicker: Meta · the pipeline

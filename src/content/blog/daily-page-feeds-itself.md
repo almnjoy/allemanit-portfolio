@@ -4,6 +4,8 @@ date: 2026-07-24
 description: Wiring the /daily dashboard to self-hosted n8n feeds, standing up a daily-log store on a cloud box, and why browser agents keep beating the official APIs.
 kicker: Build log - the week
 tags: [n8n, automation, homelab, web]
+cover: /blog/daily-page-cover.jpg
+coverAlt: Title card for the build log about the self-hosted /daily feeds
 featured: false
 ---
 

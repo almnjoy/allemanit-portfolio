@@ -1,28 +1,47 @@
 ---
 const year = new Date().getFullYear();
-const pages = [
-  { href: '/contact', label: 'Contact' },
-  { href: '/resume', label: 'Resume' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/status', label: 'Media' },
-];
-const socials = [
-  { href: 'https://github.com/almnjoy', label: 'GitHub' },
-  { href: 'https://www.linkedin.com/in/dustin-alleman/', label: 'LinkedIn' },
-  { href: 'https://www.youtube.com/@Almnjoy', label: 'YouTube' },
-  { href: 'https://www.instagram.com/alleman_joyy/', label: 'Instagram' },
+const cols = [
+  { title: 'Work', links: [
+    { href: '/projects/', label: 'Projects' },
+    { href: '/design-lab/', label: 'Design Lab' },
+    { href: '/repos/', label: 'Repos I run on' },
+    { href: '/resume/', label: 'Resume' },
+    { href: '/contact', label: 'Contact' },
+  ] },
+  { title: 'Personal', links: [
+    { href: '/blog/', label: 'Blog' },
+    { href: '/daily', label: 'Daily' },
+    { href: '/games/', label: 'Games' },
+    { href: '/music', label: 'Music' },
+    { href: '/status', label: 'Plex status' },
+  ] },
+  { title: 'Elsewhere', links: [
+    { href: 'https://github.com/almnjoy', label: 'GitHub', external: true },
+    { href: 'https://www.linkedin.com/in/dustin-alleman/', label: 'LinkedIn', external: true },
+    { href: 'https://www.youtube.com/@Almnjoy', label: 'YouTube', external: true },
+    { href: 'https://www.instagram.com/alleman_joyy/', label: 'Instagram', external: true },
+    { href: 'https://quickitprojects.com', label: 'QuickIT Projects', external: true },
+  ] },
 ];
 ---
 <footer class="mt-8 border-t border-white/10 py-10">
-  <div class="container-x flex flex-col items-center justify-between gap-4 sm:flex-row">
-    <div class="flex items-center gap-3">
-      <img src="/AllemanITLogo.svg" alt="AllemanIT" class="h-6 w-auto opacity-80" />
-      <span class="text-sm text-white/50">© {year} Dustin Alleman · AllemanIT</span>
+  <div class="container-x grid gap-8 sm:grid-cols-[1.2fr_repeat(3,1fr)]">
+    <div class="flex flex-col gap-3">
+      <img src="/AllemanITLogo.svg" alt="AllemanIT" class="h-6 w-auto self-start opacity-80" />
+      <p class="max-w-xs text-sm text-white/50">Network engineer in Chicago. I build AI tools, automation and a homelab that runs like production.</p>
     </div>
-    <div class="flex flex-wrap items-center gap-5">
-      {pages.map((p) => (<a href={p.href} class="text-sm text-white/70 hover:text-white transition">{p.label}</a>))}
-      <span class="hidden text-white/20 sm:inline">|</span>
-      {socials.map((s) => (<a href={s.href} class="text-sm text-white/60 hover:text-white transition" target="_blank" rel="noopener">{s.label}</a>))}
+    <div class="col-span-full grid grid-cols-2 gap-x-6 gap-y-6 sm:col-span-3 sm:grid-cols-3">
+      {cols.map((c) => (
+        <div>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/40">{c.title}</p>
+          <ul class="mt-2">
+            {c.links.map((l) => (
+              <li><a href={l.href} {...(l.external ? { target: '_blank', rel: 'noopener' } : {})} class="flex min-h-[44px] items-center text-sm text-white/70 transition hover:text-white sm:min-h-[36px]">{l.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   </div>
+  <p class="container-x mt-8 text-xs text-white/40">© {year} Dustin Alleman · AllemanIT</p>
 </footer>

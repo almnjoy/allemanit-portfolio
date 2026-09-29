@@ -43,3 +43,7 @@ Manual deployments are fragile, and I learned that by breaking them. The one tha
 ## The part I didn't expect
 
 Building it was only half the job. Getting people to use it is a different skill, and one I'm still working on: marketing, branding, positioning, onboarding, and explaining why someone would want this in the first place. A lot of what I learned here, technical and not, went straight into MindMap and everything I've built since.
+
+## Where it stands now
+
+Everything above is how the platform was built and proven. It is not running at that full scale day to day anymore. The pieces that earned their keep, single sign-on, the tenant dashboard and the agent layer, carried straight into MindMap and the client builds I run today.

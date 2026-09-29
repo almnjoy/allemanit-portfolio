@@ -26,6 +26,7 @@ const blog = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
+    seoTitle: z.string().optional(), // <title> when title + suffix runs past 60 chars
     date: z.coerce.date(),
     description: z.string().default(''),
     kicker: z.string().default('Dispatch'),

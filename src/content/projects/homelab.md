@@ -5,7 +5,7 @@ status: "Live"
 featured: true
 order: 2
 tags: ["Infrastructure", "Networking", "Observability"]
-stack: ["Proxmox", "Cisco Meraki", "Docker", "Kubernetes", "Grafana / Loki / Prometheus", "Proxmox Backup Server", "Authentik", "Twingate", "Hetzner"]
+stack: ["Proxmox", "Cisco Meraki", "Docker", "Kubernetes", "Grafana / Loki / Prometheus", "Proxmox Backup Server", "Authentik", "Tailscale", "Hetzner"]
 image: "/projects/homelab/header.png"
 gallery:
   - src: "/projects/homelab/physical.jpg"

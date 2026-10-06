@@ -57,8 +57,8 @@ const ART = '/images/plex/theater-site-v3.webp';
         </div>
         <p class="plex-eyebrow mt-6 text-xs text-white/40">Movies · Better company · All in one place</p>
       </div>
-      <div class="plex-hero-art relative order-1 -mx-5 sm:-mx-8 lg:order-2 lg:mx-0 lg:-mr-8 lg:self-stretch">
-        <img src={ART} width="1942" height="809" alt="Cartoon theater: Dustin handing out popcorn to Goku, Cartman and Dwight in the front row" class="h-56 w-full object-cover object-[70%_center] sm:h-72 lg:h-full lg:min-h-[400px] lg:object-[78%_center]" />
+      <div class="plex-hero-art relative order-1 -mx-5 sm:-mx-8 lg:order-2 lg:mx-0 lg:-mr-8 lg:self-center">
+        <img src={ART} width="1942" height="809" alt="Cartoon theater: Dustin handing out popcorn to Goku, Cartman and Dwight in the front row" class="h-56 w-full object-cover object-[70%_center] sm:h-72 lg:h-[380px] lg:object-[75%_center]" />
       </div>
     </div>
   </section>
@@ -84,6 +84,7 @@ const ART = '/images/plex/theater-site-v3.webp';
         <span class="plex-eyebrow text-xs text-brand-blue">Newest on the server</span>
       </div>
       <div id="recent-list" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"></div>
+      <p id="recent-attrib" class="mt-3 hidden text-xs text-white/35">Posters and ratings from <a href="https://www.themoviedb.org" target="_blank" rel="noopener" class="underline hover:text-white/60">TMDB</a>. Not endorsed or certified by TMDB.</p>
     </div>
 
     <!-- QUICK LINKS -->
@@ -116,9 +117,23 @@ const ART = '/images/plex/theater-site-v3.webp';
       </div>
       <div class="card p-6">
         <div class="flex items-center gap-3"><span class="text-xl" aria-hidden="true">🎞</span><div class="text-lg font-bold text-white">Keep the projector running</div></div>
-        <p class="mt-2 text-sm text-white/60">Never required. If you enjoy it and want to chip in, it goes toward more storage and better stability.</p>
+        <p class="mt-2 text-sm text-white/60">Never required. If you enjoy it and want to chip in, it goes toward more storage (more movies and shows) and better stability.</p>
         <a href="https://cash.app/$almnjoy" target="_blank" rel="noopener" class="btn btn-primary mt-4 inline-flex text-sm">Chip in · $almnjoy</a>
       </div>
+    </div>
+
+    <!-- THE PRICE OF ADMISSION (ticket-style cost comparison) -->
+    <div class="plex-ticket mt-6 px-6 py-6 sm:px-8">
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 class="plex-display text-3xl text-white">The price of admission</h2>
+        <span class="plex-eyebrow text-xs text-white/50">What this would cost you elsewhere</span>
+      </div>
+      <dl class="mt-4 divide-y divide-white/10 text-sm">
+        <div class="flex justify-between gap-4 py-2"><dt class="text-white/75">Netflix + Max + Disney+ + Hulu</dt><dd class="text-white/50">~$65/mo</dd></div>
+        <div class="flex justify-between gap-4 py-2"><dt class="text-white/75">One new-release rental</dt><dd class="text-white/50">~$6 each</dd></div>
+        <div class="flex justify-between gap-4 py-2"><dt class="text-white/75">Roughly, over a year</dt><dd class="text-white/50">~$780</dd></div>
+        <div class="flex justify-between gap-4 pt-3 text-base font-bold text-white"><dt>Your AllemanIT Plex</dt><dd class="plex-display text-2xl text-green-400">$0 · Free</dd></div>
+      </dl>
     </div>
 
     <div class="mt-12 flex flex-col items-center gap-2 border-t border-white/10 pt-6 text-center sm:flex-row sm:justify-between sm:text-left">

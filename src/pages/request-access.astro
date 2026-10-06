@@ -1,51 +1,135 @@
 ---
 import Base from '../layouts/Base.astro';
 // Plex access requests POST here → n8n WF (EmUILkGVv0B44j3j) → Discord approval → Plex invite flow.
+// Payload keys are a contract with the workflow: fullName, email, phone, access, notes, source, submittedAt.
+// Cinema look (Bebas Neue + ivory ticket) is scoped to .plex-* classes on this page and /status only.
 const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-00c909d1a7b3';
+const ART = '/images/plex/theater-site-v3.webp';
 ---
 <Base title="Request Plex Access | AllemanIT" description="Request access to the AllemanIT Plex media server." noindex>
-  <section class="container-x py-16">
-    <div class="mx-auto max-w-xl">
-      <a href="/status" class="text-sm text-white/50 hover:text-white">← Back to Plex</a>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+    <style is:global>
+      .plex-display { font-family: 'Bebas Neue', 'Oswald', 'Impact', 'Arial Narrow', sans-serif; letter-spacing: 0.02em; line-height: 0.92; }
+      .plex-eyebrow { font-family: 'Bebas Neue', 'Impact', sans-serif; letter-spacing: 0.18em; }
+      /* Ivory admission ticket. Notches are punched at the perforation line; the dotted rule is the tear line. */
+      .plex-stub { position: relative; background: #F5EAD6; color: #0A0E14; border-radius: 18px; box-shadow: 0 30px 60px -30px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06); }
+      /* Tear line is full-bleed inside the stub; the notches hang off its ends. */
+      .plex-tear { position: relative; border-top: 2px dashed rgba(10,14,20,0.35); }
+      .plex-tear::before, .plex-tear::after { content: ''; position: absolute; top: -14px; width: 26px; height: 26px; border-radius: 50%; background: #0A0E14; }
+      .plex-tear::before { left: -13px; }
+      .plex-tear::after { right: -13px; }
+      .plex-field { width: 100%; border-radius: 10px; border: 1.5px solid rgba(10,14,20,0.22); background: #fffaf1; color: #0A0E14; padding: 0.8rem 0.95rem; font-size: 1rem; line-height: 1.3; outline: none; transition: border-color .15s, box-shadow .15s; }
+      .plex-field::placeholder { color: rgba(10,14,20,0.42); }
+      .plex-field:focus-visible { border-color: #FF6A00; box-shadow: 0 0 0 3px rgba(255,106,0,0.28); }
+      .plex-field:user-invalid { border-color: #c2410c; }
+      .plex-label { display: block; margin-bottom: 0.35rem; font-weight: 600; font-size: 0.9rem; color: #0A0E14; }
+      .plex-cta { display: inline-flex; width: 100%; align-items: center; justify-content: center; gap: 0.5rem; border-radius: 12px; background: #FF6A00; color: #fff; font-weight: 700; font-size: 1.05rem; padding: 0.9rem 1.25rem; transition: filter .15s, transform .15s; }
+      .plex-cta:hover { filter: brightness(1.08); }
+      .plex-cta:focus-visible { outline: 3px solid #0A0E14; outline-offset: 2px; }
+      .plex-cta[disabled] { opacity: 0.7; cursor: progress; }
+      .plex-msg { display: none; border-radius: 10px; padding: 0.75rem 0.9rem; font-size: 0.9rem; font-weight: 600; }
+      .plex-msg[data-kind="sending"] { display: block; background: rgba(10,14,20,0.07); color: #0A0E14; }
+      .plex-msg[data-kind="success"] { display: block; background: rgba(22,101,52,0.12); color: #14532d; }
+      .plex-msg[data-kind="error"] { display: block; background: rgba(185,28,28,0.12); color: #991b1b; }
+      .plex-step-num { display: inline-flex; width: 2rem; height: 2rem; align-items: center; justify-content: center; border-radius: 50%; background: #FF6A00; color: #fff; font-weight: 800; font-size: 0.9rem; flex: none; }
+      .plex-art { -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); mask-image: linear-gradient(to bottom, #000 70%, transparent 100%); }
+      @media (min-width: 1024px) { .plex-art { -webkit-mask-image: none; mask-image: none; } }
+    </style>
+  </Fragment>
 
-      <h1 class="mt-4 text-4xl font-extrabold text-white">Request Plex Access</h1>
-      <p class="mt-3 text-white/65">Want in on the AllemanIT Plex server? Drop your name and email below. I review each request and, once approved, email you the last step to get watching.</p>
+  <section class="container-x pb-16 pt-8 lg:pt-12">
+    <a href="/status" class="text-sm text-white/50 hover:text-white">← Back to Plex</a>
 
-      <form id="access-form" class="card mt-8 space-y-5 p-7" data-webhook={WEBHOOK_URL}>
-        <div>
-          <label class="mb-1.5 block text-sm font-semibold text-white">Full Name <span class="text-brand-orange">*</span></label>
-          <input name="fullName" required placeholder="Enter your name"
-            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
+    <div class="mt-4 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-start lg:gap-12">
+      <!-- INTRO (mobile: short banner + headline, then straight to the form) -->
+      <div>
+        <div class="plex-art -mx-5 overflow-hidden sm:-mx-8 lg:hidden">
+          <img src={ART} width="1942" height="809" alt="" class="h-40 w-full object-cover object-[65%_center]" />
         </div>
-        <div>
-          <label class="mb-1.5 block text-sm font-semibold text-white">Email Address <span class="text-brand-orange">*</span></label>
-          <input name="email" type="email" required placeholder="Enter your email"
-            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
+        <p class="plex-eyebrow mt-4 text-lg text-brand-orange lg:mt-0">AllemanIT <span class="text-brand-blue">Plex</span></p>
+        <h1 class="plex-display mt-2 text-5xl text-white sm:text-6xl lg:text-7xl">Good company.<br />Great movie nights.</h1>
+        <p class="mt-4 text-lg text-white/70">Request access to Dustin's Plex server.</p>
+        <div class="mt-8 hidden overflow-hidden rounded-2xl border border-brand-orange/50 lg:block">
+          <img src={ART} width="1942" height="809" alt="Cartoon theater: Dustin handing out popcorn to Goku, Cartman and Dwight in the front row" class="w-full" />
         </div>
-        <div>
-          <label class="mb-1.5 block text-sm font-semibold text-white">Phone <span class="text-white/40">(optional, for text updates)</span></label>
-          <input name="phone" type="tel" placeholder="(555) 555-5555"
-            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
-        </div>
-        <div>
-          <label class="mb-1.5 block text-sm font-semibold text-white">Notes <span class="text-white/40">(optional)</span></label>
-          <textarea name="notes" rows="3" placeholder="Anything you're hoping to watch, or how I know you"
-            class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary w-full">Request Access</button>
-        <p id="form-msg" class="hidden text-center text-sm"></p>
-      </form>
+      <ol class="mt-8 grid gap-5 border-t border-white/10 pt-6 sm:grid-cols-3 lg:border-0 lg:pt-0">
+        <li class="flex gap-3">
+          <span class="plex-step-num">1</span>
+          <div><div class="font-bold text-white">Send a request</div><p class="mt-1 text-sm text-white/60">Fill out the ticket with your details.</p></div>
+        </li>
+        <li class="flex gap-3">
+          <span class="plex-step-num">2</span>
+          <div><div class="font-bold text-white">Dustin reviews it</div><p class="mt-1 text-sm text-white/60">I'll take a look and get back to you.</p></div>
+        </li>
+        <li class="flex gap-3">
+          <span class="plex-step-num">3</span>
+          <div><div class="font-bold text-white">Follow the email to finish setup</div><p class="mt-1 text-sm text-white/60">Next steps land in your inbox.</p></div>
+        </li>
+      </ol>
+      </div>
 
-      <p class="mt-6 text-center text-sm text-white/50">Not here for Plex? <a href="/contact" class="text-brand-orange hover:underline">Get in touch →</a></p>
+      <!-- TICKET FORM -->
+      <div>
+        <form id="access-form" novalidate class="plex-stub overflow-hidden px-6 py-8 sm:px-8" data-webhook={WEBHOOK_URL} aria-describedby="form-help">
+          <p class="plex-eyebrow text-center text-xs text-ink-950/60">AllemanIT Plex</p>
+          <h2 class="plex-display mt-2 text-center text-5xl text-ink-950">Request<br />your ticket</h2>
+          <p class="mt-3 text-center text-sm text-ink-950/75">Dustin reviews each request. Watch your email for the next step.</p>
+
+          <div class="mt-6 space-y-4">
+            <div>
+              <label for="fullName" class="plex-label">Full name <span class="text-brand-orange" aria-hidden="true">*</span></label>
+              <input id="fullName" name="fullName" type="text" required autocomplete="name" placeholder="Enter your full name" class="plex-field" aria-required="true" />
+            </div>
+            <div>
+              <label for="email" class="plex-label">Email address <span class="text-brand-orange" aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="Enter your email address" class="plex-field" aria-required="true" />
+            </div>
+            <div>
+              <label for="phone" class="plex-label">Phone <span class="font-normal text-ink-950/55">(optional, for text updates)</span></label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(555) 555-5555" class="plex-field" />
+            </div>
+            <div>
+              <label for="notes" class="plex-label">Notes <span class="font-normal text-ink-950/55">(optional)</span></label>
+              <textarea id="notes" name="notes" rows="3" placeholder="Anything you're hoping to watch, or how I know you" class="plex-field"></textarea>
+            </div>
+          </div>
+
+          <button type="submit" class="plex-cta mt-6"><span data-label>Request access</span> <span aria-hidden="true">→</span></button>
+          <p id="form-msg" class="plex-msg mt-4" role="status" aria-live="polite"></p>
+
+          <div class="plex-tear -mx-6 mt-7 px-6 pt-5 text-center sm:-mx-8 sm:px-8">
+            <span class="text-2xl" aria-hidden="true">🎞</span>
+            <p id="form-help" class="plex-eyebrow mt-1 text-xs text-ink-950/70">This form does not ask for your Plex password.</p>
+          </div>
+        </form>
+        <p class="mt-5 text-center text-sm text-white/50">Not here for Plex? <a href="/contact" class="text-brand-blue hover:underline">Get in touch →</a></p>
+      </div>
+
     </div>
   </section>
 
   <script>
     const form = document.getElementById('access-form');
     const msg = document.getElementById('form-msg');
+    const btn = form?.querySelector('button[type=submit]');
+    const label = btn?.querySelector('[data-label]');
+    function show(kind, text) {
+      msg.dataset.kind = kind;
+      msg.textContent = text;
+      // Errors get assertive announcement; progress and success stay polite.
+      msg.setAttribute('role', kind === 'error' ? 'alert' : 'status');
+      msg.setAttribute('aria-live', kind === 'error' ? 'assertive' : 'polite');
+    }
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = form.querySelector('button[type=submit]');
+      if (!form.checkValidity()) {
+        show('error', 'Please fill in your full name and a valid email address.');
+        const bad = form.querySelector(':invalid');
+        if (bad) bad.focus();
+        return;
+      }
       const data = new FormData(form);
       const payload = {
         fullName: data.get('fullName'),
@@ -56,22 +140,20 @@ const WEBHOOK_URL = 'https://n8n.allemanit.com/webhook/75d927ed-c714-44b0-aa7c-0
         source: 'allemanit.com',
         submittedAt: new Date().toISOString(),
       };
-      btn.disabled = true; btn.textContent = 'Sending...';
+      btn.disabled = true; btn.setAttribute('aria-busy', 'true'); label.textContent = 'Sending...';
+      show('sending', 'Sending your request...');
       try {
         const res = await fetch(form.dataset.webhook, {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
         });
         if (!res.ok) throw new Error('bad status');
-        form.reset(); show('Request received. I will follow up by email once approved.', false);
+        form.reset();
+        show('success', 'Request received. Watch your email for the next step after review.');
       } catch (err) {
-        show('Something went wrong. Email duallema@quickitprojects.com and I will sort it.', true);
+        show('error', 'Your request could not be sent. Please try again or contact Dustin.');
       } finally {
-        btn.disabled = false; btn.textContent = 'Request Access';
+        btn.disabled = false; btn.removeAttribute('aria-busy'); label.textContent = 'Request access';
       }
     });
-    function show(text, isError) {
-      msg.textContent = text;
-      msg.className = 'text-center text-sm ' + (isError ? 'text-red-400' : 'text-green-400');
-    }
   </script>
 </Base>

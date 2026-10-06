@@ -2,116 +2,173 @@
 import Base from '../layouts/Base.astro';
 // Friends-only Plex portal. Linked from emails, not from site nav.
 // Live status + newest titles come from a public n8n endpoint (checks Plex identity + Tautulli recently-added).
+// Payload: { online: bool, recent: [{ title, year, type }], checkedAt }. No poster data, so titles render as cards.
+// Cinema look (Bebas Neue + ticket motif) is scoped to .plex-* classes on this page and /request-access only.
 const STATUS_API = 'https://n8n.allemanit.com/webhook/plex-status';
 const VIDEO_URL = 'https://youtu.be/m-wiCr5uvXQ';
+const REQUEST_URL = 'https://request.allemanit.com';
+const PLEX_URL = 'https://app.plex.tv/desktop';
+const ART = '/images/plex/theater-site-v3.webp';
 ---
 <Base title="AllemanIT Plex" description="Your AllemanIT Plex quick links and live server status." noindex>
-  <section class="container-x py-16">
-    <div class="mx-auto max-w-2xl">
-      <h1 class="text-4xl font-extrabold text-white">AllemanIT Plex</h1>
-      <p class="mt-3 text-white/65">Everything in one place: live server status, what's new, and how to watch or request.</p>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+    <link rel="preload" as="image" href={ART} />
+    <style is:global>
+      .plex-display { font-family: 'Bebas Neue', 'Oswald', 'Impact', 'Arial Narrow', sans-serif; letter-spacing: 0.02em; line-height: 0.92; }
+      .plex-eyebrow { font-family: 'Bebas Neue', 'Impact', sans-serif; letter-spacing: 0.18em; }
+      /* Hero art fades into the page on every edge so it never reads as a pasted rectangle. */
+      .plex-hero-art { -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 100%); mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 100%); }
+      .plex-hero-art::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, #0A0E14 0%, rgba(10,14,20,0) 40%); pointer-events: none; }
+      @media (max-width: 1023px) {
+        .plex-hero-art { -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%); }
+        .plex-hero-art::after { display: none; }
+      }
+      /* Ticket strip: orange outline with punched notches at the halfway points. */
+      .plex-ticket { position: relative; border: 2px solid #FF6A00; border-radius: 14px; background: rgba(255,106,0,0.06); }
+      .plex-ticket::before, .plex-ticket::after { content: ''; position: absolute; top: 50%; width: 22px; height: 22px; border-radius: 50%; background: #0A0E14; border: 2px solid #FF6A00; transform: translateY(-50%); }
+      .plex-ticket::before { left: -13px; clip-path: inset(0 0 0 50%); }
+      .plex-ticket::after { right: -13px; clip-path: inset(0 50% 0 0); }
+      .plex-perf { border-left: 2px dotted rgba(255,106,0,0.6); }
+      /* Status states. Text changes with the state too; color is never the only signal. */
+      .plex-dot { width: 14px; height: 14px; border-radius: 50%; flex: none; background: #facc15; box-shadow: 0 0 0 4px rgba(250,204,21,0.18); }
+      [data-state="checking"] .plex-dot { background: #facc15; box-shadow: 0 0 0 4px rgba(250,204,21,0.18); animation: plex-pulse 1.2s ease-in-out infinite; }
+      [data-state="online"] .plex-dot { background: #22c55e; box-shadow: 0 0 0 4px rgba(34,197,94,0.22); }
+      [data-state="offline"] .plex-dot { background: #ef4444; box-shadow: 0 0 0 4px rgba(239,68,68,0.22); }
+      [data-state="unavailable"] .plex-dot { background: #9ca3af; box-shadow: 0 0 0 4px rgba(156,163,175,0.18); }
+      @keyframes plex-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+      @media (prefers-reduced-motion: reduce) { [data-state="checking"] .plex-dot { animation: none; } }
+      .plex-title-card { background: linear-gradient(160deg, #131b2e 0%, #0d1320 100%); }
+      .plex-title-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(120% 60% at 50% 0%, rgba(0,123,255,0.18), transparent 60%); pointer-events: none; }
+    </style>
+  </Fragment>
 
-      <!-- STATUS -->
-      <div class="card mt-8 flex items-center gap-4 p-6">
-        <span id="status-dot" class="inline-block h-3.5 w-3.5 shrink-0 rounded-full bg-yellow-400"></span>
+  <!-- HERO -->
+  <section class="relative overflow-hidden border-b border-white/10">
+    <div class="container-x grid items-center gap-8 py-10 lg:min-h-[400px] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.5fr)] lg:gap-4 lg:py-0">
+      <div class="order-2 py-2 lg:order-1 lg:py-12">
+        <p class="plex-eyebrow text-lg text-brand-orange">AllemanIT <span class="text-brand-blue">Plex</span></p>
+        <h1 class="plex-display mt-3 text-[3.6rem] text-white sm:text-7xl lg:text-[4.4rem]">Your next<br />good night in.</h1>
+        <p class="mt-5 max-w-md text-lg text-white/70">Pick something good. I’ll bring the popcorn.</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href={PLEX_URL} target="_blank" rel="noopener" class="btn btn-primary text-base">▶ Watch on Plex</a>
+          <a href="/request-access" class="btn btn-ghost text-base">Request access</a>
+        </div>
+        <p class="plex-eyebrow mt-6 text-xs text-white/40">Movies · Better company · All in one place</p>
+      </div>
+      <div class="plex-hero-art relative order-1 -mx-5 sm:-mx-8 lg:order-2 lg:mx-0 lg:-mr-8 lg:self-stretch">
+        <img src={ART} width="1942" height="809" alt="Cartoon theater: Dustin handing out popcorn to Goku, Cartman and Dwight in the front row" class="h-56 w-full object-cover object-[70%_center] sm:h-72 lg:h-full lg:min-h-[400px] lg:object-[78%_center]" />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-x pb-16 pt-6">
+    <!-- STATUS STRIP (real data, directly under the hero) -->
+    <div id="status-strip" data-state="checking" class="plex-ticket flex flex-col gap-3 px-6 py-4 sm:flex-row sm:items-center sm:gap-6" role="status" aria-live="polite">
+      <span class="plex-eyebrow text-sm text-brand-orange sm:w-36">Server status</span>
+      <div class="plex-perf flex items-center gap-4 sm:pl-6">
+        <span class="plex-dot" aria-hidden="true"></span>
         <div>
-          <div class="text-lg font-bold text-white">Plex Server</div>
-          <div id="status-text" class="text-sm text-white/60">Checking status…</div>
+          <div id="status-head" class="plex-display text-3xl text-white">Checking</div>
+          <div id="status-text" class="text-sm text-white/65">Checking the projector...</div>
         </div>
       </div>
-      <p class="mt-2 text-xs text-white/40">If it shows offline, the server is likely rebooting. Give it a few minutes and try again, or let me know.</p>
+      <p class="text-xs text-white/40 sm:ml-auto sm:max-w-xs sm:text-right">Offline usually means a reboot. Give it a few minutes, or reply to any of my emails.</p>
+    </div>
 
-      <!-- REQUEST ACCESS (primary CTA) -->
-      <a href="/request-access" class="mt-6 flex items-center justify-between gap-4 rounded-2xl border border-brand-orange/40 bg-gradient-to-br from-brand-orange/15 to-transparent p-6 transition hover:border-brand-orange">
+    <!-- JUST ADDED -->
+    <div id="recent-wrap" class="mt-10 hidden">
+      <div class="flex items-baseline gap-3">
+        <h2 class="plex-display text-3xl text-white">Just added</h2>
+        <span class="plex-eyebrow text-xs text-brand-blue">Newest on the server</span>
+      </div>
+      <div id="recent-list" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4"></div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      <a href={REQUEST_URL} target="_blank" rel="noopener" class="card flex items-start gap-4 p-6 hover:border-brand-blue">
+        <span class="mt-0.5 text-2xl" aria-hidden="true">🍿</span>
         <div>
-          <div class="text-lg font-bold text-white">✉ New here? Request Plex access</div>
-          <p class="mt-1 text-sm text-white/70">Not on the server yet? Send a quick request and I'll get you set up to watch.</p>
+          <div class="text-lg font-bold text-white">Missing something? Request a movie or show.</div>
+          <p class="mt-1 text-sm text-white/60">Ask for a title and it gets added automatically. No approval needed.</p>
         </div>
-        <span class="btn btn-primary shrink-0 text-sm">Request access →</span>
       </a>
-
-      <!-- JUST ADDED -->
-      <div id="recent-wrap" class="mt-8 hidden">
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-brand-orange">Just added</h2>
-        <div id="recent-list" class="mt-3 flex flex-wrap gap-2"></div>
-      </div>
-
-      <!-- LINKS -->
-      <div class="mt-8 grid gap-4 sm:grid-cols-2">
-        <a href="https://app.plex.tv/desktop" target="_blank" rel="noopener" class="card p-6 transition hover:border-brand-orange">
-          <div class="text-lg font-bold text-white">▶ Watch on Plex</div>
-          <p class="mt-1 text-sm text-white/60">Open Plex in your browser or app and start watching.</p>
-        </a>
-        <a href="https://request.allemanit.com" target="_blank" rel="noopener" class="card p-6 transition hover:border-brand-orange">
-          <div class="text-lg font-bold text-white">🍿 Request a movie or show</div>
-          <p class="mt-1 text-sm text-white/60">Ask for a title and it gets added automatically.</p>
-        </a>
-        <a href={VIDEO_URL} target="_blank" rel="noopener" class="card p-6 transition hover:border-brand-orange">
-          <div class="text-lg font-bold text-white">🎬 How to accept your invite</div>
-          <p class="mt-1 text-sm text-white/60">60-second walkthrough for first-timers.</p>
-        </a>
-      </div>
-
-      <!-- LIVE TV -->
-      <div class="card mt-8 p-6">
-        <div class="text-lg font-bold text-white">📺 Live TV channels (bonus)</div>
-        <p class="mt-1 text-sm text-white/60">I also run custom live TV channels. Heads up: Plex only lets me share live TV with people who have a <strong class="text-white/80">Plex Pass</strong> and are added to my Plex Home. If you've got a Plex Pass and want to try it, just reach out and I'll set you up.</p>
-      </div>
-
-      <!-- NEWSLETTER -->
-      <div class="card mt-4 p-6">
-        <div class="text-lg font-bold text-white">✉ Weekly "what's new" email</div>
-        <p class="mt-1 text-sm text-white/60">Every Monday I send a short roundup of new movies and shows from <strong class="text-white/80">plex-news@madeformeai.com</strong>. Add that address to your contacts and mark it "not junk" so it doesn't land in spam.</p>
-      </div>
-
-      <!-- COST + DONATE -->
-      <div class="card mt-8 p-6">
-        <div class="text-lg font-bold text-white">💸 What this would cost you elsewhere</div>
-        <div class="mt-3 space-y-1.5 text-sm text-white/70">
-          <div class="flex justify-between"><span>Netflix + Max + Disney+ + Hulu</span><span class="text-white/50">~$65/mo</span></div>
-          <div class="flex justify-between"><span>One new-release rental</span><span class="text-white/50">~$6 each</span></div>
-          <div class="flex justify-between"><span>Roughly, over a year</span><span class="text-white/50">~$780</span></div>
-          <div class="mt-2 flex justify-between border-t border-white/10 pt-2 text-base font-bold text-white"><span>Your AllemanIT Plex</span><span class="text-green-400">$0 · free</span></div>
+      <a href={VIDEO_URL} target="_blank" rel="noopener" class="card flex items-start gap-4 p-6 hover:border-brand-blue">
+        <span class="mt-0.5 text-2xl" aria-hidden="true">🎬</span>
+        <div>
+          <div class="text-lg font-bold text-white">How to accept your invite</div>
+          <p class="mt-1 text-sm text-white/60">60-second walkthrough for first-timers once your invite lands.</p>
         </div>
-        <p class="mt-4 text-sm text-white/60">Never required, but if you enjoy it and want to chip in, it genuinely helps: donations go toward more storage (more movies &amp; shows) and better stability and support.</p>
-        <a href="https://cash.app/$almnjoy" target="_blank" rel="noopener" class="btn btn-primary mt-4 inline-block text-sm">Donate via Cash App → $almnjoy</a>
-      </div>
+      </a>
+    </div>
 
-      <p class="mt-10 text-center text-xs text-white/40">AllemanIT Plex · questions? just reply to any of my emails.</p>
+    <!-- LIVE TV / NEWSLETTER / SUPPORT -->
+    <div class="mt-10 grid gap-4 lg:grid-cols-3">
+      <div class="card p-6">
+        <div class="flex items-center gap-3"><span class="text-xl" aria-hidden="true">📺</span><div class="text-lg font-bold text-white">Live TV channels</div></div>
+        <p class="mt-2 text-sm text-white/60">I run custom live TV channels too. Plex only lets me share live TV with people who have a <strong class="text-white/80">Plex Pass</strong> and are in my Plex Home. Got a Pass and want in? Reach out and I'll set you up.</p>
+      </div>
+      <div class="card p-6">
+        <div class="flex items-center gap-3"><span class="text-xl" aria-hidden="true">✉</span><div class="text-lg font-bold text-white">The weekly reel</div></div>
+        <p class="mt-2 text-sm text-white/60">Every Monday, a short roundup of new movies and shows from <strong class="text-white/80">plex-news@madeformeai.com</strong>. Add it to your contacts and mark it "not junk" so it skips spam.</p>
+      </div>
+      <div class="card p-6">
+        <div class="flex items-center gap-3"><span class="text-xl" aria-hidden="true">🎞</span><div class="text-lg font-bold text-white">Keep the projector running</div></div>
+        <p class="mt-2 text-sm text-white/60">Never required. If you enjoy it and want to chip in, it goes toward more storage and better stability.</p>
+        <a href="https://cash.app/$almnjoy" target="_blank" rel="noopener" class="btn btn-primary mt-4 inline-flex text-sm">Chip in · $almnjoy</a>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col items-center gap-2 border-t border-white/10 pt-6 text-center sm:flex-row sm:justify-between sm:text-left">
+      <span class="plex-eyebrow text-sm text-white/60">AllemanIT Plex <span class="text-brand-blue">· Cinema lives here.</span></span>
+      <span class="text-xs text-white/40">Need a hand? Reply to any email from Dustin.</span>
     </div>
   </section>
 
   <script define:vars={{ STATUS_API }}>
     (function () {
-      const dot = document.getElementById('status-dot');
+      const strip = document.getElementById('status-strip');
+      const head = document.getElementById('status-head');
       const text = document.getElementById('status-text');
+      const STATES = {
+        checking:    ['Checking',           'Checking the projector...'],
+        online:      ['Server online',      'Ready to watch.'],
+        offline:     ['Server offline',     'Try again shortly.'],
+        unavailable: ['Status unavailable', 'Open Plex to check.'],
+      };
+      function setState(s) {
+        strip.dataset.state = s;
+        head.textContent = STATES[s][0];
+        text.textContent = STATES[s][1];
+      }
+      setState('checking');
       fetch(STATUS_API, { cache: 'no-store' })
-        .then((r) => r.json())
+        .then((r) => { if (!r.ok) throw new Error('bad status'); return r.json(); })
         .then((d) => {
-          if (d.online) {
-            dot.className = 'inline-block h-3.5 w-3.5 shrink-0 rounded-full bg-green-400';
-            text.textContent = 'Online — ready to watch.';
-          } else {
-            dot.className = 'inline-block h-3.5 w-3.5 shrink-0 rounded-full bg-red-400';
-            text.textContent = 'Offline — likely rebooting. Try again shortly.';
-          }
+          setState(d.online ? 'online' : 'offline');
           const recent = Array.isArray(d.recent) ? d.recent : [];
-          if (recent.length) {
-            const list = document.getElementById('recent-list');
-            recent.slice(0, 8).forEach((it) => {
-              const chip = document.createElement('span');
-              chip.className = 'inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-white/80';
-              const icon = it.type === 'movie' ? '🎬' : '📺';
-              chip.textContent = icon + ' ' + it.title + (it.year ? ' (' + it.year + ')' : '');
-              list.appendChild(chip);
-            });
-            document.getElementById('recent-wrap').classList.remove('hidden');
-          }
+          if (!recent.length) return;
+          const list = document.getElementById('recent-list');
+          recent.slice(0, 8).forEach((it) => {
+            const card = document.createElement('div');
+            card.className = 'plex-title-card relative flex min-h-[8.5rem] flex-col justify-between overflow-hidden rounded-xl border border-white/10 p-4';
+            const kind = document.createElement('span');
+            kind.className = 'plex-eyebrow relative text-[11px] ' + (it.type === 'movie' ? 'text-brand-orange' : 'text-brand-blue');
+            kind.textContent = it.type === 'movie' ? 'Movie' : 'Show';
+            const title = document.createElement('div');
+            title.className = 'plex-display relative mt-3 text-2xl text-white';
+            title.textContent = it.title || 'Untitled';
+            const year = document.createElement('div');
+            year.className = 'relative mt-2 text-xs text-white/50';
+            year.textContent = it.year ? String(it.year) : '';
+            card.append(kind, title, year);
+            list.appendChild(card);
+          });
+          document.getElementById('recent-wrap').classList.remove('hidden');
         })
-        .catch(() => {
-          dot.className = 'inline-block h-3.5 w-3.5 shrink-0 rounded-full bg-yellow-400';
-          text.textContent = 'Status unavailable right now — open Plex to check.';
-        });
+        .catch(() => setState('unavailable'));
     })();
   </script>
 </Base>

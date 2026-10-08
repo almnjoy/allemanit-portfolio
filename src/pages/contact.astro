@@ -1,162 +1,223 @@
 ---
 import Base from '../layouts/Base.astro';
 import { products } from '../data/marketplace';
-// Contact router (2026-10-08). Four doors: plugin support (form), Quick IT (external), MadeForMeAI (external),
-// Plex (the /status page, linked quietly at the bottom). The form posts topic + product so n8n can tag the
-// Twenty person with the right platform and route plugin support without a human flipping fields.
-// Deep links: /contact/?topic=plugin&product=range-finder-companion preselects the dropdowns.
+// Contact router (2026-10-08). One plain form by default (name, email, message). Picking "Plugin support"
+// reveals the product list. Quick IT and MadeForMeAI are doors to their own sites. Plex stays a quiet footer link.
+// The form posts topic + product so n8n tags the Twenty person with the right platform without a human.
+// Deep links: /contact/?topic=plugin&product=range-finder preselects.
+// Look: same ivory "note card" treatment as /request-access, scoped to .ctc-* classes.
 const CONTACT_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/contact';
 const MFM_URL = 'https://madeformeai.com/';
 const QUICKIT_URL = 'https://quickitprojects.com/';
 const live = products.filter((p) => p.status === 'live').map((p) => ({ slug: p.slug, title: p.title }));
 const topics = [
-  { value: 'plugin', label: 'Stream Deck plugin or icon set (Elgato Marketplace)' },
-  { value: 'quickit', label: 'Quick IT: networking, IT, automation work' },
-  { value: 'mfm', label: 'MadeForMeAI account or product' },
-  { value: 'other', label: 'Something else' },
+  { value: 'other', label: 'Just reaching out' },
+  { value: 'plugin', label: 'Plugin / icon set support' },
+  { value: 'quickit', label: 'Quick IT work' },
+  { value: 'mfm', label: 'MadeForMeAI' },
 ];
 ---
 <Base title="Contact Dustin Alleman | AllemanIT" description="Reach Dustin Alleman. Stream Deck plugin support for ALMNJOY products on the Elgato Marketplace, Quick IT Projects work, MadeForMeAI, or just say hi. Every message lands in my inbox.">
-  <section class="container-x py-14">
-    <div class="mx-auto max-w-3xl">
-      <h1 class="text-3xl font-extrabold text-white sm:text-4xl">Get in touch.</h1>
-      <p class="mt-2 text-white/65">Pick the door that fits. No funnel, no bot. Messages land in my inbox (<span class="text-white/80">duallema@quickitprojects.com</span>) and I read every one.</p>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+    <style is:global>
+      .ctc-display { font-family: 'Bebas Neue', 'Oswald', 'Impact', 'Arial Narrow', sans-serif; letter-spacing: 0.02em; line-height: 0.92; }
+      .ctc-eyebrow { font-family: 'Bebas Neue', 'Impact', sans-serif; letter-spacing: 0.18em; }
+      .ctc-card { position: relative; background: #F5EAD6; color: #0A0E14; border-radius: 18px; box-shadow: 0 30px 60px -30px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06); }
+      .ctc-tear { position: relative; border-top: 2px dashed rgba(10,14,20,0.35); }
+      .ctc-tear::before, .ctc-tear::after { content: ''; position: absolute; top: -14px; width: 26px; height: 26px; border-radius: 50%; background: #0A0E14; }
+      .ctc-tear::before { left: -13px; }
+      .ctc-tear::after { right: -13px; }
+      .ctc-field { width: 100%; border-radius: 10px; border: 1.5px solid rgba(10,14,20,0.22); background: #fffaf1; color: #0A0E14; padding: 0.8rem 0.95rem; font-size: 1rem; line-height: 1.3; outline: none; transition: border-color .15s, box-shadow .15s; }
+      .ctc-field::placeholder { color: rgba(10,14,20,0.42); }
+      .ctc-field:focus-visible { border-color: #FF6A00; box-shadow: 0 0 0 3px rgba(255,106,0,0.28); }
+      .ctc-field:user-invalid { border-color: #c2410c; }
+      .ctc-label { display: block; margin-bottom: 0.35rem; font-weight: 600; font-size: 0.9rem; color: #0A0E14; }
+      .ctc-cta { display: inline-flex; width: 100%; align-items: center; justify-content: center; gap: 0.5rem; border-radius: 12px; background: #FF6A00; color: #fff; font-weight: 700; font-size: 1.05rem; padding: 0.9rem 1.25rem; transition: filter .15s; }
+      .ctc-cta:hover { filter: brightness(1.08); }
+      .ctc-cta:focus-visible { outline: 3px solid #0A0E14; outline-offset: 2px; }
+      .ctc-cta[disabled] { opacity: 0.7; cursor: progress; }
+      .ctc-msg { display: none; border-radius: 10px; padding: 0.75rem 0.9rem; font-size: 0.9rem; font-weight: 600; }
+      .ctc-msg[data-kind="sending"] { display: block; background: rgba(10,14,20,0.07); color: #0A0E14; }
+      .ctc-msg[data-kind="success"] { display: block; background: rgba(22,101,52,0.12); color: #14532d; }
+      .ctc-msg[data-kind="error"] { display: block; background: rgba(185,28,28,0.12); color: #991b1b; }
+      /* topic pills: radio inputs, label is the pill */
+      .ctc-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+      .ctc-pill { cursor: pointer; border-radius: 999px; border: 1.5px solid rgba(10,14,20,0.25); background: transparent; padding: 0.35rem 0.8rem; font-size: 0.85rem; font-weight: 600; color: rgba(10,14,20,0.75); transition: all .15s; }
+      .ctc-pill:hover { border-color: rgba(10,14,20,0.5); }
+      .ctc-pills input { position: absolute; opacity: 0; width: 0; height: 0; }
+      .ctc-pills input:checked + .ctc-pill { background: #0A0E14; border-color: #0A0E14; color: #F5EAD6; }
+      .ctc-pills input:focus-visible + .ctc-pill { box-shadow: 0 0 0 3px rgba(255,106,0,0.4); }
+      .ctc-step-num { display: inline-flex; width: 2rem; height: 2rem; align-items: center; justify-content: center; border-radius: 50%; background: #FF6A00; color: #fff; font-weight: 800; font-size: 0.9rem; flex: none; }
+    </style>
+  </Fragment>
 
-      <!-- DOORS -->
-      <div class="mt-8 grid gap-4 sm:grid-cols-3">
-        <a href="#form" data-topic="plugin" class="door card p-5 hover:border-brand-orange/50" data-umami-event="contact-door" data-umami-event-site="allemanit" data-umami-event-door="plugin">
-          <div class="text-2xl" aria-hidden="true">🎛️</div>
-          <div class="mt-2 font-bold text-white">Plugin or icon set support</div>
-          <p class="mt-1 text-sm text-white/60">Bought something of mine on the Elgato Marketplace? This is the place. Tell me the product and what's wrong.</p>
-          <span class="mt-3 inline-block text-sm font-semibold text-brand-orange">Open the form ↓</span>
-        </a>
-        <a href={QUICKIT_URL} target="_blank" rel="noopener" class="card p-5 hover:border-brand-orange/50" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickitprojects" data-umami-event-placement="contact-door">
-          <div class="text-2xl" aria-hidden="true">🖧</div>
-          <div class="mt-2 font-bold text-white">Work with me · Quick IT</div>
-          <p class="mt-1 text-sm text-white/60">Networking, IT, infrastructure, automation. Quotes, projects and the AI line live on the Quick IT site.</p>
-          <span class="mt-3 inline-block text-sm font-semibold text-brand-orange">quickitprojects.com ↗</span>
-        </a>
-        <a href={MFM_URL} target="_blank" rel="noopener" class="card p-5 hover:border-brand-orange/50" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="madeformeai" data-umami-event-placement="contact-door">
-          <div class="text-2xl" aria-hidden="true">✨</div>
-          <div class="mt-2 font-bold text-white">Try your own AI</div>
-          <p class="mt-1 text-sm text-white/60">MadeForMeAI. Free account, live demo in minutes, no card. Account questions go through that site too.</p>
-          <span class="mt-3 inline-block text-sm font-semibold text-brand-orange">madeformeai.com ↗</span>
-        </a>
+  <section class="container-x pb-16 pt-8 lg:pt-12">
+    <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,440px)] lg:items-start lg:gap-12">
+
+      <!-- INTRO + DOORS -->
+      <div>
+        <p class="ctc-eyebrow text-lg text-brand-orange">Alleman<span class="text-brand-blue">IT</span></p>
+        <h1 class="ctc-display mt-2 text-5xl text-white sm:text-6xl lg:text-7xl">Say hi.<br />I read every one.</h1>
+        <p class="mt-4 text-lg text-white/70">No funnel, no bot. The note card on the right goes straight to my inbox at <span class="text-white/90">duallema@quickitprojects.com</span>.</p>
+
+        <div class="mt-8 hidden overflow-hidden rounded-2xl border border-white/10 lg:block">
+          <img src="/me.jpg" width="1200" height="800" alt="Dustin Alleman" class="aspect-[3/2] w-full object-cover" loading="lazy" />
+        </div>
+
+        <p class="ctc-eyebrow mt-10 text-sm text-white/50">Looking for something specific?</p>
+        <ol class="mt-4 grid gap-6 border-t border-white/10 pt-6">
+          <li class="flex gap-3">
+            <span class="ctc-step-num">🎛</span>
+            <div>
+              <div class="font-bold text-white">Plugin or icon set support</div>
+              <p class="mt-1 text-sm text-white/60">Bought one of my Stream Deck products on the Elgato Marketplace? Use the card and pick <strong class="text-white/80">Plugin / icon set support</strong> so I know which one.</p>
+              <a href="#form" data-topic="plugin" class="ctc-door mt-2 inline-block text-sm font-semibold text-brand-orange hover:underline" data-umami-event="contact-door" data-umami-event-site="allemanit" data-umami-event-door="plugin">Start a support note →</a>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="ctc-step-num">🖧</span>
+            <div>
+              <div class="font-bold text-white">Work with me · Quick IT</div>
+              <p class="mt-1 text-sm text-white/60">Networking, IT, infrastructure, automation. Quotes, projects and the AI line live on the Quick IT site.</p>
+              <a href={QUICKIT_URL} target="_blank" rel="noopener" class="mt-2 inline-block text-sm font-semibold text-brand-orange hover:underline" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="quickitprojects" data-umami-event-placement="contact-door">quickitprojects.com ↗</a>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <span class="ctc-step-num">✨</span>
+            <div>
+              <div class="font-bold text-white">Try your own AI</div>
+              <p class="mt-1 text-sm text-white/60">MadeForMeAI. Free account, live demo in minutes, no card. Account questions go through that site too.</p>
+              <a href={MFM_URL} target="_blank" rel="noopener" class="mt-2 inline-block text-sm font-semibold text-brand-orange hover:underline" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="madeformeai" data-umami-event-placement="contact-door">madeformeai.com ↗</a>
+            </div>
+          </li>
+        </ol>
       </div>
 
-      <!-- FORM -->
-      <div id="form" class="mt-10 scroll-mt-24">
-        <h2 class="text-lg font-bold text-white">Send me a message</h2>
-        <p class="mt-1 text-sm text-white/55">Plugin problems, questions, ideas, or hello. Pick a topic so it lands in the right pile.</p>
+      <!-- NOTE CARD FORM -->
+      <div id="form" class="scroll-mt-24">
+        <form id="contact-form" novalidate class="ctc-card overflow-hidden px-6 py-8 sm:px-8" data-webhook={CONTACT_WEBHOOK}
+          onfocusin="if(!window.__aitFS){window.__aitFS=1;window.umami&&window.umami.track('form-start',{site:'allemanit',form:'contact'})}">
+          <p class="ctc-eyebrow text-center text-xs text-ink-950/60">AllemanIT</p>
+          <h2 class="ctc-display mt-2 text-center text-5xl text-ink-950">Drop me<br />a note</h2>
+          <p class="mt-3 text-center text-sm text-ink-950/75">Name, email, what's up. That's it.</p>
 
-        <form id="contact-form" class="card mt-5 space-y-4 p-6" data-webhook={CONTACT_WEBHOOK} onfocusin="if(!window.__aitFS){window.__aitFS=1;window.umami&&window.umami.track('form-start',{site:'allemanit',form:'contact'})}">
-          <div class="grid gap-4 sm:grid-cols-2">
+          <div class="mt-6 space-y-4">
             <div>
-              <label for="f-topic" class="mb-1.5 block text-sm font-semibold text-white">What's this about? <span class="text-brand-orange">*</span></label>
-              <select id="f-topic" name="topic" required class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white outline-none focus:border-brand-orange">
-                {topics.map((t) => <option value={t.value}>{t.label}</option>)}
-              </select>
+              <label for="f-name" class="ctc-label">Name</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Your name" class="ctc-field" />
             </div>
-            <div id="product-wrap">
-              <label for="f-product" class="mb-1.5 block text-sm font-semibold text-white">Which product?</label>
-              <select id="f-product" name="product" class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white outline-none focus:border-brand-orange">
+            <div>
+              <label for="f-email" class="ctc-label">Email <span class="text-brand-orange" aria-hidden="true">*</span></label>
+              <input id="f-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@email.com" class="ctc-field" aria-required="true" />
+            </div>
+            <div>
+              <label for="f-message" class="ctc-label">Message <span class="text-brand-orange" aria-hidden="true">*</span></label>
+              <textarea id="f-message" name="message" rows="5" required placeholder="What's up?" class="ctc-field" aria-required="true"></textarea>
+            </div>
+
+            <fieldset>
+              <legend class="ctc-label">This is about <span class="font-normal text-ink-950/55">(optional)</span></legend>
+              <div class="ctc-pills" role="radiogroup">
+                {topics.map((t, i) => (
+                  <label>
+                    <input type="radio" name="topic" value={t.value} checked={i === 0} />
+                    <span class="ctc-pill">{t.label}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+
+            <div id="product-wrap" class="hidden">
+              <label for="f-product" class="ctc-label">Which product?</label>
+              <select id="f-product" name="product" class="ctc-field">
                 <option value="">Pick one</option>
                 {live.map((p) => <option value={p.slug}>{p.title}</option>)}
                 <option value="other">Other / not sure</option>
               </select>
+              <p class="mt-2 text-xs text-ink-950/60">Helpful: Stream Deck model, what you pressed, what happened instead, and whether the game or app it talks to was running.</p>
             </div>
           </div>
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="f-name" class="mb-1.5 block text-sm font-semibold text-white">Name</label>
-              <input id="f-name" name="name" placeholder="Your name" autocomplete="name"
-                class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
-            </div>
-            <div>
-              <label for="f-email" class="mb-1.5 block text-sm font-semibold text-white">Email <span class="text-brand-orange">*</span></label>
-              <input id="f-email" name="email" type="email" required placeholder="you@email.com" autocomplete="email"
-                class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
-            </div>
-          </div>
-          <div>
-            <label for="f-message" class="mb-1.5 block text-sm font-semibold text-white">Message <span class="text-brand-orange">*</span></label>
-            <textarea id="f-message" name="message" rows="5" required placeholder="What's up?"
-              class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange"></textarea>
-            <p id="plugin-hint" class="mt-2 hidden text-xs text-white/45">Helpful: which Stream Deck model, what you clicked, what happened instead. If the plugin talks to a game or app, say whether that app was running.</p>
-          </div>
-          <!-- honeypot: n8n Screen treats a filled "website" as spam -->
+
+          <!-- honeypot: n8n treats a filled "website" as spam -->
           <div class="hidden" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
-          <button type="submit" class="btn btn-primary w-full">Send it →</button>
-          <p id="contact-msg" class="hidden text-center text-sm"></p>
+
+          <button type="submit" class="ctc-cta mt-6"><span data-label>Send it</span> <span aria-hidden="true">→</span></button>
+          <p id="contact-msg" class="ctc-msg mt-4" role="status" aria-live="polite"></p>
+
+          <div class="ctc-tear -mx-6 mt-7 px-6 pt-5 text-center sm:-mx-8 sm:px-8">
+            <span class="text-2xl" aria-hidden="true">✉️</span>
+            <p class="ctc-eyebrow mt-1 text-xs text-ink-950/70">Replies come from me, not a bot.</p>
+          </div>
         </form>
+        <p class="mt-5 text-center text-sm text-white/50">Here for the Plex server? <a href="/status" class="text-brand-blue hover:underline">Media &amp; access →</a></p>
       </div>
 
-      <p class="mt-10 text-center text-sm text-white/45">Here for the Plex server? <a href="/status" class="text-brand-orange hover:underline">Media &amp; access →</a></p>
     </div>
   </section>
 
   <script>
     const form = document.getElementById('contact-form');
     const msg = document.getElementById('contact-msg');
-    const topic = document.getElementById('f-topic');
+    const btn = form?.querySelector('button[type=submit]');
+    const label = btn?.querySelector('[data-label]');
     const product = document.getElementById('f-product');
     const productWrap = document.getElementById('product-wrap');
-    const hint = document.getElementById('plugin-hint');
-
+    const radios = [...form.querySelectorAll('input[name=topic]')];
+    const topicValue = () => (radios.find((r) => r.checked) || radios[0]).value;
+    const setTopic = (v) => { const r = radios.find((x) => x.value === v); if (r) r.checked = true; syncTopic(); };
     function syncTopic() {
-      const isPlugin = topic.value === 'plugin';
+      const isPlugin = topicValue() === 'plugin';
       productWrap.classList.toggle('hidden', !isPlugin);
-      hint.classList.toggle('hidden', !isPlugin);
       if (!isPlugin) product.value = '';
     }
     // deep link: ?topic=plugin&product=<slug>
     const q = new URLSearchParams(location.search);
-    if (q.get('topic') && [...topic.options].some((o) => o.value === q.get('topic'))) topic.value = q.get('topic');
+    if (q.get('topic')) setTopic(q.get('topic'));
     if (q.get('product') && [...product.options].some((o) => o.value === q.get('product'))) product.value = q.get('product');
-    topic.addEventListener('change', syncTopic);
+    radios.forEach((r) => r.addEventListener('change', syncTopic));
+    document.querySelectorAll('a.ctc-door[data-topic]').forEach((a) => a.addEventListener('click', () => setTopic(a.dataset.topic)));
     syncTopic();
-    // door click preselects the topic
-    document.querySelectorAll('a.door[data-topic]').forEach((a) => a.addEventListener('click', () => { topic.value = a.dataset.topic; syncTopic(); }));
 
+    function show(kind, text) {
+      msg.dataset.kind = kind; msg.textContent = text;
+      msg.setAttribute('role', kind === 'error' ? 'alert' : 'status');
+      msg.setAttribute('aria-live', kind === 'error' ? 'assertive' : 'polite');
+    }
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = form.querySelector('button[type=submit]');
+      if (!form.checkValidity()) {
+        show('error', 'A valid email and a message, please.');
+        const bad = form.querySelector(':invalid'); if (bad) bad.focus();
+        return;
+      }
       const data = new FormData(form);
-      const email = (data.get('email') || '').toString().trim();
-      const message = (data.get('message') || '').toString().trim();
-      if (!email || !message) { show('Email and a message, please.', true); return; }
-      const t = topic.value;
+      const t = topicValue();
       const productSlug = t === 'plugin' ? (data.get('product') || '').toString() : '';
       const productTitle = productSlug ? product.options[product.selectedIndex].text : '';
       const payload = {
         name: (data.get('name') || '').toString().trim(),
-        email,
-        message,
-        topic: t,
-        product: productSlug,
-        productTitle,
+        email: (data.get('email') || '').toString().trim(),
+        message: (data.get('message') || '').toString().trim(),
+        topic: t, product: productSlug, productTitle,
         website: (data.get('website') || '').toString(),
         source: 'allemanit.com/contact',
         submittedAt: new Date().toISOString(),
       };
-      btn.disabled = true; btn.textContent = 'Sending...';
+      btn.disabled = true; btn.setAttribute('aria-busy', 'true'); label.textContent = 'Sending...';
+      show('sending', 'Sending...');
       try {
-        const res = await fetch(form.dataset.webhook, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
-        });
+        const res = await fetch(form.dataset.webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) throw new Error('bad status');
         window.umami?.track('form-submit', { site: 'allemanit', form: 'contact', topic: t, outcome: 'success' });
         form.reset(); syncTopic();
-        show('Got it. I read every message and will get back to you.', false);
+        show('success', 'Got it. I read every message and will get back to you.');
       } catch (err) {
-        show('Something broke. Email me directly at duallema@quickitprojects.com.', true);
+        show('error', 'Something broke. Email me directly at duallema@quickitprojects.com.');
       } finally {
-        btn.disabled = false; btn.textContent = 'Send it →';
+        btn.disabled = false; btn.removeAttribute('aria-busy'); label.textContent = 'Send it';
       }
     });
-    function show(text, isError) {
-      msg.textContent = text;
-      msg.className = 'text-center text-sm ' + (isError ? 'text-red-400' : 'text-green-400');
-    }
   </script>
 </Base>

@@ -10,10 +10,10 @@ const MFM_URL = 'https://madeformeai.com/';
 const QUICKIT_URL = 'https://quickitprojects.com/';
 const live = products.filter((p) => p.status === 'live').map((p) => ({ slug: p.slug, title: p.title }));
 const topics = [
+  { value: 'other', label: 'Just reaching out' },
   { value: 'plugin', label: 'Stream Deck plugin or icon set (Elgato Marketplace)' },
   { value: 'quickit', label: 'Quick IT: networking, IT, automation work' },
   { value: 'mfm', label: 'MadeForMeAI account or product' },
-  { value: 'other', label: 'Something else' },
 ];
 ---
 <Base title="Contact Dustin Alleman | AllemanIT" description="Reach Dustin Alleman. Stream Deck plugin support for ALMNJOY products on the Elgato Marketplace, Quick IT Projects work, MadeForMeAI, or just say hi. Every message lands in my inbox.">
@@ -44,56 +44,72 @@ const topics = [
         </a>
       </div>
 
-      <!-- FORM -->
+      <!-- FORM: wire-line tile, same language as /daily -->
       <div id="form" class="mt-10 scroll-mt-24">
-        <h2 class="text-lg font-bold text-white">Send me a message</h2>
-        <p class="mt-1 text-sm text-white/55">Plugin problems, questions, ideas, or hello. Pick a topic so it lands in the right pile.</p>
+        <form id="contact-form" class="cf-tile" data-webhook={CONTACT_WEBHOOK} onfocusin="if(!window.__aitFS){window.__aitFS=1;window.umami&&window.umami.track('form-start',{site:'allemanit',form:'contact'})}">
+          <div class="cf-head">
+            <span class="cf-k">Send me a message</span>
+            <span class="cf-live">● lands in my inbox</span>
+          </div>
 
-        <form id="contact-form" class="card mt-5 space-y-4 p-6" data-webhook={CONTACT_WEBHOOK} onfocusin="if(!window.__aitFS){window.__aitFS=1;window.umami&&window.umami.track('form-start',{site:'allemanit',form:'contact'})}">
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="f-topic" class="mb-1.5 block text-sm font-semibold text-white">What's this about? <span class="text-brand-orange">*</span></label>
-              <select id="f-topic" name="topic" required class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white outline-none focus:border-brand-orange">
-                {topics.map((t) => <option value={t.value}>{t.label}</option>)}
-              </select>
-            </div>
-            <div id="product-wrap">
-              <label for="f-product" class="mb-1.5 block text-sm font-semibold text-white">Which product?</label>
-              <select id="f-product" name="product" class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white outline-none focus:border-brand-orange">
+          <div class="cf-row cf-2">
+            <label class="cf-field"><span class="cf-k">Name</span><input id="f-name" name="name" placeholder="Your name" autocomplete="name" /></label>
+            <label class="cf-field"><span class="cf-k">Email <em>*</em></span><input id="f-email" name="email" type="email" required placeholder="you@email.com" autocomplete="email" inputmode="email" /></label>
+          </div>
+          <label class="cf-field"><span class="cf-k">Message <em>*</em></span><textarea id="f-message" name="message" rows="5" required placeholder="What's up?"></textarea></label>
+
+          <div class="cf-row cf-2">
+            <label class="cf-field"><span class="cf-k">This is about <small>optional</small></span>
+              <select id="f-topic" name="topic">{topics.map((t) => <option value={t.value}>{t.label}</option>)}</select>
+            </label>
+            <label id="product-wrap" class="cf-field hidden"><span class="cf-k">Which product?</span>
+              <select id="f-product" name="product">
                 <option value="">Pick one</option>
                 {live.map((p) => <option value={p.slug}>{p.title}</option>)}
                 <option value="other">Other / not sure</option>
               </select>
-            </div>
+            </label>
           </div>
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="f-name" class="mb-1.5 block text-sm font-semibold text-white">Name</label>
-              <input id="f-name" name="name" placeholder="Your name" autocomplete="name"
-                class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
-            </div>
-            <div>
-              <label for="f-email" class="mb-1.5 block text-sm font-semibold text-white">Email <span class="text-brand-orange">*</span></label>
-              <input id="f-email" name="email" type="email" required placeholder="you@email.com" autocomplete="email"
-                class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange" />
-            </div>
-          </div>
-          <div>
-            <label for="f-message" class="mb-1.5 block text-sm font-semibold text-white">Message <span class="text-brand-orange">*</span></label>
-            <textarea id="f-message" name="message" rows="5" required placeholder="What's up?"
-              class="w-full rounded-xl border border-white/10 bg-ink-800 px-4 py-3 text-white placeholder-white/30 outline-none focus:border-brand-orange"></textarea>
-            <p id="plugin-hint" class="mt-2 hidden text-xs text-white/45">Helpful: which Stream Deck model, what you clicked, what happened instead. If the plugin talks to a game or app, say whether that app was running.</p>
-          </div>
+          <p id="plugin-hint" class="cf-hint hidden">Helpful: Stream Deck model, what you pressed, what happened instead, and whether the game or app it talks to was running.</p>
+
           <!-- honeypot: n8n Screen treats a filled "website" as spam -->
           <div class="hidden" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
-          <button type="submit" class="btn btn-primary w-full">Send it →</button>
-          <p id="contact-msg" class="hidden text-center text-sm"></p>
+
+          <div class="cf-foot">
+            <button type="submit" class="btn btn-primary">Send it →</button>
+            <p id="contact-msg" class="hidden text-sm"></p>
+          </div>
         </form>
       </div>
 
       <p class="mt-10 text-center text-sm text-white/45">Here for the Plex server? <a href="/status" class="text-brand-orange hover:underline">Media &amp; access →</a></p>
     </div>
   </section>
+
+
+  <style is:global>
+    .cf-tile { --rule:#2a2721; --accent:#ff6a00; --accent2:#4f9dff; --mute:#8f8a7d; border:1px solid var(--rule); border-radius:14px; padding:22px 22px 20px; background:rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:18px; }
+    .cf-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; border-bottom:1px solid var(--rule); padding-bottom:12px; }
+    .cf-k { display:block; font-family:'Inter',sans-serif; font-size:11px; font-weight:800; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); }
+    .cf-k em { color:var(--accent); font-style:normal; }
+    .cf-k small { font-weight:600; letter-spacing:0.08em; text-transform:none; color:var(--mute); margin-left:6px; }
+    .cf-live { font-family:'Inter',sans-serif; font-size:10.5px; color:#35d07f; letter-spacing:0.06em; }
+    .cf-row { display:grid; gap:18px; }
+    @media (min-width:640px) { .cf-2 { grid-template-columns:1fr 1fr; } }
+    .cf-field { display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .cf-field.hidden, .cf-hint.hidden { display:none; }
+    .cf-field input, .cf-field textarea, .cf-field select { width:100%; background:transparent; border:0; border-bottom:1px solid var(--rule); border-radius:0; padding:8px 0 9px; color:#e9e4d8; font-size:15.5px; line-height:1.4; outline:none; transition:border-color .14s ease; }
+    .cf-field textarea { resize:vertical; min-height:120px; }
+    .cf-field select { appearance:none; -webkit-appearance:none; cursor:pointer; background-image:linear-gradient(45deg, transparent 50%, var(--mute) 50%), linear-gradient(135deg, var(--mute) 50%, transparent 50%); background-position:calc(100% - 14px) 55%, calc(100% - 9px) 55%; background-size:5px 5px, 5px 5px; background-repeat:no-repeat; padding-right:28px; }
+    .cf-field select option { background:#0A0E14; color:#e9e4d8; }
+    .cf-field input::placeholder, .cf-field textarea::placeholder { color:#5f5b52; }
+    .cf-field input:focus, .cf-field textarea:focus, .cf-field select:focus { border-bottom-color:var(--accent2); }
+    .cf-field input:user-invalid, .cf-field textarea:user-invalid { border-bottom-color:#c2410c; }
+    .cf-hint { font-size:12.5px; color:var(--mute); line-height:1.5; margin-top:-6px; }
+    .cf-foot { display:flex; flex-wrap:wrap; align-items:center; gap:14px; border-top:1px solid var(--rule); padding-top:16px; }
+    .cf-foot .btn { padding:10px 22px; }
+    #contact-msg.ok { color:#35d07f; } #contact-msg.err { color:#f87171; }
+  </style>
 
   <script>
     const form = document.getElementById('contact-form');
@@ -156,7 +172,7 @@ const topics = [
     });
     function show(text, isError) {
       msg.textContent = text;
-      msg.className = 'text-center text-sm ' + (isError ? 'text-red-400' : 'text-green-400');
+      msg.className = 'text-sm ' + (isError ? 'err' : 'ok');
     }
   </script>
 </Base>

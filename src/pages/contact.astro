@@ -98,13 +98,14 @@ const topics = [
     @media (min-width:640px) { .cf-2 { grid-template-columns:1fr 1fr; } }
     .cf-field { display:flex; flex-direction:column; gap:6px; min-width:0; }
     .cf-field.hidden, .cf-hint.hidden { display:none; }
-    .cf-field input, .cf-field textarea, .cf-field select { width:100%; background:transparent; border:0; border-bottom:1px solid var(--rule); border-radius:0; padding:8px 0 9px; color:#e9e4d8; font-size:15.5px; line-height:1.4; outline:none; transition:border-color .14s ease; }
+    .cf-field input, .cf-field textarea, .cf-field select { width:100%; background:rgba(255,255,255,0.045); border:1px solid #3a362e; border-radius:10px; padding:11px 13px; color:#f3eee2; font-size:15.5px; line-height:1.4; outline:none; transition:border-color .14s ease, background .14s ease, box-shadow .14s ease; }
+    .cf-field input:hover, .cf-field textarea:hover, .cf-field select:hover { border-color:#5a554a; }
     .cf-field textarea { resize:vertical; min-height:120px; }
-    .cf-field select { appearance:none; -webkit-appearance:none; cursor:pointer; background-image:linear-gradient(45deg, transparent 50%, var(--mute) 50%), linear-gradient(135deg, var(--mute) 50%, transparent 50%); background-position:calc(100% - 14px) 55%, calc(100% - 9px) 55%; background-size:5px 5px, 5px 5px; background-repeat:no-repeat; padding-right:28px; }
+    .cf-field select { appearance:none; -webkit-appearance:none; cursor:pointer; background-image:linear-gradient(45deg, transparent 50%, var(--mute) 50%), linear-gradient(135deg, var(--mute) 50%, transparent 50%); background-position:calc(100% - 20px) 55%, calc(100% - 15px) 55%; background-size:5px 5px, 5px 5px; background-repeat:no-repeat; padding-right:38px; }
     .cf-field select option { background:#0A0E14; color:#e9e4d8; }
-    .cf-field input::placeholder, .cf-field textarea::placeholder { color:#5f5b52; }
-    .cf-field input:focus, .cf-field textarea:focus, .cf-field select:focus { border-bottom-color:var(--accent2); }
-    .cf-field input:user-invalid, .cf-field textarea:user-invalid { border-bottom-color:#c2410c; }
+    .cf-field input::placeholder, .cf-field textarea::placeholder { color:#7a7568; }
+    .cf-field input:focus, .cf-field textarea:focus, .cf-field select:focus { border-color:var(--accent); background:rgba(255,255,255,0.06); box-shadow:0 0 0 3px rgba(255,106,0,0.22); }
+    .cf-field input:user-invalid, .cf-field textarea:user-invalid { border-color:#c2410c; }
     .cf-hint { font-size:12.5px; color:var(--mute); line-height:1.5; margin-top:-6px; }
     .cf-foot { display:flex; flex-wrap:wrap; align-items:center; gap:14px; border-top:1px solid var(--rule); padding-top:16px; }
     .cf-foot .btn { padding:10px 22px; }

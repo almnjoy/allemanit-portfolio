@@ -16,7 +16,7 @@ const more = [
   { href: 'https://family.allemanit.com', label: 'Family', external: true },
   { href: 'https://quickitprojects.com', label: 'Business', external: true },
 ];
-const cta = { href: 'https://madeformeai.com/#story', label: 'Try Your Own AI' };
+const cta = { href: '/contact/', label: 'Contact' };
 const path = Astro.url.pathname;
 const isActive = (href) => !href.startsWith('http') && href !== '/' && path.startsWith(href.replace(/\/$/, ''));
 const ext = (l) => (l.external ? { target: '_blank', rel: 'noopener' } : {});
@@ -40,7 +40,7 @@ const ext = (l) => (l.external ? { target: '_blank', rel: 'noopener' } : {});
           ))}
         </div>
       </details>
-      <a href={cta.href} data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="madeformeai" data-umami-event-placement="nav" target="_blank" rel="noopener" class="rounded-lg bg-brand-orange px-3.5 py-1.5 text-sm font-semibold text-white transition hover:brightness-110">{cta.label}</a>
+      <a href={cta.href} data-umami-event="cta-click" data-umami-event-site="allemanit" data-umami-event-placement="nav" class="rounded-lg bg-brand-orange px-3.5 py-1.5 text-sm font-semibold text-white transition hover:brightness-110">{cta.label}</a>
     </div>
 
     <!-- mobile toggle -->
@@ -64,7 +64,7 @@ const ext = (l) => (l.external ? { target: '_blank', rel: 'noopener' } : {});
           <a href={l.href} {...ext(l)} class="flex min-h-[48px] items-center border-b border-white/5 text-base text-white/80">{l.label}{l.external && <span aria-hidden="true" class="ml-1 text-white/40">↗</span>}</a>
         ))}
       </div>
-      <a href={cta.href} data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="madeformeai" data-umami-event-placement="nav-mobile" target="_blank" rel="noopener" class="mt-4 mb-2 block rounded-lg bg-brand-orange px-4 py-3 text-center text-base font-semibold text-white">{cta.label}</a>
+      <a href={cta.href} data-umami-event="cta-click" data-umami-event-site="allemanit" data-umami-event-placement="nav-mobile" class="mt-4 mb-2 block rounded-lg bg-brand-orange px-4 py-3 text-center text-base font-semibold text-white">{cta.label}</a>
     </div>
   </div>
 

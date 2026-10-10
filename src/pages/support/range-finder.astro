@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Range Finder Companion Support | AllemanIT" description="Set up Range Finder Companion, clear calibration and diagnose Windows input-helper errors." url="https://allemanit.com/support/range-finder/">
+  <section class="container-x py-10">
+    <a href="/design-lab/marketplace/" class="text-sm text-white/60 hover:text-white">← Stream Deck products</a>
+    <h1 class="mt-3 text-4xl font-extrabold text-white">Range Finder Companion support</h1>
+    <p class="mt-4 max-w-3xl text-white/70">A WARDOGS companion for coordinate capture, bearing and horizontal range. Version 0.7.0 includes 15-key and XL layouts, three visual styles, calibration reset and input troubleshooting.</p>
+    <a href="https://marketplace.elgato.com/product/range-finder-companion-dc521771-db4a-4fd7-a462-22f3790a043b" target="_blank" rel="noopener" class="mt-5 inline-block font-semibold text-brand-orange hover:underline">Get Range Finder Companion on Elgato Marketplace ↗</a>
+    <div class="mt-8 grid gap-5 lg:grid-cols-2">
+      <section class="card p-6">
+        <h2 class="text-xl font-bold text-white">Start here</h2>
+        <ol class="mt-4 list-decimal space-y-3 pl-5 text-white/70">
+          <li>Install or update from Elgato Marketplace, then select the included Ultimate Artillery profile for your device.</li>
+          <li>Select CAL MENU in the Stream Deck app. Expand Troubleshooting and click <strong>Check input helper</strong>.</li>
+          <li>For map-menu capture, open the game map. Hover a point and press CAL MENU, then hover the menu’s coordinate-copy entry and press CAL MENU again within 60 seconds.</li>
+          <li>Capture Position and Target. Set the same metres-per-coordinate-unit scale on your Bearing/Range and Distance keys, and verify it against a known distance.</li>
+        </ol>
+        <p class="mt-4 text-sm text-white/50">The helper check sends no clicks or keystrokes. A successful check confirms initialization, not that a game will accept input. Range is horizontal distance, not a ballistic firing solution.</p>
+      </section>
+      <section class="card p-6">
+        <h2 class="text-xl font-bold text-white">Clear calibration</h2>
+        <p class="mt-4 text-white/70">Hold the physical CAL MENU key for 1.5 seconds, or select it in Stream Deck and click <strong>Clear saved calibration</strong>. It returns to SETUP and keeps your Position and Target.</p>
+        <p class="mt-3 text-white/70"><strong>Reset Coordinates</strong> does the opposite: it clears Position and Target while keeping calibration. Recalibrate after changing game resolution or UI scale.</p>
+      </section>
+      <section class="card p-6">
+        <h2 class="text-xl font-bold text-white">Yellow warning or buttons not working?</h2>
+        <ol class="mt-4 list-decimal space-y-3 pl-5 text-white/70">
+          <li>Select the affected key in Stream Deck and expand Troubleshooting.</li>
+          <li>Click <strong>Check input helper</strong>, then <strong>Copy support details</strong>.</li>
+          <li>Retry the failing action. Copy support details again afterward to capture its error.</li>
+          <li>Send those reports with your Windows version, Stream Deck software version and the name of the affected action.</li>
+        </ol>
+        <a href="/contact/?topic=plugin&amp;product=range-finder#form" class="mt-5 inline-block font-semibold text-brand-orange hover:underline">Contact plugin support →</a>
+        <p class="mt-4 text-sm text-white/50">Support reports contain error codes, action names and timestamps. They exclude coordinates, clipboard text and chat content.</p>
+      </section>
+      <section class="card p-6">
+        <h2 class="text-xl font-bold text-white">What the common errors mean</h2>
+        <dl class="mt-4 space-y-4 text-white/70">
+          <div><dt class="font-bold text-white">SCRIPT BLOCK</dt><dd>Windows PowerShell blocked the helper script. Review the report and your execution-policy settings. On a managed computer, ask your administrator to allow the helper.</dd></div>
+          <div><dt class="font-bold text-white">PS ERROR / NO PS</dt><dd>The helper could not initialize, or Windows PowerShell could not start. Send the diagnostic report so we can narrow down the cause.</dd></div>
+          <div><dt class="font-bold text-white">INPUT BLOCK / FOCUS</dt><dd>Keep the game focused. Check whether the game runs as administrator while Stream Deck does not. An input failure alone does not identify the cause.</dd></div>
+          <div><dt class="font-bold text-white">NEED CAL / BAD COPY / SET POS</dt><dd>Complete calibration, check the capture mode and copied coordinates, or record your Position first, respectively.</dd></div>
+        </dl>
+        <p class="mt-4 text-sm text-white/50">The plugin launches a Windows PowerShell input helper as your user. It does not change permissions or bypass Windows policy. Normal use does not require administrator privileges.</p>
+      </section>
+    </div>
+  </section>
+</Base>

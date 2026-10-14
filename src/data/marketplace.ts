@@ -1,41 +1,82 @@
 // Single source of truth for the Elgato Marketplace page.
-// Covers live in public/design-lab/marketplace/<slug>.png, 960x480 crops of the listing covers.
+// Covers live in public/design-lab/marketplace/<slug>.png, 960x480 downscales of each listing's 01-Hero.png
+//   (1920x960) from BUSINESS/Brand-and-Marketing/ElgatoMarketplace/<product>/Gallery/<newest set>/.
 //
-// Titles, categories, prices and URLs: Scout's verified listing facts, observed 2026-09-25, plus the
-//   2026-09-29 submission batch (24 products Pending review in Maker Console, prices as submitted).
-//   Library of record: BUSINESS/Brand-and-Marketing/ElgatoMarketplace/README.md
-// Media refreshed and Range Finder 0.7.0 publication confirmed by Dustin, 2026-10-10.
-// Taglines, alt text and notes: condensed from each product's DESCRIPTION.txt / LISTING.json.
-// Nothing here is written from scratch. Adding a product is one object in `products`.
-// status: live = published and purchasable; pending = submitted, Elgato review not finished, no public URL yet;
-//         coming-soon = built and tested locally, not submitted.
+// 2026-10-14: catalog cut to the 14 products that exist in Maker Console (12 published, 2 pending review).
+//   Every rejected or never-submitted listing was deleted from the console by Dustin; their site entries and
+//   covers moved to ElgatoMarketplace/Archive/Website-Covers-Before-2026-10-14/. Library of record:
+//   BUSINESS/Brand-and-Marketing/ElgatoMarketplace/README.md + START-HERE.html.
+// Titles, categories, prices and URLs: read off the published listings / Maker Console. Taglines, alt text
+//   and notes: condensed from each product's DESCRIPTION.txt / LISTING.json. Nothing here is written from scratch.
+// status: live = published and purchasable; pending = submitted, Elgato review not finished, no public URL yet.
 
 export type Product = {
   slug: string;                         // public/design-lab/marketplace/<slug>.png
-  title: string;                        // exact published listing title
-  category?: 'Icons' | 'Profiles' | 'Plugins'; // Marketplace category, omitted when there is no listing to read it from
-  tagline: string;                      // one line, condensed from the approved listing copy
+  title: string;                        // exact listing title
+  category: 'Icons' | 'Profiles' | 'Plugins';
+  tagline: string;                      // one line, condensed from the listing copy
   alt: string;                          // describes the cover art
   note?: string;                        // constraint carried over from the listing itself
-  price?: string;                       // current price shown on the listing, not a quote from us
-  url?: string;                         // canonical public listing URL
-  status: 'live' | 'pending' | 'revision' | 'coming-soon';
+  price?: string;                       // current price on the listing, or the submitted price while pending
+  url?: string;                         // canonical public listing URL (live only)
+  status: 'live' | 'pending';
   version?: string;
   support?: string;
 };
 
-// The date every price and URL below was read off the listing pages.
-export const observed = '29 September 2026';
+// The date every price and URL below was read off the listing pages / Maker Console.
+export const observed = '14 October 2026';
 
 export const storefront = 'https://marketplace.elgato.com/@almnjoy';
 
 export const products: Product[] = [
+  // Plugins first: they are the products with the most going on.
+  {
+    slug: 'range-finder',
+    title: 'Range Finder Companion',
+    category: 'Plugins',
+    tagline: 'Map coordinates, bearing, distance and supply requests on one Stream Deck key for WARDOGS players, with 15-key and XL profiles, three styles, calibration reset and input troubleshooting.',
+    alt: 'Range Finder Companion cover: a Stream Deck photographed on a desk showing set, reset, ammo, supply, zoom and bearing keys.',
+    note: 'Independent companion for WARDOGS, not an official game product. Range uses captured coordinates and the configured map scale; ballistic elevation is not calculated.',
+    price: '$3.99',
+    url: 'https://marketplace.elgato.com/product/range-finder-companion-dc521771-db4a-4fd7-a462-22f3790a043b',
+    status: 'live',
+    version: '0.7.0',
+    support: '/support/range-finder/',
+  },
+  {
+    slug: 'bf6-field-kit',
+    title: 'BF6 Field Kit',
+    category: 'Plugins',
+    tagline: 'A 15-key infantry layout with its own companion plugin for Battlefield 6 players: map, scoreboard, ping, interact, reload, weapon and gadget slots, plus a manual round timer and Steam player count.',
+    alt: 'BF6 Field Kit cover: a Stream Deck photographed on a desk with map, scoreboard, ping, reload and weapon slot keys in white line art.',
+    note: 'Independent AllemanIT work, not an official Battlefield or EA product. Key bindings are configurable shortcuts; in-game defaults may differ.',
+    price: '$3.99',
+    url: 'https://marketplace.elgato.com/product/bf6-field-kit-515cf902-34bf-4cb4-a42b-b09b987cb43d',
+    status: 'live',
+    version: '1.0.0',
+  },
+
+  // Profiles
+  {
+    slug: 'wardogs-tactical-circuit',
+    title: 'WARDOGS - Tactical Circuit',
+    category: 'Profiles',
+    tagline: 'Tactical Circuit artwork for WARDOGS on a 15-key Stream Deck: infantry, vehicle, helicopter and building sets, ivory symbols on orange and blue circuits.',
+    alt: 'WARDOGS - Tactical Circuit cover: a Stream Deck photographed on a desk with orange and blue circuit-board keys.',
+    note: 'Independent ALMNJOY work, not an official WARDOGS, BULKHEAD or Elgato product. Button images are static and do not report live game state.',
+    price: '$1.99',
+    url: 'https://marketplace.elgato.com/product/wardogs-tactical-circuit-f5fee548-35a8-4015-92a6-b42bf4534821',
+    status: 'live',
+  },
+
+  // Icon packs, published
   {
     slug: 'quest-journal',
     title: 'Quest Journal',
     category: 'Icons',
     tagline: '64 static designs for RPG players and tabletop hosts: quest journal, map, party, ready check, backpack, dice.',
-    alt: 'Quest Journal artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Quest Journal cover: a Stream Deck photographed on a desk showing the pack artwork.',
     note: 'Original artwork, not affiliated with any game publisher.',
     price: '$4.99',
     url: 'https://marketplace.elgato.com/product/quest-journal-c434f149-c56a-4851-90d3-163ec5b77ec7',
@@ -46,7 +87,7 @@ export const products: Product[] = [
     title: 'Prompt Bench',
     category: 'Icons',
     tagline: '56 static designs for writers and educators who arrange their own AI-assisted workflows: summarize, rewrite, translate, dictate, review.',
-    alt: 'Prompt Bench artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Prompt Bench cover: a Stream Deck photographed on a desk showing the pack artwork.',
     price: '$4.99',
     url: 'https://marketplace.elgato.com/product/prompt-bench-007f17e6-d576-4cb4-a705-437b049908b8',
     status: 'live',
@@ -56,7 +97,7 @@ export const products: Product[] = [
     title: 'Pocket Gremlins',
     category: 'Icons',
     tagline: '24 static designs and 24 animated alternatives of an original sprout-eared creature: coffee, be right back, quiet please, rage pause, applause.',
-    alt: 'Pocket Gremlins artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Pocket Gremlins cover: a Stream Deck photographed on a desk showing the pack artwork.',
     note: 'Animations are decorative and run independently of actions.',
     price: '$3.99',
     url: 'https://marketplace.elgato.com/product/pocket-gremlins-44745cc4-856f-4e4f-9888-8dcfe5fb053b',
@@ -67,7 +108,7 @@ export const products: Product[] = [
     title: 'Meeting Mode',
     category: 'Icons',
     tagline: '48 static designs for remote workers and educators: microphone, camera, screen share, hand raise, agenda, captions, breaks.',
-    alt: 'Meeting Mode artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Meeting Mode cover: a Stream Deck photographed on a desk showing the pack artwork.',
     price: '$3.99',
     url: 'https://marketplace.elgato.com/product/meeting-mode-e4ed008e-bc4b-45b5-806d-d1b395202f65',
     status: 'live',
@@ -77,7 +118,7 @@ export const products: Product[] = [
     title: 'Long Haul',
     category: 'Icons',
     tagline: '72 static designs for truck simulator players: wipers, headlights, hazards, parking brake, cruise, retarder, trailer, coupling.',
-    alt: 'Long Haul artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Long Haul cover: a Stream Deck photographed on a desk showing the pack artwork.',
     note: 'Original artwork, not affiliated with any game publisher.',
     price: '$4.99',
     url: 'https://marketplace.elgato.com/product/long-haul-1a827cd7-170c-4a42-bdd7-2dd492abc0f0',
@@ -88,7 +129,7 @@ export const products: Product[] = [
     title: 'Home Glow',
     category: 'Icons',
     tagline: '64 static designs and 24 animated alternatives for room and lighting control: desk lights, reading, cinema, curtains, fan, heating.',
-    alt: 'Home Glow artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Home Glow cover: a Stream Deck photographed on a desk showing the pack artwork.',
     note: 'Animations are decorative and run independently of actions.',
     price: '$5.99',
     url: 'https://marketplace.elgato.com/product/home-glow-d4706fa6-8ec8-4bbb-b845-7e3aaa4019d0',
@@ -99,7 +140,7 @@ export const products: Product[] = [
     title: 'Hearth Pixels',
     category: 'Icons',
     tagline: '48 static designs and 48 animated alternatives in original pixel art: backpack, crafting, map, journal, lantern, watering can, chest.',
-    alt: 'Hearth Pixels artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Hearth Pixels cover: a Stream Deck photographed on a desk showing the pack artwork.',
     note: 'Original artwork, not affiliated with any game publisher. Animations are decorative.',
     price: '$5.99',
     url: 'https://marketplace.elgato.com/product/hearth-pixels-de07261b-2ac5-487f-b2a6-15110b2ba069',
@@ -110,7 +151,7 @@ export const products: Product[] = [
     title: 'Cutroom',
     category: 'Icons',
     tagline: '80 static designs for video editors and film students: blade, ripple trim, roll, slip, markers, in and out points, snapping, export.',
-    alt: 'Cutroom artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Cutroom cover: a Stream Deck photographed on a desk showing the pack artwork.',
     price: '$5.99',
     url: 'https://marketplace.elgato.com/product/cutroom-34b38344-e275-4e11-af93-afb055873edc',
     status: 'live',
@@ -120,313 +161,34 @@ export const products: Product[] = [
     title: 'Packet Lab',
     category: 'Icons',
     tagline: '80 static designs for network engineers, homelab builders and IT support: DNS lookup, ping, packet capture, subnet planning, VPN, racks.',
-    alt: 'Packet Lab artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
+    alt: 'Packet Lab cover: a Stream Deck photographed on a desk showing the pack artwork.',
     price: '$5.99',
     url: 'https://marketplace.elgato.com/product/packet-lab-45717b3a-be56-4aa6-ac42-74fde83d2f86',
     status: 'live',
   },
-  {
-    slug: 'wardogs-tactical-circuit',
-    title: 'WARDOGS - Tactical Circuit',
-    category: 'Profiles',
-    tagline: 'Tactical Circuit artwork for WARDOGS on a 15-key Stream Deck: infantry, vehicle, helicopter and building sets, ivory symbols on orange and blue circuits.',
-    alt: 'WARDOGS - Tactical Circuit artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
-    note: 'Independent ALMNJOY work, not an official WARDOGS, BULKHEAD or Elgato product. Button images are static and do not report live game state.',
-    price: '$1.99',
-    url: 'https://marketplace.elgato.com/product/wardogs-tactical-circuit-f5fee548-35a8-4015-92a6-b42bf4534821',
-    status: 'live',
-  },
-  {
-    // 0.7.0 published, confirmed by Dustin on 2026-10-10.
-    slug: 'range-finder',
-    title: 'Range Finder Companion',
-    category: 'Plugins',
-    tagline: 'Map coordinates, bearing, distance and supply requests on one Stream Deck key for WARDOGS players, with 15-key and XL profiles, three styles, calibration reset and input troubleshooting.',
-    alt: 'Range Finder Companion artwork displayed on a fifteen-key Stream Deck in a themed photographic desk scene.',
-    note: 'Independent companion for WARDOGS, not an official game product. Range uses captured coordinates and the configured map scale; ballistic elevation is not calculated.',
-    price: '$3.99',
-    status: 'live',
-    version: '0.7.0',
-    support: '/support/range-finder/',
-    url: 'https://marketplace.elgato.com/product/range-finder-companion-dc521771-db4a-4fd7-a462-22f3790a043b',
-  },
 
-  // 2026-09-29 batch: submitted, Pending review, auto-publish on approval. No public URLs until Elgato approves.
-  {
-    slug: 'chat-patrol',
-    title: 'Chat Patrol',
-    category: 'Icons',
-    tagline: 'Community moderation and chat tools. 24 static designs plus six animated alternatives: typing, timeout, inbox, poll, volume meter, notification.',
-    alt: 'Chat Patrol artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'scene-switch',
-    title: 'Scene Switch',
-    category: 'Icons',
-    tagline: 'Broadcast scenes and source controls. 24 static designs plus six animated alternatives: scene cut, starting soon, fade, audio meter, studio lamp, transition.',
-    alt: 'Scene Switch artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'audio-orbit',
-    title: 'Audio Orbit',
-    category: 'Icons',
-    tagline: 'A compact mixing and listening desk. 24 static designs plus six animated alternatives: level meter, channel fader, waveform, tape reel, beat, gain knob.',
-    alt: 'Audio Orbit artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'clip-factory',
-    title: 'Clip Factory',
-    category: 'Icons',
-    tagline: 'Editing and clip assembly. 24 static designs plus six animated alternatives: trim cut, playhead, render queue, captions, audio meter, slate.',
-    alt: 'Clip Factory artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'dungeon-master-desk',
-    title: 'Dungeon Master Desk',
-    category: 'Icons',
-    tagline: 'Tabletop sessions and encounter tools. 24 static designs plus six animated alternatives: dice roll, session clock, candle, treasure, potion, portal.',
-    alt: 'Dungeon Master Desk artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'inventory-alchemy',
-    title: 'Inventory Alchemy',
-    category: 'Icons',
-    tagline: 'Ingredients, equipment and crafting storage. 24 static designs plus six animated alternatives: brew, inventory chest, crafting hammer, furnace, scales, seedling.',
-    alt: 'Inventory Alchemy artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'cyber-terminal',
-    title: 'Cyber Terminal',
-    category: 'Icons',
-    tagline: 'Terminal tools and secure workspaces. 24 static designs plus six animated alternatives: command entry, file transfer, data activity, network traffic, access gate, health meter.',
-    alt: 'Cyber Terminal artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'network-watch',
-    title: 'Network Watch',
-    category: 'Icons',
-    tagline: 'Network operations and diagnostics. 24 static designs plus six animated alternatives: packet flow, throughput, server activity, ping trace, port scan, uptime.',
-    alt: 'Network Watch artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'build-bay',
-    title: 'Build Bay',
-    category: 'Icons',
-    tagline: 'Workshop builds and engineering tasks. 24 static designs plus six animated alternatives: hammer strike, build progress, bench vise, measure, weld, level.',
-    alt: 'Build Bay artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'deploy-station',
-    title: 'Deploy Station',
-    category: 'Icons',
-    tagline: 'Software delivery and release operations. 24 static designs plus six animated alternatives: pipeline, console, service, traffic, health, release gate.',
-    alt: 'Deploy Station artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'focus-workshop',
-    title: 'Focus Workshop',
-    category: 'Icons',
-    tagline: 'Personal work sessions and organization. 24 static designs plus six animated alternatives: focus timer, task progress, inbox, writing, desk light, break brew.',
-    alt: 'Focus Workshop artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'night-shift',
-    title: 'Night Shift',
-    category: 'Icons',
-    tagline: 'Late-night desk routines. 24 static designs plus six animated alternatives: desk lamp, shift timer, coffee, night rain, moon clouds, audio meter.',
-    alt: 'Night Shift artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'coffee-circuit',
-    title: 'Coffee Circuit',
-    category: 'Icons',
-    tagline: 'Coffee bar and work-break rituals. 24 static designs plus six animated alternatives: hot cup, pour over, espresso gauge, brew timer, coffee grinder, milk pour.',
-    alt: 'Coffee Circuit artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'cozy-garden',
-    title: 'Cozy Garden',
-    category: 'Icons',
-    tagline: 'Plants, seasons and garden routines. 24 static designs plus six animated alternatives: seed growth, watering, rain, butterfly, bloom, garden gate.',
-    alt: 'Cozy Garden artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'weather-window',
-    title: 'Weather Window',
-    category: 'Icons',
-    tagline: 'Weather-inspired decorative artwork. 24 static designs plus six animated alternatives: rainfall, snowfall, cloud drift, thermometer, wind sock, lightning.',
-    alt: 'Weather Window artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'space-cargo',
-    title: 'Space Cargo',
-    category: 'Icons',
-    tagline: 'Freight logistics in a fictional spaceport. 24 static designs plus six animated alternatives: cargo door, container, loading, fuel gauge, dock traffic, airlock.',
-    alt: 'Space Cargo artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'ocean-station',
-    title: 'Ocean Station',
-    category: 'Icons',
-    tagline: 'A fictional underwater research station. 24 static designs plus six animated alternatives: water sample, current, pressure, sonar trace, station gate, fish swim.',
-    alt: 'Ocean Station artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'arcade-tokens',
-    title: 'Arcade Tokens',
-    category: 'Icons',
-    tagline: 'Original arcade room controls and collectibles. 24 static designs plus six animated alternatives: joystick, button press, score counter, coin drop, prize chest, game timer.',
-    alt: 'Arcade Tokens artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'music-workshop',
-    title: 'Music Workshop',
-    category: 'Icons',
-    tagline: 'Music practice, recording and production. 24 static designs plus six animated alternatives: metronome, piano keys, channel meter, mixer fader, tape machine, waveform.',
-    alt: 'Music Workshop artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'creator-camera',
-    title: 'Creator Camera',
-    category: 'Icons',
-    tagline: 'Photography and video capture tools. 24 static designs plus six animated alternatives: camera shutter, slate, focus pull, exposure meter, studio light, capture timer.',
-    alt: 'Creator Camera artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animated loops are decorative and run independently of actions.',
-    price: '$3.99',
-    status: 'pending',
-  },
-  {
-    slug: 'signal-desk',
-    title: 'Signal Desk',
-    category: 'Icons',
-    tagline: '96 static designs for everyday desk control: microphone and speaker, media playback, screenshots, clipboard, folders, calendar, notes, focus, system and navigation.',
-    alt: 'Signal Desk artwork displayed on a Stream Deck in a themed desk scene.',
-    price: '$4.99',
-    status: 'pending',
-  },
-  {
-    slug: 'orbital-console',
-    title: 'Orbital Console',
-    category: 'Icons',
-    tagline: '72 original spaceflight designs, each as an animated GIF and a static PNG: landing gear, docking, cargo, scanner, mining, engines, shields, life support, crew, navigation.',
-    alt: 'Orbital Console artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Original artwork, not affiliated with any game publisher. Animations are decorative.',
-    price: '$7.99',
-    status: 'pending',
-  },
+  // Icon packs, submitted and waiting on Elgato. No public URL until approved.
   {
     slug: 'on-air-motion',
     title: 'On Air Motion',
     category: 'Icons',
-    tagline: '60 broadcast-style designs with 36 animated versions and a static PNG for every design: recording, microphone, camera, scene, replay, marker, captions, studio light, screen share.',
-    alt: 'On Air Motion artwork displayed on a Stream Deck in a themed desk scene.',
-    note: 'Animations are decorative and run independently of actions.',
+    tagline: '30 studio designs for streamers, podcasters and creators, each with two static states (60 PNGs), plus 8 animated GIFs: microphone, camera, recorder, bell, mixer, music, live antenna, coffee break.',
+    alt: 'On Air Motion cover: six studio icons in charcoal, cream and orange, including a microphone, camera, mixer and coffee cup.',
+    note: 'GIF motion is decorative. Automatic state changes need an action or plugin that supports them.',
     price: '$6.99',
     status: 'pending',
-  },
-  {
-    slug: 'bf6-field-kit',
-    title: 'BF6 Field Kit',
-    category: 'Plugins',
-    tagline: 'A 15-key infantry layout with its own companion plugin for Battlefield 6 players: map, scoreboard, ping, interact, reload, weapon and gadget slots, plus a manual round timer and Steam player count.',
-    alt: 'BF6 Field Kit cover: fifteen Stream Deck keys in a field-kit style with map, scoreboard, ping, reload and weapon slot symbols.',
-    note: 'Independent AllemanIT work, not an official Battlefield or EA product. Key bindings are configurable shortcuts; in-game defaults may differ.',
-    price: '$3.99',
-    status: 'revision',
     version: '1.0.0',
   },
   {
-    slug: 'wardogs-animated',
-    title: 'WARDOGS Animated',
+    slug: 'war-pack-animated-icons',
+    title: 'War Pack Animated Icons',
     category: 'Icons',
-    tagline: '122 animated GIF designs with 122 matching static PNGs: infantry, vehicles, helicopters, weapons, comms, maps and navigation, in two-second loops.',
-    alt: 'WARDOGS Animated cover: fifteen Stream Deck keys with blue, orange and cream tactical artwork on circuit backgrounds.',
-    note: 'Independent ALMNJOY work, not an official WARDOGS, BULKHEAD or Elgato product. Animations are decorative.',
-    status: 'coming-soon',
-  },
-  {
-    slug: 'quest-journal-animated',
-    title: 'Quest Journal Animated',
-    category: 'Icons',
-    tagline: '64 animated GIF designs with 64 matching static PNGs: turning pages, sloshing potions, spinning coins, portal rings and moving equipment for RPG and tabletop layouts.',
-    alt: 'Quest Journal Animated cover: fifteen Stream Deck keys in charcoal with ivory equipment silhouettes and muted gold.',
-    note: 'Original artwork, not affiliated with any game publisher. Animations are decorative.',
-    status: 'coming-soon',
-  },
-  {
-    slug: 'home-glow-animated',
-    title: 'Home Glow Animated',
-    category: 'Icons',
-    tagline: '64 animated GIF designs with 64 matching static PNGs: spinning fans, traveling light rays, moving curtains and clock hands for home-control and routine layouts.',
-    alt: 'Home Glow Animated cover: fifteen Stream Deck keys in warm navy, peach and lavender showing lamps, fans, curtains and clocks.',
-    note: 'Animations are decorative and run independently of actions.',
-    status: 'coming-soon',
-  },
-  {
-    slug: 'pocket-gremlins-overtime',
-    title: 'Pocket Gremlins Overtime',
-    category: 'Icons',
-    tagline: 'A standalone expansion with 24 new animated work and reaction designs: sprout-eared characters carrying inbox, bug, build, deadline and desk-chaos props. The original pack is not required.',
-    alt: 'Pocket Gremlins Overtime cover: fifteen Stream Deck keys on plum with ivory sprout-eared creatures juggling task props.',
-    note: 'Animations are decorative and run independently of actions.',
-    status: 'coming-soon',
+    tagline: '40 animated GIF designs with 40 matching static PNGs of realistic military artwork for shooter setups: infantry, vehicles, helicopters, weapons, ammunition, maps, movement, comms.',
+    alt: 'War Pack Animated Icons cover: a Stream Deck photographed on a desk showing soldiers, vehicles, helicopters and weapons.',
+    note: 'Word-free artwork, not affiliated with any game developer. Animations are decorative loops, not live game status. Icon collection only, no profile or plugin.',
+    price: '$2.99',
+    status: 'pending',
+    version: '1.0.0',
   },
 ];
 
@@ -434,6 +196,4 @@ export const counts = {
   total: products.length,
   live: products.filter((p) => p.status === 'live').length,
   pending: products.filter((p) => p.status === 'pending').length,
-  revisions: products.filter((p) => p.status === 'revision').length,
-  comingSoon: products.filter((p) => p.status === 'coming-soon').length,
 };

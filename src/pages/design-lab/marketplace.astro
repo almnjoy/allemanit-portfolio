@@ -4,7 +4,7 @@ import { products, counts, observed, storefront } from '../../data/marketplace';
 ---
 <Base
   title="Elgato Marketplace | Design Lab | AllemanIT"
-  description={`The Stream Deck icon packs, profiles and plugins I design and sell under ALMNJOY: ${counts.live} live on the Elgato Marketplace, ${counts.pending} in review, ${counts.comingSoon} not listed yet. Prices, previews and what you get.`}
+  description={`The Stream Deck icon packs, profiles and plugins I design and sell under ALMNJOY: ${counts.live} live on the Elgato Marketplace, ${counts.pending} in review. Prices, previews and what you get.`}
   url="https://allemanit.com/design-lab/marketplace/"
 >
 
@@ -12,12 +12,10 @@ import { products, counts, observed, storefront } from '../../data/marketplace';
     <a href="/design-lab/" class="text-sm text-white/60 hover:text-white">← Design Lab</a>
     <h1 class="mt-3 text-4xl font-extrabold text-white sm:text-5xl">{counts.total} Stream Deck sets.<br class="hidden sm:block" /> {counts.live} live, {counts.pending} in Elgato review.</h1>
     <p class="mt-4 max-w-3xl text-lg text-white/70">I make Stream Deck icon packs, profiles and companion plugins under ALMNJOY. Icon packs give your existing actions matching artwork. Plugins such as Range Finder Companion add controls, live information and included layouts.</p>
-    <p class="mt-3 max-w-3xl text-white/60">Prices below are what each listing showed, or was submitted at, on {observed}. They are the Marketplace price, not a quote from me. Products marked "In review" are waiting on Elgato. Range Finder Companion 0.7.0 is published as of 10 October 2026. BF6 Field Kit has a revision prepared after reviewer feedback.</p>
+    <p class="mt-3 max-w-3xl text-white/60">Prices below are what each listing showed, or was submitted at, on {observed}. They are the Marketplace price, not a quote from me. Products marked "In review" are waiting on Elgato. Range Finder Companion 0.7.0 and BF6 Field Kit 1.0.0 are both published.</p>
     <div class="mt-7 flex flex-wrap gap-x-8 gap-y-3 text-sm">
       <div><span class="text-2xl font-extrabold text-white">{counts.live}</span> <span class="text-white/60">live listings</span></div>
       <div><span class="text-2xl font-extrabold text-white">{counts.pending}</span> <span class="text-white/60">submitted, in review</span></div>
-      <div><span class="text-2xl font-extrabold text-white">{counts.comingSoon}</span> <span class="text-white/60">built, not submitted</span></div>
-      <div><span class="text-2xl font-extrabold text-white">{counts.revisions}</span> <span class="text-white/60">revision prepared</span></div>
     </div>
   </section>
 
@@ -32,8 +30,6 @@ import { products, counts, observed, storefront } from '../../data/marketplace';
                 </a>
               : <img src={`/design-lab/marketplace/${p.slug}.png`} alt={p.alt} loading="lazy" decoding="async" width="960" height="480" class="aspect-[2/1] w-full object-cover" />}
             {p.status === 'pending' && <span class="tag absolute right-3 top-3 bg-ink-950/80">In review</span>}
-            {p.status === 'revision' && <span class="tag absolute right-3 top-3 bg-ink-950/80">Revision prepared</span>}
-            {p.status === 'coming-soon' && <span class="tag absolute right-3 top-3 bg-ink-950/80">Coming soon</span>}
           </div>
           <div class="flex flex-1 flex-col p-4">
             <div class="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
@@ -52,7 +48,7 @@ import { products, counts, observed, storefront } from '../../data/marketplace';
               {p.price
                 ? <div>
                     <span class="block text-lg font-bold text-white">{p.price}</span>
-                    <span class="block text-[11px] uppercase tracking-wider text-white/40">{p.status === 'pending' || p.status === 'revision' ? 'submitted price, pending review' : 'current price on Marketplace'}</span>
+                    <span class="block text-[11px] uppercase tracking-wider text-white/40">{p.status === 'pending' ? 'submitted price, pending review' : 'current price on Marketplace'}</span>
                   </div>
                 : <span class="text-sm text-white/50">Not on the Marketplace yet.</span>}
               {p.url && <a href={p.url} target="_blank" rel="noopener" data-umami-event="outbound-click" data-umami-event-site="allemanit" data-umami-event-destination="elgato-marketplace" data-umami-event-placement="marketplace-card" class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-brand-orange px-3.5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-orange/85">View on Marketplace ↗</a>}

@@ -1,0 +1,224 @@
+---
+import Base from '../../layouts/Base.astro';
+// Command Deck 0.3.0 setup + troubleshooting. Copy source: ElgatoMarketplace/Command-Deck/Support/
+// COMMAND-DECK-TROUBLESHOOTING-WEBSITE-HANDOFF.txt (Part B only). Scope stays Windows + 15-key until tested further.
+// FAQ uses native <details>/<summary>: keyboard operable (Tab, Enter/Space) with no script.
+const jump = [
+  ['setup', 'Setup'], ['launchers', 'Launchers'], ['routines', 'Routines'], ['discord', 'Discord'],
+  ['obs', 'OBS'], ['sound', 'Sound'], ['icons', 'Icons'], ['support', 'Support'],
+];
+const contact = '/contact/?topic=plugin&product=command-deck#form';
+---
+<Base
+  title="Command Deck Setup & Troubleshooting | AllemanIT"
+  description="Set up Command Deck shortcuts, map your apps and folders, and troubleshoot Discord, OBS recording, replay clips and profile artwork."
+  url="https://allemanit.com/support/command-deck/"
+>
+  <section class="container-x py-10">
+    <a href="/design-lab/marketplace/" class="text-sm text-white/60 hover:text-white">← Stream Deck products</a>
+    <h1 class="mt-3 text-4xl font-extrabold text-white">Command Deck setup &amp; troubleshooting</h1>
+    <p class="mt-4 max-w-3xl text-white/70">Command Deck puts everyday Windows shortcuts and gaming controls on two pages: Everyday and Gamer Dad. Choose Cryo, Forge or After Hours, with labelled artwork or symbol-only icons for your own titles. This page covers version 0.3.0.</p>
+
+    <nav aria-label="On this page" class="mt-6 flex flex-wrap gap-2">
+      {jump.map(([id, label]) => <a href={`#${id}`} class="tag hover:text-white">{label}</a>)}
+    </nav>
+
+    <div class="mt-8 grid gap-5 lg:grid-cols-2">
+      <section class="card p-6" aria-labelledby="before">
+        <h2 id="before" class="text-xl font-bold text-white">Before you start</h2>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-white/70">
+          <li>Use the profile made for your device. This download provides <strong>Windows 15-key</strong> layouts.</li>
+          <li>You supply your apps, games and accounts. They are not included in the download.</li>
+          <li>Buttons marked <strong>SETUP</strong> need your app, folder, document or website destination.</li>
+          <li>OBS and Discord controls need their corresponding Elgato plugins and setup.</li>
+          <li>Volume and Output Mute control Windows playback audio, not your microphone.</li>
+        </ul>
+      </section>
+
+      <section id="setup" class="card scroll-mt-24 p-6" aria-labelledby="setup-h">
+        <h2 id="setup-h" class="text-xl font-bold text-white">Quick setup</h2>
+        <ol class="mt-4 list-decimal space-y-2 pl-5 text-white/70">
+          <li>Import your chosen <code>.streamDeckProfile</code> through Stream Deck's profile import controls. Keep your existing profile as a backup and select the newly imported Command Deck.</li>
+          <li>Choose your destinations for the SETUP keys. Start with individual buttons.</li>
+          <li>Configure each step inside Work Start and Game Prep separately.</li>
+          <li>Complete the optional Discord and OBS setup below if you want those controls.</li>
+          <li>Test the actual result in the app, including both directions of toggles.</li>
+          <li>Once a key works, optionally replace its SETUP image with matching normal artwork.</li>
+          <li>Export your configured profile as a private backup. It may contain your settings.</li>
+        </ol>
+      </section>
+    </div>
+
+    <div class="mt-10 max-w-4xl space-y-10">
+      <section id="launchers" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-white">Launchers, apps and folders</h2>
+        <div class="mt-4 space-y-3">
+          <details class="card group p-5">
+            <summary class="cursor-pointer font-semibold text-white">How do I map an app, folder or Notes button?</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Select the key in Stream Deck. For <strong>System &gt; Open</strong>, use the App / File picker to choose an existing shortcut, application, folder or document. A document opens in its default Windows app. The Notes key does not create a notes file or install an app for you.</p>
+              <p>Prefer a launcher-created shortcut for a game or an app that needs launch arguments. If you type a path, put double quotes around the complete path, especially if it contains spaces. Example placeholder: <code>"C:\Example Folder\My App.lnk"</code>. Replace it with your own existing target, then test the key.</p>
+            </div>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">How do I map Mail or Calendar?</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Paste your provider's normal HTTPS page into the Website action's URL field and keep the browser-opening option enabled. Sign in through the provider yourself.</p>
+              <p><strong>Never paste a password, access token or temporary sign-in link into the profile.</strong></p>
+              <p>For a desktop app, replace Website with System &gt; Open and choose its shortcut. Make the same choice separately in Work Start if that routine should open it too.</p>
+            </div>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">A button does nothing</summary>
+            <ul class="mt-3 list-disc space-y-2 pl-5 text-white/70">
+              <li>Check whether its destination is blank. Personal targets are intentionally empty.</li>
+              <li>Confirm the selected app, shortcut, document or folder still exists and opens normally.</li>
+              <li>For a website, check the URL. For a typed file path, check the full-path quotes.</li>
+              <li>Check the taskbar and system tray: the app may already be running in the background. Opening an app does not guarantee it brings its window to the front.</li>
+              <li>If the editor shows only part of the selected app name, select it again with the picker.</li>
+            </ul>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Steam, Discord or OBS does not appear</summary>
+            <p class="mt-3 text-white/70">First open the application normally in Windows. Then map its working shortcut to the appropriate key and test again. An app already running in the tray may stay there. Open Discord only launches Discord. Open OBS only launches OBS. Neither button joins a voice channel, authorizes a plugin, begins recording or starts the replay buffer.</p>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">A key shows a question mark or missing action</summary>
+            <p class="mt-3 text-white/70">Check that the action's required plugin is installed in Stream Deck. For voice controls, use Discord by Elgato. For recording and replay, use OBS Studio by Elgato. Follow the plugin's connection instructions. If the key does not recover, replace it with the matching action from that plugin and configure it in the editor. Changing an icon cannot repair a missing integration.</p>
+          </details>
+        </div>
+      </section>
+
+      <section id="routines" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-white">Routines and pages</h2>
+        <div class="mt-4 space-y-3">
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Work Start or Game Prep only opens some things</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Double-click the routine in Stream Deck to edit its Multi Action steps. <strong>Work Start</strong> opens your work folder, mail and calendar. <strong>Game Prep</strong> opens your launcher, Discord and OBS.</p>
+              <p>Each nested action has its own destination. Changing a standalone key does not update the copy inside a routine. Map and test all three steps separately, and remove steps for apps you do not use.</p>
+              <p>Routines issue launch requests; they do not wait for login or confirm that an application is ready, so app startup may overlap. Game Prep does not start your favourite game, join voice, record or start replay.</p>
+            </div>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">How do I switch pages?</summary>
+            <p class="mt-3 text-white/70">The bottom-right key on Everyday opens Gamer Dad. The bottom-right key on Gamer Dad returns to Everyday. Neither navigation key needs an app path. If navigation was replaced while editing, restore the matching Next Page or Previous Page action.</p>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">The Break timer looks different from the other icons</summary>
+            <p class="mt-3 text-white/70">Break uses Stream Deck's native five-minute timer so its countdown remains visible. Edit its Duration in seconds and choose a sound in Stream Deck. Test completion and check Windows output volume if you cannot hear it. The supplied static timer artwork is an optional image, not a countdown display.</p>
+          </details>
+        </div>
+      </section>
+
+      <section id="discord" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-white">Discord</h2>
+        <div class="mt-4 space-y-3">
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Discord Mute or Deafen does not work</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Install Discord by Elgato from Stream Deck's Marketplace and complete its authorization prompts yourself. Opening the Discord app alone does not establish that connection.</p>
+              <p>Test Mute and Deafen in a voice session and confirm mute/unmute and deafen/undeafen inside Discord itself. If authorization has expired, reconnect through the plugin's prompts.</p>
+              <p>These controls affect Discord voice. They are not a system-wide microphone switch. Keep the native plugin display while testing; a static microphone icon does not prove that the microphone is muted.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="obs" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-white">OBS recording and replay clips</h2>
+        <div class="mt-4 space-y-3">
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">OBS Record does not work</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Make sure OBS Studio is installed and open, and that the OBS Studio plugin by Elgato is available in Stream Deck. Follow the connection prompts shown by the plugin. This profile uses that integration; a separate third-party WebSocket plugin is not the supplied default.</p>
+              <p>Configure your scenes, video sources and audio in OBS. Make a short recording directly in OBS first. Then test Record from Stream Deck, stop it and play the saved file. Check OBS's recording indicator and the saved output, not only the icon on the key. A working Record button does not configure game capture or your audio sources.</p>
+            </div>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Record works, but Save Clip does nothing</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Recording and the replay buffer are separate features. Save Clip needs an enabled, running replay buffer with footage already accumulated.</p>
+              <ol class="list-decimal space-y-1 pl-5">
+                <li>Open OBS Settings &gt; Output and enable Replay Buffer.</li>
+                <li>Choose a replay duration, such as 30 seconds, and apply the settings.</li>
+                <li>Start it with REPLAY or Start Replay Buffer in OBS.</li>
+                <li>Let it run while the desired source is visible and audio is present.</li>
+                <li>Press SAVE CLIP, find the new file and play it to confirm picture and sound.</li>
+              </ol>
+              <p>Options differ between Simple and Advanced output modes. Do not change modes only to match an old screenshot; check OBS's current guidance if a setting is unavailable. The buffer cannot recover footage from before it started. REPLAY starts and stops buffering; SAVE CLIP writes the recent buffered footage to disk.</p>
+            </div>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Where did my recording or clip go?</summary>
+            <p class="mt-3 text-white/70">Check the output destination in OBS Settings &gt; Output for your current mode. Map Clips Folder to the folder OBS actually uses. That key opens a folder; it does not set or change OBS's output location. Confirm a newly saved file exists and plays.</p>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">My recording is black or has no sound</summary>
+            <p class="mt-3 text-white/70">Check the selected scene, capture source and audio meters directly in OBS. Make a short recording using OBS's own controls and fix the capture or audio configuration there before retesting the Stream Deck key. The profile triggers recording; it does not choose the correct game, display, microphone or scene automatically.</p>
+          </details>
+        </div>
+      </section>
+
+      <section id="sound" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-white">Sound, media and screen snip</h2>
+        <div class="mt-4 space-y-3">
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Volume, Output Mute or Play / Pause affects the wrong thing</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Volume and Output Mute use the current Windows output device. Check your selected speaker or headphone output and Windows sound settings. Output Mute is not Discord mute and does not mute your microphone.</p>
+              <p>Play / Pause sends a system media command. Which player receives it depends on the apps running. Open and select your preferred player, then try again.</p>
+            </div>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Screen Snip does not save where I expected</summary>
+            <p class="mt-3 text-white/70">Snip opens the Windows snipping overlay with Win+Shift+S. Choose a region yourself. Saving and clipboard behavior are controlled by Windows and the Snipping Tool settings. This key does not silently save an image into a folder configured by Command Deck.</p>
+          </details>
+        </div>
+      </section>
+
+      <section id="icons" class="scroll-mt-24">
+        <h2 class="text-2xl font-bold text-white">Icons and styles</h2>
+        <div class="mt-4 space-y-3">
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">How do I change the look or remove SETUP?</summary>
+            <div class="mt-3 space-y-3 text-white/70">
+              <p>Choose a labelled or symbol-only profile in the style you want, or apply replacement PNG files to individual keys. Use the matching normal image after mapping a SETUP key. SETUP does not disappear automatically; it is a manual reminder, not an error detector.</p>
+              <p>Symbol-only artwork lets you add your own titles through Stream Deck. Labelled PNGs already contain text, so avoid placing a duplicate title over the baked-in label. The download includes 144 px and 288 px files; they are size variants of the same artwork.</p>
+            </div>
+          </details>
+          <details class="card p-5">
+            <summary class="cursor-pointer font-semibold text-white">Why do OBS, Discord and timer keys keep their own displays?</summary>
+            <p class="mt-3 text-white/70">The profiles preserve those actions' native displays for countdown and state feedback. Matching static artwork is also included for customization. Static artwork does not report recording, replay, mute or deafen state, so confirm state in the app.</p>
+          </details>
+        </div>
+      </section>
+
+      <section id="support" class="card scroll-mt-24 p-6">
+        <h2 class="text-2xl font-bold text-white">Still stuck? Contact support</h2>
+        <p class="mt-3 text-white/70">Send these with your message:</p>
+        <ul class="mt-3 list-disc space-y-2 pl-5 text-white/70">
+          <li>Windows version and Stream Deck software version.</li>
+          <li>Stream Deck device model, Command Deck version, style and label option.</li>
+          <li>The page and button name, what you expected, and what actually happened.</li>
+          <li>Whether the app action works directly without Stream Deck.</li>
+          <li>For Discord or OBS: app and plugin versions, connection status and any visible error.</li>
+          <li>A cropped screenshot with personal details removed, if useful.</li>
+        </ul>
+        <p class="mt-4 text-sm text-white/50">Do not send passwords, access tokens, account authorization codes or an unredacted personal profile export. Exports can contain private paths and account-linked settings.</p>
+        <a href={contact} class="mt-5 inline-block font-semibold text-brand-orange hover:underline">Contact Command Deck support →</a>
+      </section>
+
+      <section class="text-sm text-white/60">
+        <h2 class="text-base font-bold text-white">Official references</h2>
+        <ul class="mt-2 space-y-1">
+          <li><a class="hover:text-white underline underline-offset-4" target="_blank" rel="noopener" href="https://help.elgato.com/hc/en-us/articles/360028234471-Elgato-Stream-Deck-System-Actions-Hotkey-Open-Website-Multimedia">Stream Deck system actions ↗</a></li>
+          <li><a class="hover:text-white underline underline-offset-4" target="_blank" rel="noopener" href="https://help.elgato.com/hc/en-us/articles/360027960912-Elgato-Stream-Deck-Multi-Actions">Stream Deck Multi Actions ↗</a></li>
+          <li><a class="hover:text-white underline underline-offset-4" target="_blank" rel="noopener" href="https://marketplace.elgato.com/stream-deck/plugins">Elgato plugin catalog ↗</a></li>
+          <li><a class="hover:text-white underline underline-offset-4" target="_blank" rel="noopener" href="https://obsproject.com/download">OBS Studio download ↗</a></li>
+          <li><a class="hover:text-white underline underline-offset-4" target="_blank" rel="noopener" href="https://obsproject.com/kb/OBS-Studio-Overview">OBS Studio overview ↗</a></li>
+        </ul>
+      </section>
+    </div>
+  </section>
+</Base>

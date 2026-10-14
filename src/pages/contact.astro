@@ -8,7 +8,7 @@ import { products } from '../data/marketplace';
 const CONTACT_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/contact';
 const MFM_URL = 'https://madeformeai.com/';
 const QUICKIT_URL = 'https://quickitprojects.com/';
-const live = products.filter((p) => p.status === 'live').map((p) => ({ slug: p.slug, title: p.title }));
+const live = products.filter((p) => p.status === 'live' || p.support).map((p) => ({ slug: p.slug, title: p.title }));
 const topics = [
   { value: 'other', label: 'Just reaching out' },
   { value: 'plugin', label: 'Stream Deck plugin or icon set (Elgato Marketplace)' },

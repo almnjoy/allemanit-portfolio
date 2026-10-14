@@ -10,7 +10,10 @@
 //   BUSINESS/Brand-and-Marketing/ElgatoMarketplace/README.md + START-HERE.html.
 // Titles, categories, prices and URLs: read off the published listings / Maker Console. Taglines, alt text
 //   and notes: condensed from each product's DESCRIPTION.txt / LISTING.json. Nothing here is written from scratch.
-// status: live = published and purchasable; pending = submitted, Elgato review not finished, no public URL yet.
+// status: live = published and purchasable; pending = submitted, Elgato review not finished, no public URL yet;
+//         coming-soon = built and being finished locally, not submitted.
+// update: a newer version of a LIVE product that is waiting on Elgato review (shown as a note on the card).
+// Covers: live products use the exact thumbnail Elgato serves (mp-cdn '-thumbnail-intrinsic-' 1280x640, synced 2026-10-14).
 
 export type Product = {
   slug: string;                         // public/design-lab/marketplace/<slug>.png
@@ -21,8 +24,9 @@ export type Product = {
   note?: string;                        // constraint carried over from the listing itself
   price?: string;                       // current price on the listing, or the submitted price while pending
   url?: string;                         // canonical public listing URL (live only)
-  status: 'live' | 'pending';
+  status: 'live' | 'pending' | 'coming-soon';
   version?: string;
+  update?: string;
   support?: string;
 };
 
@@ -44,6 +48,7 @@ export const products: Product[] = [
     url: 'https://marketplace.elgato.com/product/range-finder-companion-dc521771-db4a-4fd7-a462-22f3790a043b',
     status: 'live',
     version: '0.7.0',
+    update: 'Version 0.7.1 is in Elgato review.',
     support: '/support/range-finder/',
   },
   {
@@ -65,7 +70,7 @@ export const products: Product[] = [
     title: 'WARDOGS - Tactical Circuit',
     category: 'Profiles',
     tagline: 'Tactical Circuit artwork for WARDOGS on a 15-key Stream Deck: infantry, vehicle, helicopter and building sets, ivory symbols on orange and blue circuits.',
-    alt: 'WARDOGS - Tactical Circuit cover: fifteen ivory tactical symbols on orange and blue circuit fragments, Your deck, your control.',
+    alt: 'WARDOGS - Tactical Circuit cover: a Stream Deck on a desk with ivory tactical symbols on orange and blue circuit keys.',
     note: 'Independent ALMNJOY work, not an official WARDOGS, BULKHEAD or Elgato product. Button images are static and do not report live game state.',
     price: '$1.99',
     url: 'https://marketplace.elgato.com/product/wardogs-tactical-circuit-f5fee548-35a8-4015-92a6-b42bf4534821',
@@ -104,6 +109,7 @@ export const products: Product[] = [
     price: '$3.99',
     url: 'https://marketplace.elgato.com/product/pocket-gremlins-44745cc4-856f-4e4f-9888-8dcfe5fb053b',
     status: 'live',
+    update: 'Version 1.1 is in Elgato review: 20 new character designs, 44 static + 44 animated.',
   },
   {
     slug: 'meeting-mode',
@@ -136,6 +142,7 @@ export const products: Product[] = [
     price: '$5.99',
     url: 'https://marketplace.elgato.com/product/home-glow-d4706fa6-8ec8-4bbb-b845-7e3aaa4019d0',
     status: 'live',
+    update: 'Version 2 is in Elgato review: 246 selectable images (153 static, 93 animated) in three coordinated color styles.',
   },
   {
     slug: 'hearth-pixels',
@@ -192,10 +199,23 @@ export const products: Product[] = [
     status: 'pending',
     version: '1.0.0',
   },
+  // Built locally, not submitted yet.
+  {
+    slug: 'command-deck',
+    title: 'Command Deck',
+    category: 'Profiles',
+    tagline: 'Everyday work and gaming shortcuts on two 15-key pages, Everyday and Gamer Dad, in Cryo, Forge or After Hours styles with labelled or symbol-only artwork.',
+    alt: 'Command Deck cover: Stream Deck profile pages in three styles, Cryo, Forge and After Hours.',
+    note: 'Windows and the 15-key layout. Discord and OBS controls need their Elgato plugins; apps, games and accounts are not included.',
+    status: 'coming-soon',
+    version: '0.3.0',
+    support: '/support/command-deck/',
+  },
 ];
 
 export const counts = {
   total: products.length,
   live: products.filter((p) => p.status === 'live').length,
   pending: products.filter((p) => p.status === 'pending').length,
+  comingSoon: products.filter((p) => p.status === 'coming-soon').length,
 };

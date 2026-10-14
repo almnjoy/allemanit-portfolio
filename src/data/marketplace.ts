@@ -1,6 +1,8 @@
 // Single source of truth for the Elgato Marketplace page.
-// Covers live in public/design-lab/marketplace/<slug>.png, 960x480 downscales of each listing's 01-Hero.png
-//   (1920x960) from BUSINESS/Brand-and-Marketing/ElgatoMarketplace/<product>/Gallery/<newest set>/.
+// Covers live in public/design-lab/marketplace/<slug>.png, 960x480 downscales of the hero that is LIVE on each listing
+//   (1920x960) from BUSINESS/Brand-and-Marketing/ElgatoMarketplace/<product>/Gallery/. Published listings keep the
+//   hero Elgato shows today (BF6 = Marketplace-2026-10-10, Tactical Circuit = original 2026-09-13 grid cover), not
+//   the newest unsubmitted revision.
 //
 // 2026-10-14: catalog cut to the 14 products that exist in Maker Console (12 published, 2 pending review).
 //   Every rejected or never-submitted listing was deleted from the console by Dustin; their site entries and
@@ -49,7 +51,7 @@ export const products: Product[] = [
     title: 'BF6 Field Kit',
     category: 'Plugins',
     tagline: 'A 15-key infantry layout with its own companion plugin for Battlefield 6 players: map, scoreboard, ping, interact, reload, weapon and gadget slots, plus a manual round timer and Steam player count.',
-    alt: 'BF6 Field Kit cover: a Stream Deck photographed on a desk with map, scoreboard, ping, reload and weapon slot keys in white line art.',
+    alt: 'BF6 Field Kit cover: a Stream Deck with map, scoreboard, ping, reload and weapon slot keys in white line art over a ruined city.',
     note: 'Independent AllemanIT work, not an official Battlefield or EA product. Key bindings are configurable shortcuts; in-game defaults may differ.',
     price: '$3.99',
     url: 'https://marketplace.elgato.com/product/bf6-field-kit-515cf902-34bf-4cb4-a42b-b09b987cb43d',
@@ -63,7 +65,7 @@ export const products: Product[] = [
     title: 'WARDOGS - Tactical Circuit',
     category: 'Profiles',
     tagline: 'Tactical Circuit artwork for WARDOGS on a 15-key Stream Deck: infantry, vehicle, helicopter and building sets, ivory symbols on orange and blue circuits.',
-    alt: 'WARDOGS - Tactical Circuit cover: a Stream Deck photographed on a desk with orange and blue circuit-board keys.',
+    alt: 'WARDOGS - Tactical Circuit cover: fifteen ivory tactical symbols on orange and blue circuit fragments, Your deck, your control.',
     note: 'Independent ALMNJOY work, not an official WARDOGS, BULKHEAD or Elgato product. Button images are static and do not report live game state.',
     price: '$1.99',
     url: 'https://marketplace.elgato.com/product/wardogs-tactical-circuit-f5fee548-35a8-4015-92a6-b42bf4534821',
@@ -126,7 +128,7 @@ export const products: Product[] = [
   },
   {
     slug: 'home-glow',
-    title: 'Home Glow',
+    title: 'Home Glow (V2 coming)',
     category: 'Icons',
     tagline: '64 static designs and 24 animated alternatives for room and lighting control: desk lights, reading, cinema, curtains, fan, heating.',
     alt: 'Home Glow cover: a Stream Deck photographed on a desk showing the pack artwork.',

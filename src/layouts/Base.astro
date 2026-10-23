@@ -11,6 +11,7 @@ const {
   type = 'website',
   noindex = false,
   jsonld = null,
+  bare = false,
 } = Astro.props;
 // Google cuts descriptions around 155-160 chars; trim long ones at a word boundary.
 const desc = description.length > 158 ? description.slice(0, 155).replace(/\s+\S*$/, '').replace(/[,;:.\s]+$/, '') + '...' : description;
@@ -58,8 +59,15 @@ const siteLd = {
   <script defer src="https://analytics.allemanit.com/r.js" data-website-id="40131f77-fb96-4b3d-8887-0ea909102c9a"></script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <Nav />
+    {bare ? (
+      <header class="border-b border-white/10">
+        <nav class="container-x flex h-16 items-center justify-between" aria-label="Main">
+          <a href="/resume/cisco/" class="flex items-center gap-2" aria-label="Dustin Alleman"><img src="/AllemanITLogo.svg" alt="Dustin Alleman" class="h-8 w-auto" /></a>
+          <a href="/contact/" class="rounded-lg bg-brand-orange px-3.5 py-1.5 text-sm font-semibold text-white transition hover:brightness-110">Contact</a>
+        </nav>
+      </header>
+    ) : <Nav />}
     <main class="flex-1"><slot /></main>
-    <Footer />
+    {!bare && <Footer />}
   </body>
 </html>

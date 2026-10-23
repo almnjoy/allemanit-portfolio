@@ -106,6 +106,7 @@ export const angles = {
     pdf: '/Dustin-Alleman-Resume-Cisco.pdf',
     umami: 'resume-download-cisco',
     indexable: false,
+    bare: true,
     title: 'Resume (Cisco) | Dustin Alleman',
     description:
       'Network engineer moving into solutions engineering. 10+ years in Cisco networking, a homelab that runs like production, and the tools I build on top of it.',
@@ -116,7 +117,7 @@ export const angles = {
       eyebrow: 'Why solutions engineering',
       heading: 'Five years inside Cisco, and I still geek out about this stuff.',
       body: 'The portfolio keeps getting bigger and smarter, from Meraki and Catalyst to the whole AgenticOps and Cloud Control direction, and I get to teach it, break it in my lab, and help customers actually use it. Moving into a Solutions Engineer role is the natural next step: same passion, pointed at the solution and the sale.',
-      note: 'Everything on <a href="/" class="text-brand-orange underline underline-offset-2">allemanit.com</a> is the proof: the homelab, the agents, the products, the labs.',
+      note: '',
     },
     stats: [
       { n: '10+', l: 'years in networking' },

@@ -1,10 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 
-// Public music showcase for allemanit.com/music.
-// Rec form posts here; public wall reads from here. Backend = n8n MUSIC-RECS workflow.
-const REC_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/music-rec';
-const WALL_WEBHOOK = 'https://n8n.quickitprojects.com/webhook/music-wall';
+// allemanit.com/music: where to listen, where to download. (Rec form + wall removed 2026-11-14;
+// their n8n MUSIC-RECS flow was archived 2026-09-28.)
 
 const SPOTIFY_PROFILE = 'https://open.spotify.com/user/12156555860';
 const SOUNDCLOUD = 'https://soundcloud.com/almnjoy';
@@ -19,7 +17,7 @@ const lanes = [
   { tag: 'Cruise', name: 'Chill / psych-soul', artists: 'Khruangbin · Leon Bridges · FKJ · Tom Misch' },
   { tag: 'Send it', name: 'Festival bass / dubstep', artists: 'Zeds Dead · Excision · Subtronics · NGHTMRE · Zomboy' },
   { tag: 'Bars', name: 'Hip-hop', artists: 'Mac Miller · Chance · Smino · JID · Nipsey Hussle' },
-  { tag: 'Guitars', name: 'Indie / alt', artists: 'Vampire Weekend · RKS · Mt. Joy · Milky Chance' },
+  { tag: 'Guitars', name: 'Indie / alt', artists: 'Rainbow Kitten Surprise · Matt Maeson · The Struts · Vampire Weekend · Goth Babe' },
   { tag: 'Loud', name: 'Rage / rap-rock', artists: 'Tech N9ne · mgk · Hollywood Undead · BMTH · Travis Barker' },
 ];
 
@@ -39,16 +37,29 @@ const playlists = [
   { name: 'Bars Deep Cuts', sub: 'bars / further out', id: '2dwrGSNv8SPbQfTdhOIPHe' },
 ];
 
+const onRepeat = [
+  'Rainbow Kitten Surprise', 'My Chemical Romance', 'NF', 'Matt Maeson', 'The Struts',
+  'Daily Bread', 'Big Gigantic', 'GRiZ', 'Fred again..', 'Goth Babe',
+];
+
+const listen = [
+  { tag: 'Stream', name: 'Spotify', note: 'Where I find things. Thirteen lane playlists below, all public.', href: SPOTIFY_PROFILE },
+  { tag: 'Sets', name: 'SoundCloud', note: 'Festival sets, edits and the stuff that never makes it to streaming. @almnjoy.', href: SOUNDCLOUD },
+  { tag: 'Live', name: 'Bandcamp Fridays', note: 'First Friday of most months Bandcamp waives its cut, so the artist keeps nearly all of it. Buy then.', href: 'https://isitbandcampfriday.com' },
+];
+
 const digs = [
   { tag: 'Free', name: 'Pretty Lights', note: 'The whole discography, 2006 to now, still free on his own site. Start with A Color Map of the Sun.', href: 'https://prettylightsmusic.com/music' },
   { tag: 'Free', name: 'Gramatik', note: 'Built Lowtemp on the idea that music should be free and never really stopped.', href: 'https://gramatik.bandcamp.com' },
   { tag: 'Buy', name: 'GRiZ', note: 'All four Chasing the Golden Hour parts, in FLAC, direct from him.', href: 'https://mynameisgriz.bandcamp.com' },
   { tag: 'Buy', name: 'The Floozies', note: 'Funk-bass with real guitar and drums. Do the Thing first.', href: 'https://flooziesduo.bandcamp.com' },
   { tag: 'Buy', name: 'Stick Figure', note: 'Fifty-odd releases, some in 24-bit. The reggae-rock end of the crate.', href: 'https://stickfigure.bandcamp.com' },
+  { tag: 'Buy', name: 'Daily Bread', note: 'Philos Records. Vanishing Point is the new one; the Flash Flood mixtapes are the live-show energy.', href: 'https://bandcamp.com/search?q=Daily%20Bread' },
+  { tag: 'Lossless', name: 'Rainbow Kitten Surprise', note: 'Major label, so no Bandcamp. Qobuz sells the FLACs, 24-bit for most of the catalog.', href: 'https://www.qobuz.com/us-en/search?q=Rainbow%20Kitten%20Surprise' },
   { tag: 'Tip', name: 'Pick FLAC', note: 'Bandcamp defaults that dropdown to MP3. FLAC costs the same. Take the FLAC.', href: 'https://bandcamp.com' },
 ];
 ---
-<Base title="Music | What Dustin Alleman is listening to" description="Funk-bass, soulful and always cruising. My nine music lanes, the playlists I live in, where I buy the files, and a box to send me something new to hear.">
+<Base title="Music | What Dustin Alleman is listening to" description="Where I listen and where I download. Funk-bass home base, an indie run lately, the playlists I live in and where to buy the files.">
   <section class="mz">
 
     <!-- HERO -->
@@ -56,14 +67,35 @@ const digs = [
       <div class="hero-bg" role="img" aria-label="Desert-cruise sunset, a convertible rolling through a funky alien landscape"></div>
       <div class="hero-shade"></div>
       <div class="hero-inner container-x">
-        <p class="eyebrow">Funk-bass · soulful · always cruising</p>
-        <h1 class="title">WHAT I'M<br /><span class="grad">LISTENING TO</span></h1>
-        <p class="lede">This is my music. The grooves I live in, the playlists I run, the artists I put people onto. Look around, then send me something new. I check out every rec that comes in.</p>
+        <p class="eyebrow">Where to listen · where to download</p>
+        <h1 class="title">LISTEN.<br /><span class="grad">THEN OWN IT.</span></h1>
+        <p class="lede">Where I listen and where I download. Streaming is for finding things; when something sticks I buy the file. Funk-bass is home base, and lately it's been a lot of indie rock.</p>
         <div class="cta">
           <a class="btn primary" href={SPOTIFY_PROFILE} target="_blank" rel="noopener">▶ Listen on Spotify</a>
           <a class="btn sc" href={SOUNDCLOUD} target="_blank" rel="noopener">☁ SoundCloud</a>
-          <a class="btn ghost" href="#drop">Drop me a rec ↓</a>
+          <a class="btn ghost" href="#get">Where to download ↓</a>
         </div>
+      </div>
+    </div>
+
+    <!-- ON REPEAT -->
+    <div class="container-x block">
+      <h2 class="sec">On repeat lately</h2>
+      <p class="sub">Pulled from my own play stats, November 2026.</p>
+      <div class="pills">{onRepeat.map((a) => <span class="pill">{a}</span>)}</div>
+    </div>
+
+    <!-- WHERE TO LISTEN -->
+    <div class="container-x block">
+      <h2 class="sec">Where to listen</h2>
+      <div class="lanes">
+        {listen.map((d) => (
+          <a class="lane dig" href={d.href} target="_blank" rel="noopener">
+            <span class="lane-tag">{d.tag}</span>
+            <h3>{d.name}</h3>
+            <p>{d.note}</p>
+          </a>
+        ))}
       </div>
     </div>
 
@@ -102,9 +134,9 @@ const digs = [
       <button id="more-pls" class="more-btn" type="button" aria-expanded="false">Show all playlists ↓</button>
     </div>
 
-    <!-- WHERE TO GET IT -->
-    <div class="container-x block">
-      <h2 class="sec">Where I actually get it</h2>
+    <!-- WHERE TO DOWNLOAD -->
+    <div class="container-x block" id="get">
+      <h2 class="sec">Where to download</h2>
       <p class="sub">Streaming is for finding things. When something sticks I go buy the file, because a playlist is a rental. Most of this scene sells direct.</p>
       <div class="lanes">
         {digs.map((d) => (
@@ -133,53 +165,11 @@ const digs = [
       <iframe class="sc-embed" scrolling="no" frameborder="no" allow="autoplay" loading="lazy" title="SoundCloud — Afternoon Vibes" src={SC_EMBED}></iframe>
     </div>
 
-    <!-- DROP A REC + WALL -->
-    <div class="container-x block" id="drop">
-      <div class="drop-grid">
 
-        <div class="drop-card">
-          <h2 class="sec tight">Put me onto something</h2>
-          <p class="sub">Artist, track, playlist, whatever. Tell me what you love and I'll go dig into it. Want it seen? Tick the box and it lands on the wall.</p>
-          <form id="rec-form" class="form" data-webhook={REC_WEBHOOK}>
-            <div class="row2">
-              <label>Your name <span class="opt">(optional)</span>
-                <input name="name" placeholder="what should I call you" />
-              </label>
-              <label>Reach you at <span class="opt">(optional)</span>
-                <input name="contact" placeholder="email / @handle" />
-              </label>
-            </div>
-            <label>The rec <span class="req">*</span>
-              <input name="rec" required placeholder="e.g. Vulfpeck – Dean Town" />
-            </label>
-            <label>Why / a note <span class="opt">(optional)</span>
-              <textarea name="note" rows="3" placeholder="what makes it hit for you"></textarea>
-            </label>
-            <label class="check">
-              <input type="checkbox" name="is_public" />
-              <span>Post this on the public wall so others can see it</span>
-            </label>
-            <button type="submit" class="btn primary wide">Send it →</button>
-            <p id="form-msg" class="msg hidden"></p>
-          </form>
-        </div>
-
-        <div class="wall-card">
-          <h2 class="sec tight">The wall</h2>
-          <p class="sub">What people are putting me onto.</p>
-          <div id="wall" class="wall">
-            <p class="wall-empty">Loading the wall…</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <p class="foot-note container-x">Homelab-hosted · no trackers on the music · <a href="/">back to allemanit.com</a></p>
+    <p class="foot-note container-x">No trackers on the music · <a href="/">back to allemanit.com</a></p>
   </section>
 
-  <script define:vars={{ WALL_WEBHOOK }}>
-    // ---- Playlist show-more ----
+  <script>
     const moreBtn = document.getElementById('more-pls');
     const plsEl = document.getElementById('pls');
     moreBtn?.addEventListener('click', () => {
@@ -187,80 +177,6 @@ const digs = [
       moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
       moreBtn.textContent = open ? 'Show fewer ↑' : 'Show all playlists ↓';
     });
-
-    // ---- Rec form ----
-    const form = document.getElementById('rec-form');
-    const msg = document.getElementById('form-msg');
-    function show(text, err) {
-      msg.textContent = text;
-      msg.className = 'msg ' + (err ? 'err' : 'ok');
-    }
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const btn = form.querySelector('button[type=submit]');
-      const fd = new FormData(form);
-      const rec = (fd.get('rec') || '').toString().trim();
-      if (!rec) { show('Give me a rec first.', true); return; }
-      const payload = {
-        name: (fd.get('name') || '').toString().trim(),
-        contact: (fd.get('contact') || '').toString().trim(),
-        rec,
-        note: (fd.get('note') || '').toString().trim(),
-        is_public: fd.get('is_public') === 'on',
-        source: 'allemanit.com/music',
-        submittedAt: new Date().toISOString(),
-      };
-      const wasPublic = payload.is_public;
-      btn.disabled = true; btn.textContent = 'Sending…';
-      try {
-        const res = await fetch(form.dataset.webhook, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error('bad status');
-        form.reset();
-        show('Got it. Thanks for the rec, going to check it out.', false);
-        if (wasPublic) setTimeout(loadWall, 800);
-      } catch (err) {
-        show('Something broke on my end. Try again, or hit me on socials.', true);
-      } finally {
-        btn.disabled = false; btn.textContent = 'Send it →';
-      }
-    });
-
-    // ---- Public wall ----
-    const wallEl = document.getElementById('wall');
-    function esc(s) {
-      return (s == null ? '' : String(s)).replace(/[&<>"']/g, (c) => (
-        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-      ));
-    }
-    function fmt(at) {
-      if (!at) return '';
-      const d = new Date(at);
-      if (isNaN(d)) return '';
-      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-    }
-    async function loadWall() {
-      try {
-        const res = await fetch(WALL_WEBHOOK, { cache: 'no-store' });
-        const data = await res.json();
-        const recs = (data && data.recs) || [];
-        if (!recs.length) {
-          wallEl.innerHTML = '<p class="wall-empty">Nothing here yet. Be the first to put me onto something. ↖</p>';
-          return;
-        }
-        wallEl.innerHTML = recs.map((r) => (
-          '<div class="wrec">' +
-            '<div class="wrec-top">' + esc(r.rec) + '</div>' +
-            (r.note ? '<div class="wrec-note">“' + esc(r.note) + '”</div>' : '') +
-            '<div class="wrec-by">— ' + esc(r.name || 'anonymous') + (fmt(r.at) ? ' · ' + fmt(r.at) : '') + '</div>' +
-          '</div>'
-        )).join('');
-      } catch (e) {
-        wallEl.innerHTML = '<p class="wall-empty">Wall is taking a nap. Refresh in a bit.</p>';
-      }
-    }
-    loadWall();
   </script>
 
   <style>
@@ -331,6 +247,9 @@ const digs = [
     .sub { color: rgba(231,236,243,0.66); margin: 14px 0 22px; max-width: 640px; line-height: 1.5; }
 
     /* LANES — neo-brutal blocks */
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: #eef2f8; padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 14px; }
+    .pill:first-child { background: #ffd23f; color: #0a0a0a; border-color: #0a0a0a; }
     .lanes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .lane {
       position: relative; border-radius: 5px; padding: 20px;

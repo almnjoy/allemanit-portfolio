@@ -98,13 +98,13 @@ import { journey, patterns, quickitVersions, allemanitVersions } from '../../dat
 
   <section class="container-x py-10">
     <h2 class="text-2xl font-bold text-white">This site, four ways</h2>
-    <p class="mt-1 mb-6 max-w-3xl text-white/60">Before allemanit.com looked like this, it looked like these. Each one is still a real page you can open.</p>
+    <p class="mt-1 mb-6 max-w-3xl text-white/60">Before allemanit.com looked like this, it looked like these. The mockups came down in November 2026; the shots stay.</p>
     <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
       {allemanitVersions.map((e) => (
-        <a href={e.url} target="_blank" rel="noopener" class="card group block overflow-hidden">
+        <div class="card group block overflow-hidden">
           <img src={`/design-lab/shots/${e.img}.jpg`} alt={e.title} loading="lazy" decoding="async" width="1100" height="687" class="aspect-[16/10] w-full object-cover object-top" />
-          <div class="p-4"><div class="flex items-center justify-between"><span class="font-bold text-white">{e.title}</span><span class="tag">open ↗</span></div><p class="mt-1 text-sm text-white/65">{e.note}</p></div>
-        </a>
+          <div class="p-4"><div class="flex items-center justify-between"><span class="font-bold text-white">{e.title}</span><span class="tag">retired</span></div><p class="mt-1 text-sm text-white/65">{e.note}</p></div>
+        </div>
       ))}
     </div>
   </section>

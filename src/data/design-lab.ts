@@ -30,7 +30,6 @@ export const clients: Site[] = [
 export const personal: Site[] = [
   { img: 'almnjoy', title: 'almnjoy.dev', stack: 'Static', note: 'A Windows 98 desktop as a personal site. Windows open, the Start menu works.', url: 'https://almnjoy.dev', year: '2025' },
   { img: 'freesite', title: 'free.quickitprojects.com', stack: 'Static', note: 'The free site campaign. Google Places finds Chicago shops with no real website, a generator builds each one a site, a card with a QR goes through the door. 109 built, 20 doors walked.', url: 'https://free.quickitprojects.com', story: '/design-lab/freesite/', year: '2026' },
-  { img: '66unique', title: '66 Unique Antiques (concept)', stack: 'Static', note: 'An unofficial redesign for an antique mall in Nashville, Michigan. Built as a demo, clearly labeled as one.', url: '/66unique/', year: '2026' },
 ];
 
 export const quickitVersions = [
@@ -43,10 +42,10 @@ export const quickitVersions = [
 ];
 
 export const allemanitVersions = [
-  { img: 'allemanit-terminal', title: 'Terminal', note: 'This site as a shell prompt. whoami.sh and all.', url: '/design1/' },
-  { img: 'allemanit-profile', title: 'Editorial profile', note: 'Serif, numbered sections, magazine pacing. This voice became /daily.', url: '/design2/' },
-  { img: 'allemanit-swiss', title: 'Swiss', note: 'Grid, one accent, nothing decorative.', url: '/design3/' },
-  { img: 'allemanit-comic', title: 'Comic', note: 'Hard outlines and drop shadows. Fun for a week.', url: '/design4/' },
+  { img: 'allemanit-terminal', title: 'Terminal', note: 'This site as a shell prompt. whoami.sh and all.' },
+  { img: 'allemanit-profile', title: 'Editorial profile', note: 'Serif, numbered sections, magazine pacing. This voice became /daily.' },
+  { img: 'allemanit-swiss', title: 'Swiss', note: 'Grid, one accent, nothing decorative.' },
+  { img: 'allemanit-comic', title: 'Comic', note: 'Hard outlines and drop shadows. Fun for a week.' },
 ];
 
 export const journey = [

@@ -2,7 +2,7 @@
 title: "Media Stack"
 summary: "A self-hosted media platform: Plex plus the full *arr automation stack and a request portal, so the whole library runs hands-off."
 status: "Live"
-order: 13
+order: 12
 tags: ["Self-hosted", "Automation"]
 stack: ["Plex", "Sonarr", "Radarr", "Overseerr", "Docker", "VPN"]
 image: "/projects/media-stack/hero.png"

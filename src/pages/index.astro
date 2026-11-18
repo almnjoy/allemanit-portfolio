@@ -7,7 +7,7 @@ import { counts as repoCounts } from '../data/repos';
 
 // Home = hero, short about, 4 featured projects, then a map of the rest of the site.
 // Everything else lives one click away on its own hub page.
-const HOME_PICKS = ['pocketops', 'brain-map', 'homelab', 'ai-agents'];
+const HOME_PICKS = ['almnjoy-labs', 'pocketops', 'homelab', 'madeformeai'];
 const all = (await getCollection('projects')).filter((p) => p.data.listed !== false);
 const picks = HOME_PICKS.map((s) => all.find((p) => p.slug === s)).filter(Boolean);
 const posts = (await getCollection('blog')).filter((p) => !p.data.draft).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 2);
@@ -23,7 +23,7 @@ const credentials = [
   { k: 'Based in', v: 'Chicago, IL' },
   { k: 'Experience', v: '10+ yrs networking & IT' },
   { k: 'Certifications', v: 'CCNA · CWNA · Meraki Solutions Specialist' },
-  { k: 'Education', v: 'B.S. IT, Western Governors University' },
+  { k: 'Education', v: 'B.S. Information Technology Management, WGU (2026)' },
   { k: 'Teaching', v: 'Instructor, Cisco Networking Academy' },
   { k: 'Service', v: 'U.S. Marine Corps veteran' },
 ];
@@ -36,7 +36,6 @@ const explore = [
   { href: '/music', lane: 'Play', title: 'Music', note: 'Funk-bass, nine lanes, and a box to send me a rec.' },
   { href: '/design-lab/marketplace/', lane: 'Work', title: 'Stream Deck art', note: 'Icon sets I draw and sell on the Elgato Marketplace.' },
   { href: '/resume/', lane: 'Work', title: 'Resume', note: 'The one-page version, plus the PDF.' },
-  { href: '/packet-labs/', lane: 'Work', title: 'Packet Labs', note: 'Guided packet captures for the stuff I used to teach.' },
 ];
 ---
 <Base>

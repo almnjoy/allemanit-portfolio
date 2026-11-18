@@ -17,7 +17,9 @@ if [ -z "$CHROME" ]; then
   done
 fi
 [ -n "$CHROME" ] || { echo "No Chrome/Chromium found. Set CHROME=/path/to/chrome"; exit 1; }
-"$CHROME" --headless --disable-gpu --no-pdf-header-footer \
-  --print-to-pdf="../public/Dustin-Alleman-Resume.pdf" \
-  "file://$PWD/resume-general.html"
-echo "wrote public/Dustin-Alleman-Resume.pdf"
+for pair in "resume-general.html:Dustin-Alleman-Resume.pdf" "resume-cisco.html:Dustin-Alleman-Resume-Cisco.pdf"; do
+  src="${pair%%:*}"; out="${pair##*:}"
+  "$CHROME" --headless --disable-gpu --no-pdf-header-footer \
+    --print-to-pdf="../public/$out" "file://$PWD/$src"
+  echo "wrote public/$out"
+done

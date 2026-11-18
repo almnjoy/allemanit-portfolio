@@ -3,7 +3,7 @@ title: "CCNP Study Bot + CML Lab"
 summary: "A self-hosted study engine that drills me on the CCNP Automation blueprint, paired with a Cisco Modeling Labs environment and an automation workbench where the labs actually run. Built to turn a cert path into daily reps."
 status: "In Progress"
 featured: false
-order: 8
+order: 9
 tags: ["Networking", "Automation", "AI", "Certification"]
 stack: ["Python", "Flask", "SQLite", "Claude (claude -p)", "Cisco Modeling Labs", "Ansible", "pyATS", "Terraform", "Docker"]
 ---

@@ -6,10 +6,12 @@
 Rebuild: `./build-pdf.sh` (needs Chrome or Chromium; see the script header for why
 LibreOffice is not used).
 
-`public/Dustin-Alleman-Resume-Cisco.pdf` is the older Cisco/SE resume, exported from
-LibreOffice Writer on 2026-07-15. Its .odt source was never checked in. It is linked
-from /resume/cisco/ and is kept as-is. If it ever needs an edit, rebuild it as a
-second HTML file here rather than hunting for the Writer doc.
+`resume-cisco.html` is the source of truth for **public/Dustin-Alleman-Resume-Cisco.pdf**
+(the Cisco/SE angle linked from /resume/cisco/). Rebuilt from HTML since 2026-11-18; the
+old LibreOffice Writer export (2026-07-15, no source) is gone. `./build-pdf.sh` builds both.
+
+Rules (2026-11-18): no phone number on either PDF or page. Degree wording everywhere is
+"Bachelor of Science, Information Technology Management, Western Governors University (Nov 2026)".
 
 Page copy lives in `src/data/resume.ts` (`angles.general` / `angles.cisco`), not here.
 Keep the two in sync when facts change: certs, dates, job titles.

@@ -12,7 +12,7 @@ export const credentials = [
   { k: 'Based in', v: 'Chicago, IL (remote)' },
   { k: 'Experience', v: '10+ yrs networking, 5 in cloud-managed enterprise' },
   { k: 'Certifications', v: 'CCNA, CWNA, Meraki Specialist, CCNP (in progress)' },
-  { k: 'Education', v: 'B.S. Business Management, WGU (Nov 2026)' },
+  { k: 'Education', v: 'Bachelor of Science, Information Technology Management (WGU, Nov 2026)' },
   { k: 'Teaching', v: 'CCNA instructor, City Colleges of Chicago' },
   { k: 'Service', v: 'U.S. Marine Corps veteran' },
 ];
@@ -62,7 +62,7 @@ const t = {
   next: {
     year: '2026',
     title: "What's next",
-    body: 'CCNP in progress, degree wrapping in November, and looking for the seat where design, automation, and customer-facing work all count.',
+    body: 'B.S. in Information Technology Management finished at WGU, CCNP in progress, and looking for the seat where design, automation, and customer-facing work all count.',
   },
 };
 
@@ -135,7 +135,7 @@ export const angles = {
       { ...t.fedramp, title: 'FedRAMP team', body: 'Technical advisor for federal agencies on the Cisco FedRAMP cloud. Embedded-SE work, just without the title.' },
       t.build,
       { year: '2025', title: 'Cisco Live', body: 'My favorite week of the year. Ran into old colleagues, geeked out on the roadmap, came home with a list of things to try.' },
-      { ...t.next, title: 'Next up: Solutions Engineer', body: 'CCNP in progress, degree wrapping in November, and aiming squarely at the SE seat.' },
+      { ...t.next, title: 'Next up: Solutions Engineer', body: 'B.S. in Information Technology Management finished at WGU, CCNP in progress, and aiming squarely at the SE seat.' },
     ],
     ciscoLive: {
       eyebrow: 'Cisco Live 2025',

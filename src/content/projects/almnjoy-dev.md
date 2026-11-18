@@ -3,7 +3,7 @@ title: "almnjoy.dev"
 summary: "My personal tech blog, themed like a late-90s Windows desktop. Distinctive on purpose, with auto-curated content from an RSS pipeline."
 status: "Live"
 featured: false
-order: 99
+order: 14
 tags: ["Brand", "Content", "Web"]
 stack: ["WordPress", "Custom theme", "n8n"]
 liveUrl: "https://almnjoy.dev"

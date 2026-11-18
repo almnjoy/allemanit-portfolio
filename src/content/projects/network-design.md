@@ -2,7 +2,7 @@
 title: "Network Design & Architecture"
 summary: "Networking is the foundation the rest of my work is built on: secure, segmented, well-documented design, a homelab that mirrors the enterprise, and a dedicated Cisco Modeling Labs environment for the heavy scenarios."
 status: "Service"
-order: 9
+order: 10
 tags: ["Networking", "Security", "Architecture"]
 stack: ["Cisco", "Meraki", "Cisco Modeling Labs", "BGP / OSPF", "RADIUS / ISE", "VPN"]
 image: "/projects/homelab/header.png"
@@ -18,7 +18,7 @@ I eventually repurposed an old server into a dedicated Cisco Modeling Labs (CML)
 
 ## Two things that came out of it
 
-The same curiosity turned into a couple of projects worth their own pages. MerakiNOC was my take on automating configuration and monitoring through the Meraki API and a custom dashboard. [Packet Labs](/packet-labs/) (the old netadmintoolbox.com) packages the everyday utilities and troubleshooting I teach into one fast site.
+The same curiosity turned into a couple of projects worth their own pages. MerakiNOC was my take on automating configuration and monitoring through the Meraki API and a custom dashboard. The packet-level teaching material that used to live in Packet Labs (the old netadmintoolbox.com) now lives in [Almnjoy Labs](/projects/almnjoy-labs/), as real break/fix case files against a lab you can log into.
 
 ## Teaching it
 

@@ -1,5 +1,7 @@
-/projects/netadmintoolbox/  /packet-labs/  301
-/projects/netadmintoolbox   /packet-labs/  301
+/projects/netadmintoolbox/  /projects/almnjoy-labs/  301
+/projects/netadmintoolbox   /projects/almnjoy-labs/  301
+/packet-labs/*  /projects/almnjoy-labs/  301
+/packet-labs  /projects/almnjoy-labs/  301
 /projects/game-dev/  /games/  301
 /projects/game-dev   /games/  301
 /projects/web-design/  /design-lab/  301

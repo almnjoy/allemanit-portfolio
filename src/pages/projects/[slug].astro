@@ -4,7 +4,7 @@ import Thumb from '../../components/Thumb.astro';
 import { getCollection } from 'astro:content';
 import { reposFor, repoName, repoId } from '../../data/repos';
 
-// Projects with a directUrl (Games, Design Lab, Packet Labs) have a real home elsewhere;
+// Projects with a directUrl (Games, Design Lab) have a real home elsewhere;
 // no duplicate page here. _redirects sends the old URLs to that home.
 export async function getStaticPaths() {
   const listed = (await getCollection('projects')).filter((p) => p.data.listed !== false).sort((a, b) => a.data.order - b.data.order);

@@ -2,7 +2,7 @@
 title: "Design Lab"
 summary: "Every project needed a front end, so I got good at making them. The explorations, the rejects, a style engine that skins one page 32 ways, and the sites that shipped."
 status: "Live"
-order: 3
+order: 5
 featured: true
 directUrl: "/design-lab/"
 cardImage: "/design-lab/shots/style-engine.jpg"
@@ -25,7 +25,7 @@ After enough builds, the same pieces kept showing up: navigation, contact forms,
 
 ## Sites you can poke at
 
-A few are live: [almnjoy.dev](https://almnjoy.dev) (a retro Windows 98 desktop), [quickitprojects.com](https://quickitprojects.com) (clean consulting), [madeformeai.com](https://madeformeai.com) (a modern SaaS product), and [Packet Labs](/packet-labs/) (what the old netadmintoolbox.com became).
+A few are live: [almnjoy.dev](https://almnjoy.dev) (a retro Windows 98 desktop), [quickitprojects.com](https://quickitprojects.com) (clean consulting), [madeformeai.com](https://madeformeai.com) (a modern SaaS product), and [Almnjoy Labs](https://labs.almnjoy.dev) (the lab portal).
 
 ## What it taught me
 
